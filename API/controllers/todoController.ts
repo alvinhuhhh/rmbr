@@ -1,9 +1,9 @@
-const dayjs = require("dayjs");
+import dayjs from "dayjs";
 
 var Todo = require("../models/todo");
 
 // Get list of all todos (homepage)
-exports.get_todo_list = async function (req, res) {
+exports.get_todo_list = async function (req: Request, res: Response) {
   try {
     const todoList = await Todo.find({});
 
@@ -14,7 +14,7 @@ exports.get_todo_list = async function (req, res) {
 };
 
 // Get one todo item by id
-exports.get_todo = async function (req, res) {
+exports.get_todo = async function (req: Request, res: Response) {
   try {
     const todo = await Todo.findById(req.params.id);
 
@@ -29,7 +29,7 @@ exports.get_todo = async function (req, res) {
 };
 
 // Create a new todo item
-exports.create_todo = async function (req, res) {
+exports.create_todo = async function (req: Request, res: Response) {
   try {
     const todo = new Todo(req.body);
     await todo.save();
@@ -40,7 +40,7 @@ exports.create_todo = async function (req, res) {
 };
 
 // Update a todo item by id
-exports.update_todo = async function (req, res) {
+exports.update_todo = async function (req: Request, res: Response) {
   try {
     const todo = await Todo.findOne({ _id: req.params.id });
 
@@ -63,7 +63,7 @@ exports.update_todo = async function (req, res) {
 };
 
 // Delete a todo item by id
-exports.delete_todo = async function (req, res) {
+exports.delete_todo = async function (req: Request, res: Response) {
   try {
     const todo = await Todo.findOne({ _id: req.params.id });
 

@@ -1,8 +1,13 @@
 require("dotenv").config();
 
-var config = {};
+interface Config {
+  port: number;
+  dbConnectionString: string;
+}
 
-config.port = 3000;
-config.dbConnectionString = process.env.DB_CONNECTION_STRING;
+const config: Config = {
+  port: typeof process.env.PORT === "number" ? process.env.PORT : 3000,
+  dbConnectionString: typeof process.env.DB_CONNECTION_STRING === "string" ? process.env.DB_CONNECTION_STRING : "",
+};
 
-module.exports = config;
+export default config;

@@ -1,8 +1,9 @@
-const config = require("./config");
-const express = require("express");
-const mongoose = require("mongoose");
-const cors = require("cors");
-const morgan = require("morgan");
+import express from "express";
+import mongoose from "mongoose";
+import cors from "cors";
+import morgan from "morgan";
+import config from "./config";
+import indexRouter from "./routes/index";
 
 const app = express();
 const port = config.port;
@@ -13,11 +14,10 @@ app.use(cors());
 app.use(morgan("common"));
 
 // Routes
-const indexRouter = require("./routes/index");
 app.use("/", indexRouter);
 
 // Connect to DB and start listening
-mongoose.connect(config.dbConnectionString, { useNewUrlParser: true }).then(() => {
+mongoose.connect(config.dbConnectionString).then(() => {
   app.listen(port, () => {
     console.log(`Jabberwocky started and listening on http://localhost:${port}`);
   });

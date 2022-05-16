@@ -1,25 +1,26 @@
-const express = require("express");
+import express from "express";
+
 const router = express.Router();
 
 // Require controller modules
-var todo_controller = require("../controllers/todoController");
+var todoController = require("../controllers/todoController");
 
 /**
  * Todo Routes
  */
 // GET todos homepage
-router.get("/todo/list", todo_controller.get_todo_list);
+router.get("/todo/list", todoController.get_todo_list);
 
 // GET todo by id
-router.get("/todo/:id", todo_controller.get_todo);
+router.get("/todo/:id", todoController.get_todo);
 
 // POST create todo
-router.post("/todo/create", todo_controller.create_todo);
+router.post("/todo/create", todoController.create_todo);
 
 // PUT update todo
-router.put("/todo/:id/update", todo_controller.update_todo);
+router.put("/todo/:id/update", todoController.update_todo);
 
 // DELETE delete todo
-router.delete("/todo/:id/delete", todo_controller.delete_todo);
+router.delete("/todo/:id/delete", todoController.delete_todo);
 
-module.exports = router;
+export default router;
