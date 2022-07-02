@@ -8,7 +8,7 @@ async function createTodo(todo) {
     dto.createdBy = appConfig.user.username;
     dto.createdDate = dayjs().format();
 
-    let response = await axios.post(`${appConfig.api.url}/todo/create`, dto);
+    let response = await axios.post(`${appConfig.api.url}/create`, dto);
     console.log(`[createTodo] Status code: ${response.status}`);
 
     return true;
@@ -19,7 +19,7 @@ async function createTodo(todo) {
 
 async function getTodoList() {
   try {
-    let response = await axios.get(`${appConfig.api.url}/todo/list`);
+    let response = await axios.get(`${appConfig.api.url}/list`);
     console.log(`[getTodoList] Status code: ${response.status}`);
 
     return response.data;
@@ -34,10 +34,7 @@ async function updateTodo(todo) {
     dto.updatedBy = appConfig.user.username;
     dto.updatedDate = dayjs().format();
 
-    let response = await axios.put(
-      `${appConfig.api.url}/todo/${todo._id}/update`,
-      dto
-    );
+    let response = await axios.put(`${appConfig.api.url}/${todo._id}/update`, dto);
     console.log(`[updateTodo] Status code: ${response.status}`);
 
     return true;
@@ -48,9 +45,7 @@ async function updateTodo(todo) {
 
 async function deleteTodo(todo) {
   try {
-    let response = await axios.delete(
-      `${appConfig.api.url}/todo/${todo._id}/delete`
-    );
+    let response = await axios.delete(`${appConfig.api.url}/${todo._id}/delete`);
     console.log(`[deleteTodo] Status code: ${response.status}`);
 
     return true;

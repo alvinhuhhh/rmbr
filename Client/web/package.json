@@ -1,7 +1,8 @@
 {
-  "name": "web",
-  "version": "0.1.0",
-  "private": true,
+  "name": "todo-web",
+  "version": "1.0.0",
+  "description": "React web frontend for todo list",
+  "main": "index.js",
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
@@ -12,7 +13,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.26.1",
     "dayjs": "^1.11.0",
-    "prettier": "^2.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
@@ -24,6 +24,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "author": "Alvin Tan",
+  "license": "ISC",
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -42,5 +44,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:3000",
+  "devDependencies": {
+    "prettier": "^2.7.1"
+  }
 }

@@ -1,6 +1,6 @@
 const appConfig = {
   api: {
-    url: "http://localhost:3000",
+    url: process.env.REACT_APP_API_URL,
   },
   user: {
     username: "sysadmin",
