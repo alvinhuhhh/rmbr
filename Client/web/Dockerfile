@@ -1,16 +1,12 @@
-FROM node:16
-
-# Set production environment
+FROM node:16 AS build
 ENV NODE_ENV=production
+WORKDIR /root
+COPY . .
+RUN npm install
+RUN npm run build
 
-# Install serve
-RUN npm install -g serve
-
-# Create app directory
-WORKDIR /app
-
-# Copy build files into /app
-COPY build /app
-
+FROM nginx:alpine
+COPY --from=build /root/build /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+CMD [ "nginx", "-g", "daemon off;" ]
 EXPOSE 3001
-CMD [ "npx", "serve", "-l", "3001" ]

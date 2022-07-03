@@ -1,10 +1,10 @@
 FROM node:16 AS build
 WORKDIR /temp
 COPY . .
-RUN npm install
+RUN npm install typescript
 RUN npx tsc
 
-FROM node:16
+FROM node:16-alpine
 ENV NODE_ENV=production
 WORKDIR /root/
 COPY --from=build /temp/build ./
