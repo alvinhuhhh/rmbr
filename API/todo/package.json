@@ -8,8 +8,8 @@
     "start": "npx tsc && node build/app.js",
     "test": "jest"
   },
-  "author": "Alvin Tan",
-  "license": "ISC",
+  "author": "Tan Wei Bing Alvin",
+  "license": "MIT",
   "dependencies": {
     "cors": "^2.8.5",
     "dayjs": "^1.11.3",

@@ -24,8 +24,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "author": "Alvin Tan",
-  "license": "ISC",
+  "author": "Tan Wei Bing Alvin",
+  "license": "MIT",
   "eslintConfig": {
     "extends": [
       "react-app",
