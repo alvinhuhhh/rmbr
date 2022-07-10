@@ -2,5 +2,4 @@
 
 ## Required environment variables
 
-- PORT
-- DB_CONNECTION_STRING
+REACT_APP_API_URL
