@@ -1,0 +1,9 @@
+export default function NotFound({ ...props }: NotFoundProps) {
+  return (
+    <main style={{ padding: "1rem" }}>
+      <p>There's nothing here!</p>
+    </main>
+  );
+}
+
+interface NotFoundProps {}
