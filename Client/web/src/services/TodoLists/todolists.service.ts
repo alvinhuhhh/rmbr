@@ -1,8 +1,17 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import appConfig from "../../config";
-import { Todo } from "../../types/todo.types";
-import { List } from "../../types/list.types";
-import { User } from "../../types/user.types";
 
-export default class TodoListsService {}
+export default class TodoListsService {
+  public static async GetLists(): Promise<Array<IList>> {
+    const email = sessionStorage.getItem("email");
+    axios
+      .get(`${appConfig.api.url}/list/${email}`)
+      .then((response) => {
+        console.log(`[GetLists] ${response.status} ${response.statusText}`);
+        return response.data;
+      })
+      .catch((err) => console.log(err));
+    return [];
+  }
+}

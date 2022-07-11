@@ -1,59 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
+import listSchema from "./list";
 
-const todoSchema = new Schema({
-  createdBy: {
-    type: String,
-    required: true,
-  },
-  createdDate: {
-    type: Date,
-    required: true,
-  },
-  updatedBy: {
-    type: String,
-  },
-  updatedDate: {
-    type: Date,
-  },
-  title: {
-    type: String,
-    maxLength: 100,
-    required: true,
-  },
-  description: {
-    type: String,
-    maxLength: 200,
-  },
-  done: {
-    type: Boolean,
-    required: true,
-  },
-});
-
-const listSchema = new Schema({
-  createdBy: {
-    type: String,
-    required: true,
-  },
-  createdDate: {
-    type: Date,
-    required: true,
-  },
-  updatedBy: {
-    type: String,
-  },
-  updatedDate: {
-    type: Date,
-  },
-  title: {
-    type: String,
-    maxLength: 100,
-    required: true,
-  },
-  todos: [todoSchema],
-});
-
-const userSchema = new Schema({
+const userSchema = new Schema<IUser>({
   email: {
     type: String,
     required: true,
@@ -68,5 +16,5 @@ const userSchema = new Schema({
   lists: [listSchema],
 });
 
-const User = mongoose.model("User", userSchema);
+const User = model("User", userSchema);
 export default User;

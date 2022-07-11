@@ -16,16 +16,25 @@ export default class UserController {
 
   public static async CreateUser(req: Request, res: Response) {
     try {
-      const body = req.body;
-      if (typeof body.email === "string") {
-        const user = await UserService.CreateUser(body.email);
-        if (user) res.status(201).send();
-        else res.status(500).send();
-      }
+      const user = req.body;
+      const response = await UserService.CreateUser(user as IUser);
+
+      if (response) res.status(201).send();
+      else res.status(500).send();
     } catch (err) {
       console.log(err);
     }
   }
 
-  public static async UpdateUser(req: Request, res: Response) {}
+  public static async UpdateUser(req: Request, res: Response) {
+    try {
+      const user = req.body;
+      const response = await UserService.UpdateUser(user as IUser);
+
+      if (response) res.status(204).send();
+      else res.status(500).send();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }
