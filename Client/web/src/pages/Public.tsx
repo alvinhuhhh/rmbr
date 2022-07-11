@@ -16,7 +16,7 @@ export default function Public({ ...props }: LoginProps) {
     if (jwt.nonce === sessionStorage.getItem("nonce")) {
       sessionStorage.setItem("jwt", response.credential);
       if (typeof jwt.email === "string") sessionStorage.setItem("email", jwt.email);
-      navigate("/app");
+      navigate("/app/lists");
     }
   };
 
