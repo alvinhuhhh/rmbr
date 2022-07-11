@@ -54,6 +54,17 @@ const listSchema = new Schema({
 });
 
 const userSchema = new Schema({
+  email: {
+    type: String,
+    required: true,
+  },
+  createdDate: {
+    type: Date,
+    required: true,
+  },
+  updatedDate: {
+    type: Date,
+  },
   lists: [listSchema],
 });
 
