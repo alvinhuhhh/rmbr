@@ -14,12 +14,12 @@ interface IList {
   updatedBy: string | null;
   updatedDate: Date | null;
   title: string;
-  todos: Array<ITodo>;
+  todos: ITodo[];
 }
 
 interface IUser {
   email: string;
   createdDate: Date;
   updatedDate: Date | null;
-  lists: Array<IList>;
+  lists: IList[];
 }
