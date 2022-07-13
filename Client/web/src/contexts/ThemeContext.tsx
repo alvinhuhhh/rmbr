@@ -1,10 +1,12 @@
 import React from "react";
-import { ThemeProvider, createTheme } from "@mui/material";
+import { ThemeProvider, createTheme, useMediaQuery } from "@mui/material";
 
 export const ThemeContext = React.createContext({ mode: "light", toggleDarkMode: () => {} });
 
 export function ThemeContextProvider({ children, ...props }: IThemeContextProviderProps) {
-  const [mode, setMode] = React.useState<"light" | "dark">("light");
+  const [mode, setMode] = React.useState<"light" | "dark">(
+    useMediaQuery("(prefers-color-scheme: dark)") ? "dark" : "light"
+  );
   const theme = React.useMemo(
     () =>
       createTheme({

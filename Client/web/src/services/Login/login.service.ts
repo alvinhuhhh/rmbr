@@ -16,9 +16,11 @@ export default class LoginService {
       createdDate: new Date(dayjs().format()),
       lists: [],
     };
-    axios
-      .post(`${appConfig.api.url}/user/create`, user)
-      .then((response) => console.log(`[CreateUser] ${response.status} ${response.statusText}`))
-      .catch((err) => console.log(err));
+    try {
+      let response = await axios.post(`${appConfig.api.url}/user/create`, user);
+      console.log(`[CreateUser] ${response.status} ${response.statusText}`);
+    } catch (err) {
+      console.log(err);
+    }
   }
 }
