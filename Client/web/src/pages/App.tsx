@@ -1,21 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { Grid, AppBar, Toolbar, Drawer, IconButton, Typography, List, ListItem, ListItemButton } from "@mui/material";
 import { Menu as MenuIcon, LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function App() {
   const drawerWidth = 250;
   const navigate = useNavigate();
+  const theme = useContext(ThemeContext);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
 
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
-  };
-
-  const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
   };
 
   const handleSettingsClick = () => {};
@@ -35,8 +32,8 @@ export default function App() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Jabberwocky
           </Typography>
-          <IconButton size="small" color="inherit" onClick={toggleDarkMode}>
-            {darkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          <IconButton size="small" color="inherit" onClick={theme.toggleDarkMode}>
+            {theme.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
           </IconButton>
         </Toolbar>
       </AppBar>

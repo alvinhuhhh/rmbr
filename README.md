@@ -25,7 +25,7 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 2. ~~Basic frontend React SPA in Typescript~~
 3. OAuth 2.0 authentication and API authorization
 4. SSL/TLS encryption
-5. Dark mode
+5. ~~Dark mode~~
 6. Coloured flags
 7. Lists
 8. Folders
