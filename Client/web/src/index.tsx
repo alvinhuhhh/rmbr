@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -28,6 +29,16 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 
   return children;
 }
+
+axios.interceptors.request.use(
+  (config) => {
+    if (config.headers) config.headers.Authorization = `Basic ${sessionStorage.getItem("jwt")}`;
+    return config;
+  },
+  (err) => {
+    return Promise.reject(err);
+  }
+);
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
 root.render(

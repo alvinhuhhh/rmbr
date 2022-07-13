@@ -4,6 +4,8 @@ import ListService from "../services/list.service";
 
 export default class ListController {
   public static async GetLists(req: Request, res: Response) {
+    const headers = req.get("Authorization");
+    console.log(headers);
     try {
       const email = req.params.email;
       const lists = await ListService.GetLists(email);
