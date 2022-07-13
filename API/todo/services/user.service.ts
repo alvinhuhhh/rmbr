@@ -24,7 +24,7 @@ export default class UserService {
       const newUser = new User();
       newUser.email = user.email;
       newUser.createdDate = new Date();
-      newUser.save();
+      await newUser.save();
 
       return true;
     } catch (err) {
@@ -39,12 +39,13 @@ export default class UserService {
       const query = User.where({ email: user.email });
       const existingUser = await query.findOne();
       if (existingUser) {
+        // Update user
         existingUser.email = user.email;
         existingUser.updatedDate = new Date();
-        existingUser.save();
+        await existingUser.save();
+
         return true;
       }
-
       return null;
     } catch (err) {
       console.log(err);

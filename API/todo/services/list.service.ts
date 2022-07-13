@@ -32,10 +32,12 @@ export default class ListService {
       const query = User.where({ email: email });
       const user = await query.findOne();
       if (user) {
+        // Create list
         list.createdBy = email;
         list.createdDate = new Date();
         user.lists.push(list);
-        user.save();
+        await user.save();
+
         return true;
       }
       return null;
@@ -61,8 +63,10 @@ export default class ListService {
       const query = User.where({ email: email });
       const user = await query.findOne();
       if (user) {
+        // Delete list
         user.lists.pull(listId);
-        user.save();
+        await user.save();
+
         return true;
       }
       return null;
