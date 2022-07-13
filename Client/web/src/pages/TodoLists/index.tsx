@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import {
   Grid,
   List,
@@ -12,7 +13,7 @@ import {
   Fab,
 } from "@mui/material";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import dayjs from "dayjs";
+import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
 
@@ -117,7 +118,7 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
           <Button variant="outlined" onClick={handleCancelDelete}>
             Cancel
           </Button>
-          <Button variant="contained" onClick={() => handleConfirmDelete((confirmationDialogData as IList)._id)}>
+          <Button variant="contained" onClick={() => handleConfirmDelete(confirmationDialogData?._id || -1)}>
             OK
           </Button>
         </DialogActions>

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Button } from "@mui/material";
+import { IList } from "../../types/lists.types";
 
 export default function ListDialog({ title, open, setOpen, data, setData, save, ...props }: IListDialogProps) {
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined = (event) => {

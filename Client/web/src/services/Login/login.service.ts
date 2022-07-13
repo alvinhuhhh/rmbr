@@ -1,6 +1,7 @@
 import axios from "axios";
 import dayjs from "dayjs";
 import appConfig from "../../config";
+import { IUser } from "../../types/user.types";
 
 export default class LoginService {
   public static async CheckIfUserExists(email: string) {
