@@ -1,4 +1,5 @@
 import User from "../models/user";
+import { IUser } from "../types/user.types";
 
 export default class UserService {
   public static async GetUserByEmail(email: string) {

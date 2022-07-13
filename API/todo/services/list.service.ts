@@ -1,12 +1,14 @@
-import List from "../models/list";
 import User from "../models/user";
+import { IUser } from "../types/user.types";
+import { IList } from "../types/list.types";
 
 export default class ListService {
   public static async GetLists(email: string) {
     try {
       const query = User.where({ email: email });
-      const user = await query.findOne();
+      const user: IUser | null = await query.findOne();
       if (user) return user.lists;
+      return null;
     } catch (err) {
       console.log(err);
       return null;
@@ -18,6 +20,7 @@ export default class ListService {
       const query = User.find({ email: email, "lists._id": listId });
       const list = await query.findOne();
       if (list) return list;
+      return null;
     } catch (err) {
       console.log(err);
       return null;
@@ -31,27 +34,38 @@ export default class ListService {
       if (user) {
         list.createdBy = email;
         list.createdDate = new Date();
-
-        user.lists = [...user.lists, list];
+        user.lists.push(list);
         user.save();
         return true;
       }
+      return null;
     } catch (err) {
       console.log(err);
       return null;
     }
   }
 
-  public static async UpdateList() {
+  public static async UpdateList(email: string, list: IList) {
     try {
+      const query = User.where({ email: email });
+      const user = await query.findOne();
+      return null;
     } catch (err) {
       console.log(err);
       return null;
     }
   }
 
-  public static async DeleteList() {
+  public static async DeleteList(email: string, listId: string) {
     try {
+      const query = User.where({ email: email });
+      const user = await query.findOne();
+      if (user) {
+        user.lists.pull(listId);
+        user.save();
+        return true;
+      }
+      return null;
     } catch (err) {
       console.log(err);
       return null;

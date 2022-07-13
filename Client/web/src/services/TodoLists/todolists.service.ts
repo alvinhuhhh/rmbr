@@ -22,4 +22,16 @@ export default class TodoListsService {
       console.log(err);
     }
   }
+
+  public static async UpdateList(list: IList): Promise<void> {}
+
+  public static async DeleteList(id: number): Promise<void> {
+    try {
+      const email = sessionStorage.getItem("email");
+      let response = await axios.delete(`${appConfig.api.url}/list/${email}/${id}`);
+      console.log(`[DeleteList] ${response.status} ${response.statusText}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

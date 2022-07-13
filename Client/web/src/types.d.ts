@@ -1,25 +1,28 @@
 interface ITodo {
+  _id?: ObjectId;
   createdBy: string;
   createdDate: Date;
-  updatedBy: string | null;
-  updatedDate: Date | null;
+  updatedBy?: string;
+  updatedDate?: Date;
   title: string;
-  description: string | null;
+  description?: string;
   done: boolean;
 }
 
 interface IList {
+  _id?: ObjectId;
   createdBy: string;
   createdDate: Date;
-  updatedBy: string | null;
-  updatedDate: Date | null;
+  updatedBy?: string;
+  updatedDate?: Date;
   title: string;
   todos: ITodo[];
 }
 
 interface IUser {
+  _id?: ObjectId;
   email: string;
   createdDate: Date;
-  updatedDate: Date | null;
+  updatedDate?: Date;
   lists: IList[];
 }

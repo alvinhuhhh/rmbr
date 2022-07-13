@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import { IList } from "../types/list.types";
 import ListService from "../services/list.service";
 
 export default class ListController {
@@ -40,23 +41,29 @@ export default class ListController {
     }
   }
 
-  // public static async UpdateList(req: Request, res: Response) {
-  //   try {
-  //     const list = req.body;
-  //     const response = await ListService.UpdateList(list as IList);
+  public static async UpdateList(req: Request, res: Response) {
+    try {
+      const email = req.params.email;
+      const list = req.body;
+      const response = await ListService.UpdateList(email, list as IList);
 
-  //     if (response) res.status(204).send();
-  //     else res.status(500).send();
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }
+      if (response) res.status(204).send();
+      else res.status(500).send();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
-  // public static async DeleteList(req: Request, res: Response) {
-  //   const id = req.params.id;
-  //   const response = await ListService.DeleteList(id);
+  public static async DeleteList(req: Request, res: Response) {
+    try {
+      const email = req.params.email;
+      const listId = req.params.listId;
+      const response = await ListService.DeleteList(email, listId);
 
-  //   if (response) res.status(204).send();
-  //   else res.status(500).send();
-  // }
+      if (response) res.status(204).send();
+      else res.status(500).send();
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

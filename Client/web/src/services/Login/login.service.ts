@@ -13,7 +13,6 @@ export default class LoginService {
     let user: IUser = {
       email: email,
       createdDate: new Date(dayjs().format()),
-      updatedDate: null,
       lists: [],
     };
     axios

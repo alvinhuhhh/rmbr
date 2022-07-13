@@ -1,5 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Grid, List, ListItem, ListItemButton, IconButton, Fab } from "@mui/material";
+import {
+  Grid,
+  List,
+  ListItem,
+  ListItemButton,
+  Button,
+  IconButton,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Fab,
+} from "@mui/material";
 import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import dayjs from "dayjs";
 import TodoListsService from "../../services/TodoLists/todolists.service";
@@ -11,6 +22,7 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
+  const [confirmationDialogData, setConfirmationDialogData] = useState<IList>();
 
   const handleAddClick = () => {
     setDialogTitle("New list");
@@ -26,7 +38,22 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
     setDialogOpen(true);
   };
 
-  const handleDeleteClick = (list: IList) => {};
+  const handleDeleteClick = (list: IList) => {
+    setConfirmationDialogData(list);
+  };
+
+  const handleCancelDelete = () => {
+    setConfirmationDialogData(undefined);
+  };
+
+  const handleConfirmDelete = (id: number) => {
+    TodoListsService.DeleteList(id)
+      .then(() => setConfirmationDialogData(undefined))
+      .then(() => {
+        return TodoListsService.GetLists();
+      })
+      .then((data) => setLists(data));
+  };
 
   const handleSave = () => {
     const data: IList = { ...(dialogData as IList) };
@@ -80,6 +107,17 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
         setData={setDialogData}
         save={handleSave}
       />
+      <Dialog open={Boolean(confirmationDialogData)} onClose={handleCancelDelete}>
+        <DialogContent>Are you sure you want to delete {confirmationDialogData?.title || ""}?</DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleCancelDelete}>
+            Cancel
+          </Button>
+          <Button variant="contained" onClick={() => handleConfirmDelete((confirmationDialogData as IList)._id)}>
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   );
 }

@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { IUser } from "../types/user.types";
 import listSchema from "./list";
 
 const userSchema = new Schema<IUser>({
@@ -16,5 +17,5 @@ const userSchema = new Schema<IUser>({
   lists: [listSchema],
 });
 
-const User = model("User", userSchema);
+const User = model<IUser>("User", userSchema);
 export default User;

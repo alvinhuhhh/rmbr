@@ -1,4 +1,5 @@
 import { Schema } from "mongoose";
+import { IList } from "../types/list.types";
 import todoSchema from "./todo";
 
 const listSchema = new Schema<IList>({
