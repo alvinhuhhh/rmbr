@@ -46,26 +46,30 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
     setConfirmationDialogData(undefined);
   };
 
-  const handleConfirmDelete = (id: number) => {
-    TodoListsService.DeleteList(id)
-      .then(() => setConfirmationDialogData(undefined))
-      .then(() => {
-        return TodoListsService.GetLists();
-      })
-      .then((data) => setLists(data));
+  const handleConfirmDelete = async (id: number) => {
+    let status = await TodoListsService.DeleteList(id);
+    if (status === 204) {
+      setConfirmationDialogData(undefined);
+      TodoListsService.GetLists().then((data) => setLists(data));
+    }
   };
 
-  const handleSave = () => {
-    const data: IList = { ...(dialogData as IList) };
-    data.createdBy = sessionStorage.getItem("email") || "";
-    data.createdDate = new Date(dayjs().format());
+  const handleSave = async () => {
+    switch (dialogType) {
+      case "create":
+        const data: IList = { ...(dialogData as IList) };
+        data.createdBy = sessionStorage.getItem("email") || "";
+        data.createdDate = new Date(dayjs().format());
 
-    TodoListsService.CreateList(data)
-      .then(() => setDialogOpen(false))
-      .then(() => {
-        return TodoListsService.GetLists();
-      })
-      .then((data) => setLists(data));
+        let status = await TodoListsService.CreateList(data);
+        if (status === 201) {
+          setDialogOpen(false);
+          TodoListsService.GetLists().then((data) => setLists(data));
+        }
+        break;
+      case "edit":
+        break;
+    }
   };
 
   useEffect(() => {
@@ -88,7 +92,7 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
                 disablePadding
                 divider
               >
-                <ListItemButton onClick={handleEditClick}>{list.title}</ListItemButton>
+                <ListItemButton>{list.title}</ListItemButton>
               </ListItem>
             ))
           ) : (
