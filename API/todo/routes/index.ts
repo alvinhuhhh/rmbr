@@ -10,11 +10,11 @@ router.get("/user/:email", UserController.GetUserByEmail);
 router.post("/user/create", UserController.CreateUser);
 router.put("/user/:email", UserController.UpdateUser);
 
-router.get("/list/:email", ListController.GetLists);
-router.get("/list/:email/:listId", ListController.GetListById);
-router.post("/list/:email/create", ListController.CreateList);
-router.put("/list/:email/:listId", ListController.UpdateList);
-router.delete("/list/:email/:listId", ListController.DeleteList);
+router.get("/list", ListController.GetLists);
+router.get("/list/:listId", ListController.GetListById);
+router.post("/list/create", ListController.CreateList);
+router.put("/list/:listId", ListController.UpdateList);
+router.delete("/list/:listId", ListController.DeleteList);
 
 router.get("/todo/:todoId", TodoController.GetTodoById);
 router.post("/todo/create", TodoController.CreateTodo);

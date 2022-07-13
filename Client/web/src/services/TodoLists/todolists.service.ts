@@ -5,8 +5,7 @@ import { IList } from "../../types/lists.types";
 export default class TodoListsService {
   public static async GetLists(): Promise<IList[]> {
     try {
-      const email = sessionStorage.getItem("email");
-      let response = await axios.get(`${appConfig.api.url}/list/${email}`);
+      let response = await axios.get(`${appConfig.api.url}/list`);
       console.log(`[GetLists] ${response.status} ${response.statusText}`);
       return response.data;
     } catch (err) {
@@ -17,8 +16,7 @@ export default class TodoListsService {
 
   public static async CreateList(list: IList): Promise<number | undefined> {
     try {
-      const email = sessionStorage.getItem("email");
-      let response = await axios.post(`${appConfig.api.url}/list/${email}/create`, list);
+      let response = await axios.post(`${appConfig.api.url}/list/create`, list);
       console.log(`[CreateList] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
@@ -30,8 +28,7 @@ export default class TodoListsService {
 
   public static async DeleteList(id: number): Promise<number | undefined> {
     try {
-      const email = sessionStorage.getItem("email");
-      let response = await axios.delete(`${appConfig.api.url}/list/${email}/${id}`);
+      let response = await axios.delete(`${appConfig.api.url}/list/${id}`);
       console.log(`[DeleteList] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {

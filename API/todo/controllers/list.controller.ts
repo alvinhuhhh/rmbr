@@ -1,13 +1,12 @@
 import { Request, Response } from "express";
 import { IList } from "../types/list.types";
 import ListService from "../services/list.service";
+import GetEmailFromHeaders from "../utils/GetEmailFromHeaders";
 
 export default class ListController {
   public static async GetLists(req: Request, res: Response) {
-    const headers = req.get("Authorization");
-    console.log(headers);
+    const email = GetEmailFromHeaders(req.get("Authorization") as string);
     try {
-      const email = req.params.email;
       const lists = await ListService.GetLists(email);
 
       if (lists) res.status(200).send(lists);
@@ -18,8 +17,8 @@ export default class ListController {
   }
 
   public static async GetListById(req: Request, res: Response) {
+    const email = GetEmailFromHeaders(req.get("Authorization") as string);
     try {
-      const email = req.params.email;
       const listId = req.params.listId;
       const list = await ListService.GetListById(email, listId);
 
@@ -31,8 +30,8 @@ export default class ListController {
   }
 
   public static async CreateList(req: Request, res: Response) {
+    const email = GetEmailFromHeaders(req.get("Authorization") as string);
     try {
-      const email = req.params.email;
       const list = req.body;
       const response = await ListService.CreateList(email, list as IList);
 
@@ -44,8 +43,8 @@ export default class ListController {
   }
 
   public static async UpdateList(req: Request, res: Response) {
+    const email = GetEmailFromHeaders(req.get("Authorization") as string);
     try {
-      const email = req.params.email;
       const list = req.body;
       const response = await ListService.UpdateList(email, list as IList);
 
@@ -57,8 +56,8 @@ export default class ListController {
   }
 
   public static async DeleteList(req: Request, res: Response) {
+    const email = GetEmailFromHeaders(req.get("Authorization") as string);
     try {
-      const email = req.params.email;
       const listId = req.params.listId;
       const response = await ListService.DeleteList(email, listId);
 
