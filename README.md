@@ -21,19 +21,19 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 
 ## Development Roadmap
 
-1. ~~Basic backend Express API in Typescript~~
-2. ~~Basic frontend React SPA in Typescript~~
-3. OAuth 2.0 authentication and API authorization
-4. SSL/TLS encryption
-5. ~~Dark mode~~
-6. Coloured flags
-7. Lists
-8. Folders
-9. Trash folder
-10. Photos
-11. Links
-12. Terraform IaaC
-13. AWS Route 53 domain name (maybe)
+- :white_check_mark: Basic backend Express API in Typescript
+- :white_check_mark:Basic frontend React SPA in Typescript
+- OAuth 2.0 authentication and API authorization
+- SSL/TLS encryption
+- :white_check_mark:Dark mode
+- Coloured flags
+- Lists
+- Folders
+- Trash folder
+- Photos
+- Links
+- Terraform IaaC
+- AWS Route 53 domain name (maybe)
 
 ## Contributing
 
