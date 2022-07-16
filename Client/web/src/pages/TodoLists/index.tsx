@@ -8,6 +8,7 @@ import {
   Button,
   IconButton,
   Dialog,
+  DialogTitle,
   DialogContent,
   DialogActions,
   Fab,
@@ -113,14 +114,13 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
         save={handleSave}
       />
       <Dialog open={Boolean(confirmationDialogData)} onClose={handleCancelDelete}>
-        <DialogContent>Are you sure you want to delete {confirmationDialogData?.title || ""}?</DialogContent>
+        <DialogTitle>Delete list?</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete <b>{confirmationDialogData?.title || ""}</b>?
+        </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleCancelDelete}>
-            Cancel
-          </Button>
-          <Button variant="contained" onClick={() => handleConfirmDelete(confirmationDialogData?._id || -1)}>
-            OK
-          </Button>
+          <Button onClick={handleCancelDelete}>Cancel</Button>
+          <Button onClick={() => handleConfirmDelete(confirmationDialogData?._id || -1)}>Delete</Button>
         </DialogActions>
       </Dialog>
     </Grid>
