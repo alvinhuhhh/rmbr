@@ -4,6 +4,7 @@ import {
   Grid,
   List,
   ListItem,
+  ListItemIcon,
   ListItemButton,
   Button,
   IconButton,
@@ -12,8 +13,9 @@ import {
   DialogContent,
   DialogActions,
   Fab,
+  Popover,
 } from "@mui/material";
-import { Add as AddIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
@@ -21,10 +23,12 @@ import ListDialog from "./dialog";
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const [lists, setLists] = useState<IList[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
-  const [confirmationDialogData, setConfirmationDialogData] = useState<IList>();
+  const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
+  const [selectedItem, setSelectedItem] = useState<IList>();
 
   const handleAddClick = () => {
     setDialogTitle("New list");
@@ -34,46 +38,71 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   };
 
   const handleEditClick = () => {
+    setOptionsAnchor(null);
     setDialogTitle("Edit list");
-    setDialogData({} as IList);
+    setDialogData(selectedItem as IList);
     setDialogType("edit");
     setDialogOpen(true);
+  };
+
+  const handleDeleteClick = () => {
+    setOptionsAnchor(null);
+    setDeleteDialogOpen(true);
   };
 
   const handleListClick = async (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
   };
 
-  const handleDeleteClick = (list: IList) => {
-    setConfirmationDialogData(list);
+  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, list: IList) => {
+    setOptionsAnchor(event.currentTarget);
+    setSelectedItem(list);
+  };
+
+  const handleOptionsClose = () => {
+    setOptionsAnchor(null);
+    setSelectedItem(undefined);
   };
 
   const handleCancelDelete = () => {
-    setConfirmationDialogData(undefined);
+    setDeleteDialogOpen(false);
+    setSelectedItem(undefined);
   };
 
   const handleConfirmDelete = async (id: number) => {
     let status = await TodoListsService.DeleteList(id);
     if (status === 204) {
-      setConfirmationDialogData(undefined);
+      setDeleteDialogOpen(false);
+      setSelectedItem(undefined);
       TodoListsService.GetLists().then((data) => setLists(data));
     }
   };
 
   const handleSave = async () => {
+    let data: IList = { ...(dialogData as IList) };
+    let status: number | undefined;
     switch (dialogType) {
       case "create":
-        const data: IList = { ...(dialogData as IList) };
         data.createdBy = sessionStorage.getItem("email") || "";
         data.createdDate = new Date(dayjs().format());
 
-        let status = await TodoListsService.CreateList(data);
+        status = await TodoListsService.CreateList(data);
         if (status === 201) {
           setDialogOpen(false);
           TodoListsService.GetLists().then((data) => setLists(data));
         }
         break;
       case "edit":
+        data.updatedBy = sessionStorage.getItem("email") || "";
+        data.updatedDate = new Date(dayjs().format());
+
+        status = await TodoListsService.UpdateList(data);
+        if (status === 204) {
+          setDialogOpen(false);
+          TodoListsService.GetLists().then((data) => setLists(data));
+        }
+        break;
+      default:
         break;
     }
   };
@@ -91,8 +120,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
               <ListItem
                 key={list._id}
                 secondaryAction={
-                  <IconButton edge="end" onClick={() => handleDeleteClick(list)}>
-                    <DeleteIcon />
+                  <IconButton edge="end" onClick={(event) => handleOptionsClick(event, list)}>
+                    <OptionsIcon />
                   </IconButton>
                 }
                 disablePadding
@@ -107,6 +136,35 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
             <ListItem>No lists found. Create one!</ListItem>
           )}
         </List>
+        <Popover
+          id="optionsPopover"
+          open={Boolean(optionsAnchor)}
+          anchorEl={optionsAnchor}
+          onClose={handleOptionsClose}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton id="editItem" onClick={handleEditClick}>
+                <ListItemIcon>
+                  <EditIcon />
+                </ListItemIcon>
+                Edit
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton id="deleteItem" onClick={handleDeleteClick}>
+                <ListItemIcon>
+                  <DeleteIcon />
+                </ListItemIcon>
+                Delete
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Popover>
       </Grid>
       <Fab size="large" color="secondary" sx={{ position: "absolute", bottom: 15, right: 15 }} onClick={handleAddClick}>
         <AddIcon />
@@ -119,14 +177,14 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         setData={setDialogData}
         save={handleSave}
       />
-      <Dialog open={Boolean(confirmationDialogData)} onClose={handleCancelDelete}>
+      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
         <DialogTitle>Delete list?</DialogTitle>
         <DialogContent>
-          Are you sure you want to delete <b>{confirmationDialogData?.title || ""}</b>?
+          Are you sure you want to delete <b>{selectedItem?.title || ""}</b>?
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCancelDelete}>Cancel</Button>
-          <Button onClick={() => handleConfirmDelete(confirmationDialogData?._id || -1)}>Delete</Button>
+          <Button onClick={() => handleConfirmDelete(selectedItem?._id || -1)}>Delete</Button>
         </DialogActions>
       </Dialog>
     </Grid>

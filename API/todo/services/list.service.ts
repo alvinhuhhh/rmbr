@@ -48,14 +48,18 @@ export default class ListService {
 
   public static async UpdateList(email: string, list: IList): Promise<boolean> {
     try {
-      const existingList = await this.GetListById(email, list._id.toString());
-      if (existingList) {
-        existingList.updatedBy = email;
-        existingList.updatedDate = new Date();
-        existingList.title = list.title;
-        await existingList.save();
+      const user = await User.findOne({ email: email });
+      if (user) {
+        const existingList = user.lists.id(list._id.toString());
+        if (existingList) {
+          existingList.updatedBy = email;
+          existingList.updatedDate = new Date();
+          existingList.title = list.title;
+          existingList.todos = list.todos;
+          await user.save();
 
-        return true;
+          return true;
+        }
       }
       return false;
     } catch (err) {
