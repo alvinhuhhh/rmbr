@@ -62,7 +62,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   const handleListClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
-    navigate(`${id}`);
+    navigate(`/app/lists/${id}`);
   };
 
   const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, list: IList) => {

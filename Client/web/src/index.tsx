@@ -7,6 +7,7 @@ import { ThemeContextProvider } from "./contexts/ThemeContext";
 import App from "./pages/App";
 import Public from "./pages/Public";
 import NotFound from "./pages/NotFound";
+import Settings from "./pages/Settings";
 import TodoLists from "./pages/TodoLists";
 import TodoList from "./pages/TodoList";
 
@@ -65,6 +66,7 @@ root.render(
           >
             <Route path="lists" element={<TodoLists />} />
             <Route path="lists/:listId" element={<TodoList />} />
+            <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

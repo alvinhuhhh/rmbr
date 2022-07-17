@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import {
   Grid,
   AppBar,
@@ -10,16 +10,24 @@ import {
   List,
   ListItem,
   ListItemButton,
-  Breadcrumbs,
-  Link,
+  ListItemIcon,
+  ListItemText,
+  Divider,
 } from "@mui/material";
-import { Menu as MenuIcon, LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
+import {
+  Menu as MenuIcon,
+  ListAlt as ListIcon,
+  Settings as SettingsIcon,
+  Logout as LogoutIcon,
+  LightMode as LightModeIcon,
+  DarkMode as DarkModeIcon,
+} from "@mui/icons-material";
 import { ThemeContext } from "../contexts/ThemeContext";
 
 export default function App() {
   const drawerWidth = 250;
-  const navigate = useNavigate();
   const theme = useContext(ThemeContext);
+  const navigate = useNavigate();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -27,7 +35,15 @@ export default function App() {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-  const handleSettingsClick = () => {};
+  const handleListsClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    navigate("/app/lists");
+  };
+
+  const handleSettingsClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    navigate("/app/settings");
+  };
 
   const handleLogoutClick = () => {
     sessionStorage.clear();
@@ -49,13 +65,6 @@ export default function App() {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <Grid item xs={12} padding={1}>
-        <Breadcrumbs>
-          <Link underline="hover" color="inherit" component={RouterLink as any} to="/app/lists">
-            Home
-          </Link>
-        </Breadcrumbs>
-      </Grid>
       <Drawer
         anchor="left"
         open={isDrawerOpen}
@@ -65,13 +74,28 @@ export default function App() {
         <Toolbar />
         <List>
           <ListItem disablePadding>
+            <ListItemButton onClick={handleListsClick}>
+              <ListItemIcon>
+                <ListIcon />
+              </ListItemIcon>
+              <ListItemText primary="Lists" />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem disablePadding>
             <ListItemButton onClick={handleSettingsClick}>
-              <Typography variant="h6">Settings</Typography>
+              <ListItemIcon>
+                <SettingsIcon />
+              </ListItemIcon>
+              <ListItemText primary="Settings" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton onClick={handleLogoutClick}>
-              <Typography variant="h6">Logout</Typography>
+              <ListItemIcon>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText primary="Logout" />
             </ListItemButton>
           </ListItem>
         </List>
