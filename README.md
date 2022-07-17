@@ -32,7 +32,7 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 - Trash folder
 - Photos
 - Links
-- Terraform IaaC
+- :construction: Terraform IaC
 - AWS Route 53 domain name (maybe)
 
 ## Contributing
