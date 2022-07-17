@@ -19,7 +19,7 @@ export default class ListService {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        const list = await user.lists.id(listId);
+        const list = user.lists.id(listId);
         if (list) return list;
       }
     } catch (err) {
@@ -70,8 +70,7 @@ export default class ListService {
 
   public static async DeleteList(email: string, listId: string): Promise<boolean> {
     try {
-      const query = User.where({ email: email });
-      const user = await query.findOne();
+      const user = await User.findOne({ email: email });
       if (user) {
         // Delete list
         user.lists.pull(listId);

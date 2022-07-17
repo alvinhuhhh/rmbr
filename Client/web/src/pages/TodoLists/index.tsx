@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   List,
@@ -21,6 +22,8 @@ import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
 
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
+  const navigate = useNavigate();
+
   const [lists, setLists] = useState<IList[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -52,6 +55,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   const handleListClick = async (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
+    navigate(`${id}`);
   };
 
   const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, list: IList) => {
