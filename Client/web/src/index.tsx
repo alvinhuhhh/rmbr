@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { CssBaseline, ThemeProvider } from "@mui/material";
+import { CssBaseline } from "@mui/material";
 import { ThemeContextProvider } from "./contexts/ThemeContext";
 import App from "./pages/App";
 import Public from "./pages/Public";

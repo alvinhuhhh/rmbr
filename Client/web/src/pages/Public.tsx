@@ -39,7 +39,7 @@ export default function Public({ ...props }: LoginProps) {
     });
 
     globalThis.google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
+      theme: "filled_blue",
       size: "large",
     });
   }, []);

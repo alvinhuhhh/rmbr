@@ -1,6 +1,18 @@
 import React, { useState, useContext } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
-import { Grid, AppBar, Toolbar, Drawer, IconButton, Typography, List, ListItem, ListItemButton } from "@mui/material";
+import { Outlet, Link as RouterLink, useNavigate } from "react-router-dom";
+import {
+  Grid,
+  AppBar,
+  Toolbar,
+  Drawer,
+  IconButton,
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  Breadcrumbs,
+  Link,
+} from "@mui/material";
 import { Menu as MenuIcon, LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
 import { ThemeContext } from "../contexts/ThemeContext";
 
@@ -37,6 +49,13 @@ export default function App() {
           </IconButton>
         </Toolbar>
       </AppBar>
+      <Grid item xs={12} padding={1}>
+        <Breadcrumbs>
+          <Link underline="hover" color="inherit" component={RouterLink as any} to="/app/lists">
+            Home
+          </Link>
+        </Breadcrumbs>
+      </Grid>
       <Drawer
         anchor="left"
         open={isDrawerOpen}
