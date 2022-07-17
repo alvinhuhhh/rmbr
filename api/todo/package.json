@@ -6,7 +6,11 @@
   "scripts": {
     "build": "npx tsc",
     "start": "npx tsc && node build/app.js",
-    "test": "jest"
+    "test": "jest",
+    "docker:build": "docker build -t public.ecr.aws/f4k7k9n9/jabberwocky-api .",
+    "docker:push": "docker push public.ecr.aws/f4k7k9n9/jabberwocky-api",
+    "aws:login": "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws",
+    "deploy": "npm run aws:login & npm run docker:build && npm run docker:push"
   },
   "author": "Tan Wei Bing Alvin",
   "license": "MIT",
