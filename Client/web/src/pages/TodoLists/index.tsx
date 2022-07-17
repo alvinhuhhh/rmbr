@@ -7,6 +7,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemButton,
+  ListItemText,
   Button,
   IconButton,
   Dialog,
@@ -16,7 +17,13 @@ import {
   Fab,
   Popover,
 } from "@mui/material";
-import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Description as ListIcon,
+  Add as AddIcon,
+  MoreVert as OptionsIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
@@ -53,7 +60,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     setDeleteDialogOpen(true);
   };
 
-  const handleListClick = async (event: React.MouseEvent<HTMLElement>) => {
+  const handleListClick = (event: React.MouseEvent<HTMLElement>) => {
     const { id } = event.currentTarget;
     navigate(`${id}`);
   };
@@ -132,7 +139,10 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
                 divider
               >
                 <ListItemButton id={list._id?.toString()} onClick={handleListClick}>
-                  {list.title}
+                  <ListItemIcon>
+                    <ListIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={list.title} />
                 </ListItemButton>
               </ListItem>
             ))

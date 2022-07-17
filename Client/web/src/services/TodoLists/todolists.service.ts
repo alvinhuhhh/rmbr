@@ -44,9 +44,9 @@ export default class TodoListsService {
     }
   }
 
-  public static async DeleteList(id: number): Promise<number | undefined> {
+  public static async DeleteList(listId: number): Promise<number | undefined> {
     try {
-      let response = await axios.delete(`${appConfig.api.url}/list/${id}`);
+      let response = await axios.delete(`${appConfig.api.url}/list/${listId}`);
       console.log(`[DeleteList] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
