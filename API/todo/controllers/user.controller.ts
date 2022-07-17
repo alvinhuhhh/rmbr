@@ -3,7 +3,7 @@ import { IUser } from "../types/user.types";
 import UserService from "../services/user.service";
 
 export default class UserController {
-  public static async GetUserByEmail(req: Request, res: Response) {
+  public static async GetUserByEmail(req: Request, res: Response): Promise<void> {
     try {
       const email = req.params.email;
       const user = await UserService.GetUserByEmail(email);
@@ -15,7 +15,7 @@ export default class UserController {
     }
   }
 
-  public static async CreateUser(req: Request, res: Response) {
+  public static async CreateUser(req: Request, res: Response): Promise<void> {
     try {
       const user = req.body;
       const response = await UserService.CreateUser(user as IUser);
@@ -27,7 +27,7 @@ export default class UserController {
     }
   }
 
-  public static async UpdateUser(req: Request, res: Response) {
+  public static async UpdateUser(req: Request, res: Response): Promise<void> {
     try {
       const user = req.body;
       const response = await UserService.UpdateUser(user as IUser);

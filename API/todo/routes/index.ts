@@ -16,9 +16,10 @@ router.post("/list/create", ListController.CreateList);
 router.put("/list/:listId", ListController.UpdateList);
 router.delete("/list/:listId", ListController.DeleteList);
 
-router.get("/todo/:todoId", TodoController.GetTodoById);
-router.post("/todo/create", TodoController.CreateTodo);
-router.put("/todo/:todoId", TodoController.UpdateTodo);
-router.delete("/list/:todoId", TodoController.DeleteTodo);
+router.get("/todo/:listId", TodoController.GetTodos);
+router.get("/todo/:listId/:todoId", TodoController.GetTodoById);
+router.post("/todo/:listId/create", TodoController.CreateTodo);
+router.put("/todo/:listId/:todoId", TodoController.UpdateTodo);
+router.delete("/todo/:listId/:todoId", TodoController.DeleteTodo);
 
 export default router;

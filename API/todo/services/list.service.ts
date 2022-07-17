@@ -1,36 +1,35 @@
+import { Types } from "mongoose";
 import User from "../models/user";
-import { IUser } from "../types/user.types";
 import { IList } from "../types/list.types";
 
 export default class ListService {
-  public static async GetLists(email: string) {
+  public static async GetLists(email: string): Promise<Types.DocumentArray<IList> | undefined> {
     try {
-      const query = User.where({ email: email });
-      const user: IUser | null = await query.findOne();
+      const user = await User.findOne({ email: email });
       if (user) return user.lists;
-      return null;
     } catch (err) {
       console.log(err);
-      return null;
     }
   }
 
-  public static async GetListById(email: string, listId: string) {
+  public static async GetListById(
+    email: string,
+    listId: string
+  ): Promise<(Types.Subdocument<Types.ObjectId> & IList) | undefined> {
     try {
-      const query = User.find({ email: email, "lists._id": listId });
-      const list = await query.findOne();
-      if (list) return list;
-      return null;
+      const user = await User.findOne({ email: email });
+      if (user) {
+        const list = await user.lists.id(listId);
+        if (list) return list;
+      }
     } catch (err) {
       console.log(err);
-      return null;
     }
   }
 
-  public static async CreateList(email: string, list: IList) {
+  public static async CreateList(email: string, list: IList): Promise<boolean> {
     try {
-      const query = User.where({ email: email });
-      const user = await query.findOne();
+      const user = await User.findOne({ email: email });
       if (user) {
         // Create list
         list.createdBy = email;
@@ -40,25 +39,32 @@ export default class ListService {
 
         return true;
       }
-      return null;
+      return false;
     } catch (err) {
       console.log(err);
-      return null;
+      return false;
     }
   }
 
-  public static async UpdateList(email: string, list: IList) {
+  public static async UpdateList(email: string, list: IList): Promise<boolean> {
     try {
-      const query = User.where({ email: email });
-      const user = await query.findOne();
-      return null;
+      const existingList = await this.GetListById(email, list._id.toString());
+      if (existingList) {
+        existingList.updatedBy = email;
+        existingList.updatedDate = new Date();
+        existingList.title = list.title;
+        await existingList.save();
+
+        return true;
+      }
+      return false;
     } catch (err) {
       console.log(err);
-      return null;
+      return false;
     }
   }
 
-  public static async DeleteList(email: string, listId: string) {
+  public static async DeleteList(email: string, listId: string): Promise<boolean> {
     try {
       const query = User.where({ email: email });
       const user = await query.findOne();
@@ -69,10 +75,10 @@ export default class ListService {
 
         return true;
       }
-      return null;
+      return false;
     } catch (err) {
       console.log(err);
-      return null;
+      return false;
     }
   }
 }

@@ -18,7 +18,7 @@ import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
 
-export default function TodoLists({ ...props }: ITodoListsProps) {
+export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const [lists, setLists] = useState<IList[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
@@ -38,6 +38,10 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
     setDialogData({} as IList);
     setDialogType("edit");
     setDialogOpen(true);
+  };
+
+  const handleListClick = async (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
   };
 
   const handleDeleteClick = (list: IList) => {
@@ -83,9 +87,9 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
       <Grid item xs={12}>
         <List>
           {lists.length > 0 ? (
-            lists.map((list, index) => (
+            lists.map((list) => (
               <ListItem
-                key={index}
+                key={list._id}
                 secondaryAction={
                   <IconButton edge="end" onClick={() => handleDeleteClick(list)}>
                     <DeleteIcon />
@@ -94,7 +98,9 @@ export default function TodoLists({ ...props }: ITodoListsProps) {
                 disablePadding
                 divider
               >
-                <ListItemButton>{list.title}</ListItemButton>
+                <ListItemButton id={list._id?.toString()} onClick={handleListClick}>
+                  {list.title}
+                </ListItemButton>
               </ListItem>
             ))
           ) : (

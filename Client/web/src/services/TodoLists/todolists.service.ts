@@ -14,6 +14,16 @@ export default class TodoListsService {
     return [];
   }
 
+  public static async GetListById(listId: string): Promise<IList | undefined> {
+    try {
+      let response = await axios.get(`${appConfig.api.url}/list/${listId}`);
+      console.log(`[GetListById] ${response.status} ${response.statusText}`);
+      return response.data;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   public static async CreateList(list: IList): Promise<number | undefined> {
     try {
       let response = await axios.post(`${appConfig.api.url}/list/create`, list);
@@ -24,7 +34,15 @@ export default class TodoListsService {
     }
   }
 
-  public static async UpdateList(list: IList): Promise<void> {}
+  public static async UpdateList(list: IList): Promise<number | undefined> {
+    try {
+      let response = await axios.put(`${appConfig.api.url}/list/${list._id?.toString()}`, list);
+      console.log(`[UpdateList] ${response.status} ${response.statusText}`);
+      return response.status;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   public static async DeleteList(id: number): Promise<number | undefined> {
     try {

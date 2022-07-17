@@ -32,7 +32,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 
 axios.interceptors.request.use(
   (config) => {
-    if (config.headers) config.headers.Authorization = `Basic ${sessionStorage.getItem("jwt")}`;
+    if (config.headers) config.headers.Authorization = `Bearer ${sessionStorage.getItem("jwt")}`;
     return config;
   },
   (err) => {

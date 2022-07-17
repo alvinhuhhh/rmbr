@@ -2,23 +2,20 @@ import User from "../models/user";
 import { IUser } from "../types/user.types";
 
 export default class UserService {
-  public static async GetUserByEmail(email: string) {
+  public static async GetUserByEmail(email: string): Promise<IUser | undefined> {
     try {
-      const query = User.where({ email: email });
-      const user = await query.findOne();
+      const user = await User.findOne({ email: email });
       if (user) return user;
     } catch (err) {
       console.log(err);
-      return null;
     }
   }
 
-  public static async CreateUser(user: IUser) {
+  public static async CreateUser(user: IUser): Promise<boolean> {
     try {
       // Check if user exists
-      const query = User.where({ email: user.email });
-      const existingUser = await query.findOne();
-      if (existingUser) return null;
+      const existingUser = await User.findById(user._id.toString());
+      if (existingUser) return false;
 
       // Create new user
       const newUser = new User();
@@ -29,15 +26,14 @@ export default class UserService {
       return true;
     } catch (err) {
       console.log(err);
-      return null;
+      return false;
     }
   }
 
-  public static async UpdateUser(user: IUser) {
+  public static async UpdateUser(user: IUser): Promise<boolean> {
     try {
       // Get existing user
-      const query = User.where({ email: user.email });
-      const existingUser = await query.findOne();
+      const existingUser = await User.findById(user._id.toString());
       if (existingUser) {
         // Update user
         existingUser.email = user.email;
@@ -46,10 +42,10 @@ export default class UserService {
 
         return true;
       }
-      return null;
+      return false;
     } catch (err) {
       console.log(err);
-      return null;
+      return false;
     }
   }
 }
