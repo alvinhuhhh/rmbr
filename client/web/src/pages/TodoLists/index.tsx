@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   List,
@@ -8,7 +8,6 @@ import {
   ListItemIcon,
   ListItemButton,
   ListItemText,
-  Checkbox,
   Button,
   IconButton,
   Dialog,
@@ -18,34 +17,40 @@ import {
   Fab,
   Popover,
 } from "@mui/material";
-import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { ITodo } from "../../types/todo.types";
-import TodoService from "../../services/Todo/todo.service";
-import TodoDialog from "./dialog";
+import {
+  Description as ListIcon,
+  Add as AddIcon,
+  MoreVert as OptionsIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
+import { IList } from "../../types/lists.types";
+import TodoListsService from "../../services/TodoLists/todolists.service";
+import ListDialog from "./dialog";
 
-export default function TodoList({ ...props }: TodoListProps): JSX.Element {
-  const { listId } = useParams();
+export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
+  const navigate = useNavigate();
 
-  const [todos, setTodos] = useState<ITodo[]>([]);
+  const [lists, setLists] = useState<IList[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
-  const [dialogData, setDialogData] = useState<ITodo>();
+  const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
-  const [selectedItem, setSelectedItem] = useState<ITodo>();
+  const [selectedItem, setSelectedItem] = useState<IList>();
 
   const handleAddClick = () => {
-    setDialogTitle("New todo");
-    setDialogData({} as ITodo);
+    setDialogTitle("New list");
+    setDialogData({} as IList);
     setDialogType("create");
     setDialogOpen(true);
   };
 
   const handleEditClick = () => {
     setOptionsAnchor(null);
-    setDialogTitle("Edit todo");
-    setDialogData(selectedItem as ITodo);
+    setDialogTitle("Edit list");
+    setDialogData(selectedItem as IList);
     setDialogType("edit");
     setDialogOpen(true);
   };
@@ -55,9 +60,14 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     setDeleteDialogOpen(true);
   };
 
-  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, todo: ITodo) => {
+  const handleListClick = (event: React.MouseEvent<HTMLElement>) => {
+    const { id } = event.currentTarget;
+    navigate(`/app/lists/${id}`);
+  };
+
+  const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, list: IList) => {
     setOptionsAnchor(event.currentTarget);
-    setSelectedItem(todo);
+    setSelectedItem(list);
   };
 
   const handleOptionsClose = () => {
@@ -70,47 +80,37 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     setSelectedItem(undefined);
   };
 
-  const handleToggleDone = async (todo: ITodo) => {
-    let data: ITodo = { ...todo };
-    data.done = !data.done;
-    let status = await TodoService.UpdateTodo(listId as string, data);
-    if (status === 204) {
-      TodoService.GetTodos(listId as string).then((data) => setTodos(data));
-    }
-  };
-
   const handleConfirmDelete = async (id: number) => {
-    let status = await TodoService.DeleteTodo(listId as string, id);
+    let status = await TodoListsService.DeleteList(id);
     if (status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TodoService.GetTodos(listId as string).then((data) => setTodos(data));
+      TodoListsService.GetLists().then((data) => setLists(data));
     }
   };
 
   const handleSave = async () => {
-    let data: ITodo = { ...(dialogData as ITodo) };
+    let data: IList = { ...(dialogData as IList) };
     let status: number | undefined;
     switch (dialogType) {
       case "create":
         data.createdBy = sessionStorage.getItem("email") || "";
         data.createdDate = new Date(dayjs().format());
-        data.done = false;
 
-        status = await TodoService.CreateTodo(listId as string, data);
+        status = await TodoListsService.CreateList(data);
         if (status === 201) {
           setDialogOpen(false);
-          TodoService.GetTodos(listId as string).then((data) => setTodos(data));
+          TodoListsService.GetLists().then((data) => setLists(data));
         }
         break;
       case "edit":
         data.updatedBy = sessionStorage.getItem("email") || "";
         data.updatedDate = new Date(dayjs().format());
 
-        status = await TodoService.UpdateTodo(listId as string, data);
+        status = await TodoListsService.UpdateList(data);
         if (status === 204) {
           setDialogOpen(false);
-          TodoService.GetTodos(listId as string).then((data) => setTodos(data));
+          TodoListsService.GetLists().then((data) => setLists(data));
         }
         break;
       default:
@@ -119,35 +119,35 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   };
 
   useEffect(() => {
-    TodoService.GetTodos(listId as string).then((data) => setTodos(data));
+    TodoListsService.GetLists().then((data) => setLists(data));
   }, []);
 
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12}>
         <List>
-          {todos.length > 0 ? (
-            todos.map((todo) => (
+          {lists.length > 0 ? (
+            lists.map((list) => (
               <ListItem
-                key={todo._id}
+                key={list._id}
                 secondaryAction={
-                  <IconButton edge="end" onClick={(event) => handleOptionsClick(event, todo)}>
+                  <IconButton edge="end" onClick={(event) => handleOptionsClick(event, list)}>
                     <OptionsIcon />
                   </IconButton>
                 }
                 disablePadding
                 divider
               >
-                <ListItemButton>
+                <ListItemButton id={list._id?.toString()} onClick={handleListClick}>
                   <ListItemIcon>
-                    <Checkbox checked={todo.done} disableRipple onClick={() => handleToggleDone(todo)} />
+                    <ListIcon />
                   </ListItemIcon>
-                  <ListItemText primary={todo.title} />
+                  <ListItemText primary={list.title} />
                 </ListItemButton>
               </ListItem>
             ))
           ) : (
-            <ListItem>No todos found. Create one!</ListItem>
+            <ListItem>No lists found. Create one!</ListItem>
           )}
         </List>
         <Popover
@@ -183,7 +183,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
       <Fab size="large" color="secondary" sx={{ position: "absolute", bottom: 15, right: 15 }} onClick={handleAddClick}>
         <AddIcon />
       </Fab>
-      <TodoDialog
+      <ListDialog
         title={dialogTitle}
         open={dialogOpen}
         setOpen={setDialogOpen}
@@ -205,4 +205,4 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   );
 }
 
-interface TodoListProps {}
+interface ITodoListsProps {}
