@@ -226,6 +226,10 @@ resource "aws_ecs_task_definition" "jabberwocky-api-task-definition" {
           "name" : "PORT",
           "value" : "3000"
         },
+        {
+          "name" : "DB_CONNECTION_STRING",
+          "value" : "${var.db_connection_string}"
+        }
       ]
     }
   ])
