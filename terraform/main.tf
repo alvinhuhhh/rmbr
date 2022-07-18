@@ -226,10 +226,6 @@ resource "aws_ecs_task_definition" "jabberwocky-api-task-definition" {
           "name" : "PORT",
           "value" : "3000"
         },
-        {
-          "name" : "DB_CONNECTION_STRING",
-          "value" : "mongodb+srv://admin:12wq%21%40WQ@todo.dacgkfn.mongodb.net/todo?retryWrites=true&w=majority"
-        }
       ]
     }
   ])
