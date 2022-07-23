@@ -42,10 +42,10 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     setDialogOpen(true);
   };
 
-  const handleEditClick = () => {
+  const handleEditClick = (event: React.MouseEvent<HTMLElement>, todo?: ITodo) => {
     setOptionsAnchor(null);
     setDialogTitle("Edit todo");
-    setDialogData(selectedItem as ITodo);
+    setDialogData((todo && (todo as ITodo)) || (selectedItem as ITodo));
     setDialogType("edit");
     setDialogOpen(true);
   };
@@ -70,7 +70,9 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     setSelectedItem(undefined);
   };
 
-  const handleToggleDone = async (todo: ITodo) => {
+  const handleToggleDone = async (event: React.MouseEvent<HTMLElement>, todo: ITodo) => {
+    event.stopPropagation();
+
     let data: ITodo = { ...todo };
     data.done = !data.done;
     let status = await TodoService.UpdateTodo(listId as string, data);
@@ -138,9 +140,9 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                 disablePadding
                 divider
               >
-                <ListItemButton>
+                <ListItemButton onClick={(event) => handleEditClick(event, todo)}>
                   <ListItemIcon>
-                    <Checkbox checked={todo.done} disableRipple onClick={() => handleToggleDone(todo)} />
+                    <Checkbox checked={todo.done} disableRipple onClick={(event) => handleToggleDone(event, todo)} />
                   </ListItemIcon>
                   <ListItemText primary={todo.title} />
                 </ListItemButton>
