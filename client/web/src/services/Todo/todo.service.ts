@@ -26,7 +26,7 @@ export default class TodoService {
 
   public static async CreateTodo(listId: string, todo: ITodo): Promise<number | undefined> {
     try {
-      let response = await axios.post(`${appConfig.api.url}/todo/${listId}/create`, todo);
+      let response = await axios.post(`${appConfig.api.url}/todo/${listId}`, todo);
       console.log(`[CreateTodo] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {

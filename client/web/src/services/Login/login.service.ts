@@ -17,7 +17,7 @@ export default class LoginService {
       lists: [],
     };
     try {
-      let response = await axios.post(`${appConfig.api.url}/user/create`, user);
+      let response = await axios.post(`${appConfig.api.url}/user`, user);
       console.log(`[CreateUser] ${response.status} ${response.statusText}`);
     } catch (err) {
       console.log(err);

@@ -26,7 +26,7 @@ export default class TodoListsService {
 
   public static async CreateList(list: IList): Promise<number | undefined> {
     try {
-      let response = await axios.post(`${appConfig.api.url}/list/create`, list);
+      let response = await axios.post(`${appConfig.api.url}/list`, list);
       console.log(`[CreateList] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
