@@ -1,5 +1,4 @@
 FROM node:16 AS build
-ENV NODE_ENV=production
 WORKDIR /root
 COPY . .
 RUN npm install

@@ -32,8 +32,10 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "aws:sync": "aws s3 sync build s3://jabberwocky-web",
-    "deploy": "react-scripts build && npm run aws:sync"
+    "docker:build": "docker build -t public.ecr.aws/f4k7k9n9/jabberwocky-web .",
+    "docker:push": "docker push public.ecr.aws/f4k7k9n9/jabberwocky-web",
+    "aws:login": "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws",
+    "deploy": "npm run aws:login & npm run docker:build && npm run docker:push"
   },
   "author": "Tan Wei Bing Alvin",
   "license": "MIT",
