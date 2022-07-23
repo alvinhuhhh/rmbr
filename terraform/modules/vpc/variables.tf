@@ -5,7 +5,3 @@ variable "vpc_cidr" {
 variable "public_cidr" {
   type = string
 }
-
-variable "private_cidr" {
-  type = string
-}
