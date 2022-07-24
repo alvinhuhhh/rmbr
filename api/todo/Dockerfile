@@ -11,4 +11,4 @@ COPY --from=build /temp/build ./
 COPY --from=build /temp/package.json ./
 RUN npm install --omit=dev
 CMD [ "node", "app.js" ]
-EXPOSE 3000
+EXPOSE 443
