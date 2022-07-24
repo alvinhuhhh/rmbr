@@ -7,7 +7,7 @@ export default class TodoService {
     try {
       let response = await axios.get(`${appConfig.api.url}/todo/${listId}`);
       console.log(`[GetTodos] ${response.status} ${response.statusText}`);
-      return response.data;
+      if (response.status === 200) return response.data;
     } catch (err) {
       console.log(err);
     }
@@ -18,7 +18,7 @@ export default class TodoService {
     try {
       let response = await axios.get(`${appConfig.api.url}/todo/${listId}/${todoId}`);
       console.log(`[GetTodoById] ${response.status} ${response.statusText}`);
-      return response.data;
+      if (response.status === 200) return response.data;
     } catch (err) {
       console.log(err);
     }

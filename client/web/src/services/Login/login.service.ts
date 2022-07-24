@@ -4,13 +4,13 @@ import appConfig from "../../config";
 import { IUser } from "../../types/user.types";
 
 export default class LoginService {
-  public static async CheckIfUserExists(email: string) {
+  public static async CheckIfUserExists(email: string): Promise<void> {
     axios.get(`${appConfig.api.url}/user/${email}`).catch((err) => {
       this.CreateUser(email);
     });
   }
 
-  private static async CreateUser(email: string) {
+  private static async CreateUser(email: string): Promise<void> {
     let user: IUser = {
       email: email,
       createdDate: new Date(dayjs().format()),
