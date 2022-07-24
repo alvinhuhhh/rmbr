@@ -40,3 +40,8 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 Contributors:
 
 - Me
+
+## Task List
+
+- Write README on generating self-signed SSL Certs
+- Tighten security group rules

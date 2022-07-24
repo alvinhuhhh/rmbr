@@ -9,3 +9,7 @@ Configure a .env.production file before build, as React embeds environment varia
 - PORT
 - REACT_APP_API_URL
 - REACT_APP_CLIENT_ID
+
+## Production deployment
+
+SSL cert is required to use GSI
