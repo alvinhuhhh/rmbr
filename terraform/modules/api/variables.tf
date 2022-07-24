@@ -10,6 +10,10 @@ variable "ec2_instance_type" {
   type = string
 }
 
+variable "ec2_private_ip" {
+  type = string
+}
+
 variable "sg_id" {
   type = string
 }

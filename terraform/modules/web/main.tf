@@ -8,6 +8,7 @@ resource "aws_instance" "jabberwocky_web" {
 
   ami = var.ec2_ami
   instance_type = var.ec2_instance_type
+  private_ip = var.ec2_private_ip
   associate_public_ip_address = true
 
   iam_instance_profile = var.ecs_agent_instance_profile_name
