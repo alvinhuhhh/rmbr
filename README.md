@@ -24,15 +24,15 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 - :white_check_mark: Basic backend Express API in Typescript
 - :white_check_mark: Basic frontend React SPA in Typescript
 - :white_check_mark: OAuth 2.0 authentication and API authorization
-- SSL/TLS encryption
+- :white_check_mark: SSL/TLS encryption
 - :white_check_mark: Dark mode
-- Coloured flags
-- Lists
+- :white_check_mark: Lists
+- :construction: Terraform IaC
+- Photos
+- Embed links
+- Priority flags
 - Folders
 - Trash folder
-- Photos
-- Links
-- :construction: Terraform IaC
 - AWS Route 53 domain name (maybe)
 
 ## Contributing
@@ -44,4 +44,5 @@ Contributors:
 ## Task List
 
 - Write README on generating self-signed SSL Certs
+- Organize READMEs
 - Tighten security group rules
