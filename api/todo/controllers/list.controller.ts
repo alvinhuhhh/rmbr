@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { IList } from "../types/list.types";
 import ListService from "../services/list.service";
-import GetEmailFromHeaders from "../utils/GetEmailFromHeaders";
 
 export default class ListController {
   public static async GetLists(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const lists = await ListService.GetLists(email);
@@ -15,11 +14,11 @@ export default class ListController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async GetListById(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -30,11 +29,11 @@ export default class ListController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async CreateList(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const list = req.body;
@@ -45,11 +44,11 @@ export default class ListController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async UpdateList(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const list = req.body;
@@ -60,11 +59,11 @@ export default class ListController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async DeleteList(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -75,6 +74,6 @@ export default class ListController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 }

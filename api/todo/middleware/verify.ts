@@ -11,7 +11,10 @@ export default async function verify(req: Request, res: Response, next: NextFunc
       idToken: token,
       audience: process.env.CLIENT_ID,
     });
-    if (ticket) next();
+    if (ticket) {
+      req.email = ticket.getPayload()?.email;
+      next();
+    }
   } catch (err) {
     console.log(err);
     res.status(401).send();

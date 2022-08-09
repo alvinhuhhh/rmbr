@@ -1,11 +1,10 @@
 import { Request, Response } from "express";
 import { ITodo } from "../types/todo.types";
 import TodoService from "../services/todo.service";
-import GetEmailFromHeaders from "../utils/GetEmailFromHeaders";
 
 export default class TodoController {
   public static async GetTodos(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -16,11 +15,11 @@ export default class TodoController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async GetTodoById(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -32,11 +31,11 @@ export default class TodoController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async CreateTodo(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const todo = req.body;
@@ -48,11 +47,11 @@ export default class TodoController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async UpdateTodo(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const todo = req.body;
@@ -64,11 +63,11 @@ export default class TodoController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 
   public static async DeleteTodo(req: Request, res: Response): Promise<void> {
-    const email = GetEmailFromHeaders(req.get("Authorization") as string);
+    const email = req.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -80,6 +79,6 @@ export default class TodoController {
       } catch (err) {
         console.log(err);
       }
-    } else res.status(401).send();
+    } else res.status(500).send();
   }
 }
