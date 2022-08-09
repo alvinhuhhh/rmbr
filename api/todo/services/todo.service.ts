@@ -56,7 +56,7 @@ export default class TodoService {
       if (user) {
         const todos = user.lists.id(listId)?.todos;
         if (todos) {
-          const existingTodo = todos.id(todo._id.toString());
+          const existingTodo = todos.id(todo._id);
           if (existingTodo) {
             existingTodo.updatedBy = email;
             existingTodo.updatedDate = new Date();

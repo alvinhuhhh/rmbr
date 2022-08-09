@@ -14,7 +14,7 @@ export default class UserService {
   public static async CreateUser(user: IUser): Promise<boolean> {
     try {
       // Check if user exists
-      const existingUser = await User.findById(user._id.toString());
+      const existingUser = await User.findOne({ email: user.email });
       if (existingUser) return false;
 
       // Create new user
@@ -33,7 +33,7 @@ export default class UserService {
   public static async UpdateUser(user: IUser): Promise<boolean> {
     try {
       // Get existing user
-      const existingUser = await User.findById(user._id.toString());
+      const existingUser = await User.findById(user._id);
       if (existingUser) {
         // Update user
         existingUser.email = user.email;

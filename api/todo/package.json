@@ -1,5 +1,5 @@
 {
-  "name": "todo-api",
+  "name": "api",
   "version": "1.0.0",
   "description": "Express.js API for Rmbr",
   "main": "build/app.js",
@@ -7,8 +7,8 @@
     "build": "npx tsc",
     "start": "npx tsc && node build/app.js",
     "test": "jest",
-    "docker:build": "docker build -t public.ecr.aws/f4k7k9n9/jabberwocky-api .",
-    "docker:push": "docker push public.ecr.aws/f4k7k9n9/jabberwocky-api",
+    "docker:build": "docker build -t public.ecr.aws/f4k7k9n9/rmbr-api .",
+    "docker:push": "docker push public.ecr.aws/f4k7k9n9/rmbr-api",
     "aws:login": "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws",
     "deploy": "npm run aws:login & npm run docker:build && npm run docker:push"
   },

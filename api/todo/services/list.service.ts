@@ -50,7 +50,7 @@ export default class ListService {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        const existingList = user.lists.id(list._id.toString());
+        const existingList = user.lists.id(list._id);
         if (existingList) {
           existingList.updatedBy = email;
           existingList.updatedDate = new Date();
