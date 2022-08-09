@@ -75,7 +75,7 @@ export default function Public({ ...props }: LoginProps) {
           <Grid container justifyContent="space-between" padding={3}>
             <Grid item>Rmbr</Grid>
             <Grid item>
-              <Link href="https://github.com/alvinhuhhh/jabberwocky" color="inherit">
+              <Link href="https://github.com/alvinhuhhh/rmbr" color="inherit">
                 Github
               </Link>
               <Typography variant="body1" color="inherit" marginLeft={3} display="inline">
