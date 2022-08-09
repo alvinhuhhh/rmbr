@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "start": "npx tsc && node build/app.js",
     "test": "jest",
-    "docker:build": "docker build -t public.ecr.aws/f4k7k9n9/rmbr-api .",
+    "docker:build": "npm run build & docker build -t public.ecr.aws/f4k7k9n9/rmbr-api .",
     "docker:push": "docker push public.ecr.aws/f4k7k9n9/rmbr-api",
     "aws:login": "aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws",
     "deploy": "npm run aws:login & npm run docker:build && npm run docker:push"
@@ -19,6 +19,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "google-auth-library": "^8.1.1",
+    "helmet": "^5.1.1",
     "jose": "^4.8.3",
     "mongodb": "^4.7.0",
     "mongoose": "^6.4.2",
