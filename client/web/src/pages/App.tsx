@@ -47,6 +47,7 @@ export default function App() {
 
   const handleLogoutClick = () => {
     sessionStorage.clear();
+    localStorage.clear();
     navigate("/");
   };
 
@@ -58,7 +59,7 @@ export default function App() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {sessionStorage.getItem("email")}
+            {localStorage.getItem("email")}
           </Typography>
           <IconButton size="small" color="inherit" onClick={theme.toggleDarkMode}>
             {theme.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}

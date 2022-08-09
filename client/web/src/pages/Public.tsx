@@ -18,9 +18,9 @@ export default function Public({ ...props }: LoginProps) {
     const jwt = decodeJwt(response.credential);
 
     if (jwt.nonce === sessionStorage.getItem("nonce")) {
-      sessionStorage.setItem("jwt", response.credential);
+      localStorage.setItem("jwt", response.credential);
       if (typeof jwt.email === "string") {
-        sessionStorage.setItem("email", jwt.email);
+        localStorage.setItem("email", jwt.email);
 
         // Check if user exists, create user if not
         LoginService.CheckIfUserExists(jwt.email);

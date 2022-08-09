@@ -14,7 +14,7 @@ import TodoList from "./pages/TodoList";
 function PublicRoute({ children }: { children: JSX.Element }) {
   let location = useLocation();
 
-  if (sessionStorage.getItem("jwt")) {
+  if (localStorage.getItem("jwt")) {
     return <Navigate to="/app/lists" state={{ from: location }} replace />;
   }
 
@@ -24,7 +24,7 @@ function PublicRoute({ children }: { children: JSX.Element }) {
 function PrivateRoute({ children }: { children: JSX.Element }) {
   let location = useLocation();
 
-  if (!sessionStorage.getItem("jwt")) {
+  if (!localStorage.getItem("jwt")) {
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
@@ -33,7 +33,7 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 
 axios.interceptors.request.use(
   (config) => {
-    if (config.headers) config.headers.Authorization = `Bearer ${sessionStorage.getItem("jwt")}`;
+    if (config.headers) config.headers.Authorization = `Bearer ${localStorage.getItem("jwt")}`;
     return config;
   },
   (err) => {
