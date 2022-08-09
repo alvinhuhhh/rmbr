@@ -1,3 +1,3 @@
 output "web_public_ip_address" {
-  value = aws_instance.jabberwocky_web.public_ip
+  value = aws_instance.rmbr_web.public_ip
 }

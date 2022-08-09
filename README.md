@@ -1,6 +1,6 @@
-# Jabberwocky
+# Rmbr
 
-Jabberwocky is a fullstack todo app, because every developer needs to make a todo app.
+Rmbr is a fullstack todo app, because every developer needs to make a todo app.
 
 ## Application stack
 
@@ -40,9 +40,3 @@ Jabberwocky is a fullstack todo app, because every developer needs to make a tod
 Contributors:
 
 - Me
-
-## Task List
-
-- Write README on generating self-signed SSL Certs
-- Organize READMEs
-- Tighten security group rules

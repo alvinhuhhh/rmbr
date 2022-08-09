@@ -1,8 +1,8 @@
 terraform {
   cloud {
-    organization = "jjjabberwocky"
+    organization = "alvinhuhhh"
     workspaces {
-      name = "Jabberwocky-Workspace"
+      name = "Rmbr"
     }
   }
 
@@ -25,6 +25,7 @@ provider "aws" {
 module "vpc" {
   source = "./modules/vpc"
 
+  app_name    = "Rmbr"
   vpc_cidr    = "10.0.0.0/24"
   public_cidr = "10.0.0.0/24"
 }
@@ -33,8 +34,8 @@ module "vpc" {
 module "ecr" {
   source = "./modules/ecr"
 
-  api_ecr_repository_name = "jabberwocky-api"
-  web_ecr_repository_name = "jabberwocky-web"
+  api_ecr_repository_name = "rmbr-api"
+  web_ecr_repository_name = "rmbr-web"
 }
 
 # Create ECS IAM instance profile
@@ -50,7 +51,7 @@ module "api" {
   ec2_instance_type = "t2.micro"
   ec2_private_ip    = "10.0.0.24"
 
-  jabberwocky_public_subnet_id    = module.vpc.jabberwocky_public_subnet_id
+  public_subnet_id                = module.vpc.public_subnet_id
   ecs_agent_instance_profile_name = module.iam.ecs_agent_instance_profile_name
   sg_id                           = module.vpc.api_sg_id
   ssh_public_key                  = var.api_ssh_public_key
@@ -64,7 +65,7 @@ module "web" {
   ec2_instance_type = "t2.micro"
   ec2_private_ip    = "10.0.0.25"
 
-  jabberwocky_public_subnet_id    = module.vpc.jabberwocky_public_subnet_id
+  public_subnet_id                = module.vpc.public_subnet_id
   ecs_agent_instance_profile_name = module.iam.ecs_agent_instance_profile_name
   sg_id                           = module.vpc.web_sg_id
   ssh_public_key                  = var.web_ssh_public_key

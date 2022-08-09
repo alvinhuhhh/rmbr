@@ -1,10 +1,10 @@
-resource "aws_key_pair" "jabberwocky_web" {
-  key_name = "jabberwocky-web"
+resource "aws_key_pair" "rmbr_web" {
+  key_name = "rmbr-web"
   public_key = var.ssh_public_key
 }
 
-resource "aws_instance" "jabberwocky_web" {
-  subnet_id = var.jabberwocky_public_subnet_id
+resource "aws_instance" "rmbr_web" {
+  subnet_id = var.public_subnet_id
 
   ami = var.ec2_ami
   instance_type = var.ec2_instance_type
@@ -13,9 +13,9 @@ resource "aws_instance" "jabberwocky_web" {
 
   iam_instance_profile = var.ecs_agent_instance_profile_name
   security_groups = ["${var.sg_id}"]
-  key_name = aws_key_pair.jabberwocky_web.key_name
+  key_name = aws_key_pair.rmbr_web.key_name
 
-  user_data = "#!/bin/bash\necho ECS_CLUSTER=jabberwocky-web >> /etc/ecs/ecs.config"
+  user_data = "#!/bin/bash\necho ECS_CLUSTER=rmbr-web >> /etc/ecs/ecs.config"
 
   tags = {
     Name = "Jabberwocky Web ECS Instance"
@@ -23,6 +23,6 @@ resource "aws_instance" "jabberwocky_web" {
 }
 
 # Create ECS cluster
-resource "aws_ecs_cluster" "jabberwocky_web" {
-  name = "jabberwocky-web"
+resource "aws_ecs_cluster" "rmbr_web" {
+  name = "rmbr-web"
 }
