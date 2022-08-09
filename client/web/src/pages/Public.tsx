@@ -23,10 +23,11 @@ export default function Public({ ...props }: LoginProps) {
         localStorage.setItem("email", jwt.email);
 
         // Check if user exists, create user if not
-        LoginService.CheckIfUserExists(jwt.email);
+        LoginService.CheckIfUserExists(jwt.email).then((response) => {
+          if (response?.status === 200) navigate("/app/lists");
+          else navigate("/");
+        });
       }
-
-      navigate("/app/lists");
     }
   };
 
