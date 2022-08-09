@@ -18,7 +18,7 @@ resource "aws_instance" "rmbr_web" {
   user_data = "#!/bin/bash\necho ECS_CLUSTER=rmbr-web >> /etc/ecs/ecs.config"
 
   tags = {
-    Name = "Jabberwocky Web ECS Instance"
+    Name = "Rmbr Web ECS Instance"
   }
 }
 

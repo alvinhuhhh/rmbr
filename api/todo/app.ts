@@ -43,7 +43,7 @@ try {
       console.log("Database connected");
       app.listen(3000);
       https.createServer(options, app).listen(443, () => {
-        console.log(`API server started and listening on https://localhost`);
+        console.log(`API server started and listening on PORT: 443`);
       });
     });
   } else {

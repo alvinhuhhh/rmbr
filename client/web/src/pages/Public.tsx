@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Grid, Paper, Typography, Link, IconButton } from "@mui/material";
 import { LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
 import { ThemeContext } from "../contexts/ThemeContext";
