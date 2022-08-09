@@ -60,10 +60,10 @@ export default function Public({ ...props }: LoginProps) {
       <Grid item container justifyContent="center" alignItems="center" spacing={5}>
         <Grid item sm={12} lg={6}>
           <Typography variant="h3" marginLeft={5}>
-            Jabberwocky
+            Rmbr
           </Typography>
           <Typography variant="h6" marginLeft={5}>
-            Because every developer needs to make a todo app
+            Fullstack todo app.
           </Typography>
         </Grid>
         <Grid item sm={12} lg={6} container justifyContent="center" alignItems="center">
@@ -73,7 +73,7 @@ export default function Public({ ...props }: LoginProps) {
       <Grid item sx={{ position: "absolute", bottom: 0, width: "100vw" }}>
         <Paper sx={{ height: "100%", width: "100%" }}>
           <Grid container justifyContent="space-between" padding={3}>
-            <Grid item>Jabberwocky</Grid>
+            <Grid item>Rmbr</Grid>
             <Grid item>
               <Link href="https://github.com/alvinhuhhh/jabberwocky" color="inherit">
                 Github
