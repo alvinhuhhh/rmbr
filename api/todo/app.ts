@@ -56,7 +56,7 @@ try {
   console.log(err);
 }
 
-// SSL For Free domain validation
+// For ZeroSSL domain validation
 http
   .createServer((req, res) => {
     const reqUrl = url.parse(req.url as string).pathname;
