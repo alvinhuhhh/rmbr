@@ -1,6 +1,10 @@
-# Configuration
+# Rmbr Todo API
 
-## Required environment variables
+## Required configuration
 
-- PORT
-- DB_CONNECTION_STRING
+### Environment variables
+
+```bash
+PORT
+DB_CONNECTION_STRING
+```

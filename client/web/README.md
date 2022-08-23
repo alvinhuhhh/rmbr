@@ -1,15 +1,15 @@
-# Configuration
+# Rmbr Web Client
 
 ## Required configuration
 
-Configure a .env.production file before build, as React embeds environment variables into the static files on build that cannot be changed during runtime.
+### Environment variables
 
-### Variables to configure:
+```bash
+PORT
+REACT_APP_API_URL
+REACT_APP_CLIENT_ID
+```
 
-- PORT
-- REACT_APP_API_URL
-- REACT_APP_CLIENT_ID
-
-## Production deployment
+### Google Identity Services
 
 SSL cert is required to use GSI

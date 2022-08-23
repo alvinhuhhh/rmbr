@@ -1,7 +1,5 @@
 import "dotenv/config";
 import fs from "fs";
-import url from "url";
-import http from "http";
 import https from "https";
 
 import express from "express";
@@ -17,7 +15,6 @@ const app = express();
 const options = {
   key: fs.readFileSync("ssl/private.key", "utf-8"),
   cert: fs.readFileSync("ssl/certificate.crt", "utf-8"),
-  ca: fs.readFileSync("ssl/ca_bundle.crt", "utf-8"),
 };
 
 // Middleware
@@ -28,7 +25,7 @@ app.use(helmet());
 app.use(verify);
 
 // Routes
-app.use("/", routes);
+app.use("/api", routes);
 
 try {
   // Connect to DB and start listening
@@ -55,19 +52,3 @@ try {
 } catch (err) {
   console.log(err);
 }
-
-// SSL For Free domain validation
-http
-  .createServer((req, res) => {
-    const reqUrl = url.parse(req.url as string).pathname;
-    const file = fs.createReadStream("ssl/6C8CC160AA79C5242666D6778CB576C6.txt");
-    if (reqUrl === "/.well-known/pki-validation/6C8CC160AA79C5242666D6778CB576C6.txt") {
-      file.pipe(res);
-    } else {
-      res.writeHead(404);
-      res.end();
-    }
-  })
-  .listen(80, () => {
-    console.log("HTTP server started on PORT: 80");
-  });
