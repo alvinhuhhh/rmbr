@@ -1,5 +1,6 @@
 import "dotenv/config";
 import fs from "fs";
+import http from "http";
 import https from "https";
 
 import express from "express";
@@ -13,8 +14,8 @@ import routes from "./routes/index";
 
 const app = express();
 const options = {
-  key: fs.readFileSync("ssl/private.key", "utf-8"),
-  cert: fs.readFileSync("ssl/certificate.crt", "utf-8"),
+  // key: fs.readFileSync("ssl/private.key", "utf-8"),
+  // cert: fs.readFileSync("ssl/certificate.crt", "utf-8"),
 };
 
 // Middleware
@@ -42,8 +43,12 @@ try {
     database.once("connected", () => {
       console.log("Database connected");
 
-      https.createServer(options, app).listen(443, () => {
-        console.log(`API server started and listening on PORT: 443`);
+      // https.createServer(options, app).listen(443, () => {
+      //   console.log(`API server started and listening on PORT: 443`);
+      // });
+
+      http.createServer(app).listen(80, () => {
+        console.log(`API server started and listening on PORT: 80`);
       });
     });
   } else {
