@@ -29,6 +29,10 @@ const todoSchema = new Schema<ITodo>({
     type: Boolean,
     required: true,
   },
+  priority: {
+    type: Number,
+    required: true,
+  },
 });
 
 export default todoSchema;

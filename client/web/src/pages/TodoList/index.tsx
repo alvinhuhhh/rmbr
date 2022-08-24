@@ -14,13 +14,20 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  MoreVert as OptionsIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+  Bookmark as PriorityIcon,
+} from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import { ITodo } from "../../types/todo.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import TodoService from "../../services/Todo/todo.service";
 import TodoDialog from "./dialog";
 import DeleteDialog from "../../components/DeleteDialog";
+import PriorityColorMap from "../../components/PriorityColorMap";
 
 export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   const { listId } = useParams();
@@ -149,6 +156,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                 </ListItemIcon>
                 <ListItemButton onClick={(event) => handleEditClick(event, todo)} disableGutters>
                   <ListItemText primary={todo.title} />
+                  {todo.priority && <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />}
                 </ListItemButton>
               </ListItem>
             ))

@@ -63,6 +63,7 @@ export default class TodoService {
             existingTodo.title = todo.title;
             existingTodo.description = todo.description;
             existingTodo.done = todo.done;
+            existingTodo.priority = todo.priority;
             await user.save();
 
             return true;
