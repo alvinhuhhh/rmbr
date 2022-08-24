@@ -21,7 +21,7 @@ const todoSchema = new Schema<ITodo>({
     maxLength: 100,
     required: true,
   },
-  description: {
+  notes: {
     type: String,
     maxLength: 200,
   },

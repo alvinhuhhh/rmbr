@@ -3,13 +3,14 @@ import dayjs from "dayjs";
 import { useNavigate } from "react-router-dom";
 import {
   Grid,
+  Box,
   List,
   ListItem,
   ListItemIcon,
   ListItemButton,
   ListItemText,
+  Button,
   IconButton,
-  Fab,
   Popover,
   Typography,
 } from "@mui/material";
@@ -116,11 +117,16 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} xl={6}>
-        <Typography variant="h5" fontWeight="bold" sx={{ margin: 2, marginBottom: 1 }}>
-          Lists
-        </Typography>
+        <Box sx={{ margin: 2, marginBottom: 1 }}>
+          <Typography variant="h5" fontWeight="bold" display="inline">
+            Lists
+          </Typography>
+          <Button variant="outlined" size="small" onClick={handleAddClick} sx={{ float: "right" }}>
+            <AddIcon />
+          </Button>
+        </Box>
         <List sx={{ maxHeight: "calc(100vh - 132px)", overflow: "auto" }}>
-          {lists.length > 0 ? (
+          {lists.length > 0 &&
             lists.map((list) => (
               <ListItem
                 key={list._id}
@@ -136,10 +142,16 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
                   <ListItemText primary={list.title} />
                 </ListItemButton>
               </ListItem>
-            ))
-          ) : (
-            <ListItem>No lists found. Create one!</ListItem>
-          )}
+            ))}
+          <ListItem disableGutters>
+            <ListItemButton onClick={handleAddClick}>
+              <ListItemText
+                primary="+ New list"
+                primaryTypographyProps={{ fontWeight: "bold" }}
+                secondary="Click to create a new list"
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Popover
           id="optionsPopover"
@@ -171,9 +183,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
           </List>
         </Popover>
       </Grid>
-      <Fab size="large" color="secondary" sx={{ position: "absolute", bottom: 15, right: 15 }} onClick={handleAddClick}>
-        <AddIcon />
-      </Fab>
       <ListDialog
         title={dialogTitle}
         open={dialogOpen}

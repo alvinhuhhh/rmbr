@@ -3,14 +3,15 @@ import dayjs from "dayjs";
 import { useParams } from "react-router-dom";
 import {
   Grid,
+  Box,
   List,
   ListItem,
   ListItemIcon,
   ListItemButton,
   ListItemText,
+  Button,
   Checkbox,
   IconButton,
-  Fab,
   Popover,
   Typography,
 } from "@mui/material";
@@ -134,12 +135,17 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
-        <Typography variant="h5" fontWeight="bold" sx={{ margin: 2, marginBottom: 1 }}>
-          {list && list.title}
-        </Typography>
+      <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto" }}>
+        <Box sx={{ margin: 2, marginBottom: 1 }}>
+          <Typography variant="h5" fontWeight="bold" display="inline">
+            {list && list.title}
+          </Typography>
+          <Button variant="outlined" size="small" onClick={handleAddClick} sx={{ float: "right" }}>
+            <AddIcon />
+          </Button>
+        </Box>
         <List>
-          {todos.length > 0 ? (
+          {todos.length > 0 &&
             todos.map((todo) => (
               <ListItem
                 key={todo._id}
@@ -159,10 +165,16 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                   {todo.priority && <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />}
                 </ListItemButton>
               </ListItem>
-            ))
-          ) : (
-            <ListItem>No todos found. Create one!</ListItem>
-          )}
+            ))}
+          <ListItem disableGutters>
+            <ListItemButton onClick={handleAddClick}>
+              <ListItemText
+                primary="+ New todo"
+                primaryTypographyProps={{ fontWeight: "bold" }}
+                secondary="Click to create a new todo"
+              />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Popover
           id="optionsPopover"
@@ -194,9 +206,6 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
           </List>
         </Popover>
       </Grid>
-      <Fab size="large" color="secondary" sx={{ position: "absolute", bottom: 15, right: 15 }} onClick={handleAddClick}>
-        <AddIcon />
-      </Fab>
       <TodoDialog
         title={dialogTitle}
         open={dialogOpen}

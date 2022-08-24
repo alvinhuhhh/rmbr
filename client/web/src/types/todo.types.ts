@@ -5,7 +5,7 @@ export interface ITodo {
   updatedBy?: string;
   updatedDate?: Date;
   title: string;
-  description?: string;
+  notes?: string;
   done: boolean;
   priority: number;
 }

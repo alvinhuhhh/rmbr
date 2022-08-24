@@ -61,7 +61,7 @@ export default class TodoService {
             existingTodo.updatedBy = email;
             existingTodo.updatedDate = new Date();
             existingTodo.title = todo.title;
-            existingTodo.description = todo.description;
+            existingTodo.notes = todo.notes;
             existingTodo.done = todo.done;
             existingTodo.priority = todo.priority;
             await user.save();

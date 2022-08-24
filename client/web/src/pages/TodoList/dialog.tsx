@@ -127,9 +127,9 @@ export default function TodoDialog({
           </Grid>
           <Grid item xs={12}>
             <TextField
-              name="description"
-              label="Description"
-              value={data?.description || ""}
+              name="notes"
+              label="Notes"
+              value={data?.notes || ""}
               onChange={handleInputChange}
               variant="filled"
               fullWidth
