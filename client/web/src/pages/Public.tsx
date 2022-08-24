@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { Grid, Paper, Typography, Link, IconButton } from "@mui/material";
 import { LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
 import { ThemeContext } from "../contexts/ThemeContext";
@@ -49,32 +49,32 @@ export default function Public({ ...props }: LoginProps) {
   }, []);
 
   return (
-    <Grid container justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
-      <IconButton
-        size="small"
-        color="inherit"
-        onClick={theme.toggleDarkMode}
-        sx={{ position: "absolute", top: 15, right: 15 }}
-      >
-        {theme.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
-      </IconButton>
-      <Grid item container justifyContent="center" alignItems="center" spacing={5}>
-        <Grid item sm={12} lg={6}>
-          <Typography variant="h3" marginLeft={5}>
+    <React.Fragment>
+      <Grid container justifyContent="center" alignItems="center" flexDirection="column" sx={{ height: "100vh" }}>
+        <IconButton
+          size="small"
+          color="inherit"
+          onClick={theme.toggleDarkMode}
+          sx={{ position: "absolute", top: 15, right: 15 }}
+        >
+          {theme.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+        </IconButton>
+        <Grid item>
+          <Typography variant="h1" display="inline">
             Rmbr
           </Typography>
-          <Typography variant="h6" marginLeft={5}>
-            Fullstack todo app.
+          <Typography variant="h4" display="inline">
+            .app
           </Typography>
         </Grid>
-        <Grid item sm={12} lg={6} container justifyContent="center" alignItems="center">
+        <Grid item paddingTop={15}>
           <div id="signInDiv" />
         </Grid>
       </Grid>
-      <Grid item sx={{ position: "absolute", bottom: 0, width: "100vw" }}>
+      <Grid container>
         <Paper sx={{ height: "100%", width: "100%" }}>
           <Grid container justifyContent="space-between" padding={3}>
-            <Grid item>Rmbr</Grid>
+            <Grid item>Rmbr.app</Grid>
             <Grid item>
               <Link href="https://github.com/alvinhuhhh/rmbr" color="inherit">
                 Github
@@ -86,7 +86,7 @@ export default function Public({ ...props }: LoginProps) {
           </Grid>
         </Paper>
       </Grid>
-    </Grid>
+    </React.Fragment>
   );
 }
 

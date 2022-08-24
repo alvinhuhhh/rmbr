@@ -124,8 +124,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12}>
-        <List>
+      <Grid item xs={12} xl={6}>
+        <List sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
           {lists.length > 0 ? (
             lists.map((list) => (
               <ListItem
