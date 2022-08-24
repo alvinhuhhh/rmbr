@@ -4,7 +4,7 @@ import { LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "jose";
-import LoginService from "../services/Login";
+import LoginService from "../services/Login/login.service";
 
 declare global {
   var google: any;

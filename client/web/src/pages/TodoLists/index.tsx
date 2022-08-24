@@ -8,25 +8,15 @@ import {
   ListItemIcon,
   ListItemButton,
   ListItemText,
-  Button,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Fab,
   Popover,
 } from "@mui/material";
-import {
-  Description as ListIcon,
-  Add as AddIcon,
-  MoreVert as OptionsIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-} from "@mui/icons-material";
+import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
+import DeleteDialog from "../../components/DeleteDialog";
 
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const navigate = useNavigate();
@@ -124,8 +114,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12} xl={6}>
-        <List sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
+      <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
+        <List>
           {lists.length > 0 ? (
             lists.map((list) => (
               <ListItem
@@ -139,9 +129,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
                 divider
               >
                 <ListItemButton id={list._id?.toString()} onClick={handleListClick}>
-                  <ListItemIcon>
-                    <ListIcon />
-                  </ListItemIcon>
                   <ListItemText primary={list.title} />
                 </ListItemButton>
               </ListItem>
@@ -191,16 +178,13 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         setData={setDialogData}
         save={handleSave}
       />
-      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Delete list?</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete <b>{selectedItem?.title || ""}</b>?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
-          <Button onClick={() => handleConfirmDelete(selectedItem?._id || -1)}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteDialog
+        open={deleteDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
+        itemType="list"
+        itemName={selectedItem?.title || ""}
+      />
     </Grid>
   );
 }

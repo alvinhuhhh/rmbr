@@ -41,8 +41,10 @@ export default function ListDialog({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setOpen(false)}>Cancel</Button>
-        <Button disabled={!Boolean(data?.title)} onClick={save}>
+        <Button variant="outlined" onClick={() => setOpen(false)}>
+          Cancel
+        </Button>
+        <Button variant="contained" disabled={!Boolean(data?.title)} onClick={save}>
           Save
         </Button>
       </DialogActions>

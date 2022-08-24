@@ -9,23 +9,23 @@ import {
   ListItemButton,
   ListItemText,
   Checkbox,
-  Button,
   IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Fab,
   Popover,
+  Typography,
 } from "@mui/material";
 import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { IList } from "../../types/lists.types";
 import { ITodo } from "../../types/todo.types";
+import TodoListsService from "../../services/TodoLists/todolists.service";
 import TodoService from "../../services/Todo/todo.service";
 import TodoDialog from "./dialog";
+import DeleteDialog from "../../components/DeleteDialog";
 
 export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   const { listId } = useParams();
 
+  const [list, setList] = useState<IList>();
   const [todos, setTodos] = useState<ITodo[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -121,13 +121,17 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   };
 
   useEffect(() => {
+    TodoListsService.GetListById(listId as string).then((data) => setList(data));
     TodoService.GetTodos(listId as string).then((data) => setTodos(data));
   }, []);
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12} xl={6}>
-        <List sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
+      <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
+        <Typography variant="h5" sx={{ margin: 2, marginBottom: 1 }}>
+          <b>{list && list.title}</b>
+        </Typography>
+        <List>
           {todos.length > 0 ? (
             todos.map((todo) => (
               <ListItem
@@ -140,10 +144,10 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                 disablePadding
                 divider
               >
-                <ListItemButton onClick={(event) => handleEditClick(event, todo)}>
-                  <ListItemIcon>
-                    <Checkbox checked={todo.done} disableRipple onClick={(event) => handleToggleDone(event, todo)} />
-                  </ListItemIcon>
+                <ListItemIcon>
+                  <Checkbox checked={todo.done} onClick={(event) => handleToggleDone(event, todo)} />
+                </ListItemIcon>
+                <ListItemButton onClick={(event) => handleEditClick(event, todo)} disableGutters>
                   <ListItemText primary={todo.title} />
                 </ListItemButton>
               </ListItem>
@@ -193,16 +197,13 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
         setData={setDialogData}
         save={handleSave}
       />
-      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
-        <DialogTitle>Delete list?</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete <b>{selectedItem?.title || ""}</b>?
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelDelete}>Cancel</Button>
-          <Button onClick={() => handleConfirmDelete(selectedItem?._id || -1)}>Delete</Button>
-        </DialogActions>
-      </Dialog>
+      <DeleteDialog
+        open={deleteDialogOpen}
+        onClose={handleCancelDelete}
+        onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
+        itemType="todo"
+        itemName={selectedItem?.title || ""}
+      />
     </Grid>
   );
 }
