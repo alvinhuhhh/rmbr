@@ -17,6 +17,8 @@ import {
 import {
   Menu as MenuIcon,
   ListAlt as ListIcon,
+  People as SharedIcon,
+  Delete as TrashIcon,
   Settings as SettingsIcon,
   Logout as LogoutIcon,
   LightMode as LightModeIcon,
@@ -38,6 +40,16 @@ export default function App() {
   const handleListsClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
     navigate("/app/lists");
+  };
+
+  const handleSharedClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    navigate("/app/shared");
+  };
+
+  const handleTrashClick = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+    navigate("/app/trash");
   };
 
   const handleSettingsClick = () => {
@@ -80,6 +92,22 @@ export default function App() {
                 <ListIcon />
               </ListItemIcon>
               <ListItemText primary="Lists" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleSharedClick}>
+              <ListItemIcon>
+                <SharedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Shared" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={handleTrashClick}>
+              <ListItemIcon>
+                <TrashIcon />
+              </ListItemIcon>
+              <ListItemText primary="Trash" />
             </ListItemButton>
           </ListItem>
           <Divider />

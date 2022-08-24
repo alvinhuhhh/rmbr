@@ -10,6 +10,8 @@ import NotFound from "./pages/NotFound";
 import Settings from "./pages/Settings";
 import TodoLists from "./pages/TodoLists";
 import TodoList from "./pages/TodoList";
+import Shared from "./pages/Shared";
+import Trash from "./pages/Trash";
 
 function PublicRoute({ children }: { children: JSX.Element }) {
   let location = useLocation();
@@ -66,6 +68,8 @@ root.render(
           >
             <Route path="lists" element={<TodoLists />} />
             <Route path="lists/:listId" element={<TodoList />} />
+            <Route path="shared" element={<Shared />} />
+            <Route path="trash" element={<Trash />} />
             <Route path="settings" element={<Settings />} />
           </Route>
           <Route path="*" element={<NotFound />} />

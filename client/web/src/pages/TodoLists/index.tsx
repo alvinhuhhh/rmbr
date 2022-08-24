@@ -11,6 +11,7 @@ import {
   IconButton,
   Fab,
   Popover,
+  Typography,
 } from "@mui/material";
 import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
@@ -114,8 +115,11 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   return (
     <Grid container justifyContent="center">
-      <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
-        <List>
+      <Grid item xs={12} xl={6}>
+        <Typography variant="h5" fontWeight="bold" sx={{ margin: 2, marginBottom: 1 }}>
+          Lists
+        </Typography>
+        <List sx={{ maxHeight: "calc(100vh - 132px)", overflow: "auto" }}>
           {lists.length > 0 ? (
             lists.map((list) => (
               <ListItem

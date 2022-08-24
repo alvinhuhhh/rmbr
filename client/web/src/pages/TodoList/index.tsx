@@ -135,8 +135,8 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} xl={6} sx={{ maxHeight: "calc(100vh - 64px)", overflow: "auto", paddingBottom: 15 }}>
-        <Typography variant="h5" sx={{ margin: 2, marginBottom: 1 }}>
-          <b>{list && list.title}</b>
+        <Typography variant="h5" fontWeight="bold" sx={{ margin: 2, marginBottom: 1 }}>
+          {list && list.title}
         </Typography>
         <List>
           {todos.length > 0 ? (
@@ -154,7 +154,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                 <ListItemIcon>
                   <Checkbox checked={todo.done} onClick={(event) => handleToggleDone(event, todo)} />
                 </ListItemIcon>
-                <ListItemButton onClick={(event) => handleEditClick(event, todo)} disableGutters>
+                <ListItemButton onClick={(event) => handleEditClick(event, todo)}>
                   <ListItemText primary={todo.title} />
                   {todo.priority && <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />}
                 </ListItemButton>
