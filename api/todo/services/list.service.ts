@@ -1,26 +1,22 @@
-import { Types } from "mongoose";
 import User from "../models/user";
 import { IList } from "../types/list.types";
 
 export default class ListService {
-  public static async GetLists(email: string): Promise<Types.DocumentArray<IList> | undefined> {
+  public static async GetLists(email: string): Promise<Array<IList> | undefined> {
     try {
       const user = await User.findOne({ email: email });
-      if (user) return user.lists;
+      if (user) return user.lists.filter((list) => !list.deleted);
     } catch (err) {
       console.log(err);
     }
   }
 
-  public static async GetListById(
-    email: string,
-    listId: string
-  ): Promise<(Types.Subdocument<Types.ObjectId> & IList) | undefined> {
+  public static async GetListById(email: string, listId: string): Promise<IList | undefined> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
         const list = user.lists.id(listId);
-        if (list) return list;
+        if (list && !list.deleted) return list;
       }
     } catch (err) {
       console.log(err);
@@ -34,6 +30,7 @@ export default class ListService {
         // Create list
         list.createdBy = email;
         list.createdDate = new Date();
+        list.deleted = false;
         user.lists.push(list);
         await user.save();
 
@@ -72,11 +69,15 @@ export default class ListService {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        // Delete list
-        user.lists.pull(listId);
-        await user.save();
+        const existingList = user.lists.id(listId);
+        if (existingList) {
+          existingList.updatedBy = email;
+          existingList.updatedDate = new Date();
+          existingList.deleted = true;
+          await user.save();
 
-        return true;
+          return true;
+        }
       }
       return false;
     } catch (err) {

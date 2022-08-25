@@ -17,6 +17,10 @@ const listSchema = new Schema<IList>({
   updatedDate: {
     type: Date,
   },
+  deleted: {
+    type: Boolean,
+    required: true,
+  },
   title: {
     type: String,
     maxLength: 100,

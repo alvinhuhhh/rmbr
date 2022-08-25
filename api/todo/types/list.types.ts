@@ -7,6 +7,7 @@ export interface IList {
   createdDate: Date;
   updatedBy?: string;
   updatedDate?: Date;
+  deleted: boolean;
   title: string;
   todos: Types.DocumentArray<ITodo>;
 }

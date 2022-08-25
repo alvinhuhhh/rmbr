@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, model } from "mongoose";
 import { ITodo } from "../types/todo.types";
 
 const todoSchema = new Schema<ITodo>({
@@ -15,6 +15,10 @@ const todoSchema = new Schema<ITodo>({
   },
   updatedDate: {
     type: Date,
+  },
+  deleted: {
+    type: Boolean,
+    required: true,
   },
   title: {
     type: String,
