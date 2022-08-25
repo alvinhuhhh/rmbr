@@ -19,15 +19,24 @@ export default function Public({ ...props }: LoginProps) {
 
     if (jwt.nonce === sessionStorage.getItem("nonce")) {
       localStorage.setItem("jwt", response.credential);
-      if (typeof jwt.email === "string") {
-        localStorage.setItem("email", jwt.email);
+      localStorage.setItem("id", jwt.sub as string);
+      localStorage.setItem("fullname", jwt.name as string);
+      localStorage.setItem("givenname", jwt.given_name as string);
+      localStorage.setItem("familyname", jwt.family_name as string);
+      localStorage.setItem("imageurl", jwt.picture as string);
+      localStorage.setItem("email", jwt.email as string);
 
-        // Check if user exists, create user if not
-        LoginService.CheckIfUserExists(jwt.email).then((response) => {
-          if (response?.status === 200) navigate("/app/lists");
-          else navigate("/");
+      // Check if user exists
+      LoginService.CheckIfUserExists(jwt.email as string)
+        .then((response) => {
+          if (response?.status !== 200) return LoginService.CreateUser(jwt.email as string);
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => {
+          navigate("/app/lists");
         });
-      }
     }
   };
 

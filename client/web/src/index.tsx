@@ -7,11 +7,11 @@ import { ThemeContextProvider } from "./contexts/ThemeContext";
 import App from "./pages/App";
 import Public from "./pages/Public";
 import NotFound from "./pages/NotFound";
-import Settings from "./pages/Settings";
 import TodoLists from "./pages/TodoLists";
 import TodoList from "./pages/TodoList";
 import Shared from "./pages/Shared";
 import Trash from "./pages/Trash";
+import Settings from "./pages/Settings";
 
 function PublicRoute({ children }: { children: JSX.Element }) {
   let location = useLocation();
