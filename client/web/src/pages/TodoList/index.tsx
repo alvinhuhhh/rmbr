@@ -108,6 +108,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
         data.createdBy = sessionStorage.getItem("email") || "";
         data.createdDate = new Date(dayjs().format());
         data.done = false;
+        data.priority = data.priority || -1;
 
         status = await TodoService.CreateTodo(listId as string, data);
         if (status === 201) {
@@ -164,7 +165,9 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                 </ListItemIcon>
                 <ListItemButton onClick={(event) => handleEditClick(event, todo)}>
                   <ListItemText primary={todo.title} />
-                  {todo.priority && <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />}
+                  {todo.priority && todo.priority > 0 && (
+                    <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />
+                  )}
                 </ListItemButton>
               </ListItem>
             ))}
