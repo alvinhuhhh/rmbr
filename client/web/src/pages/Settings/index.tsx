@@ -9,8 +9,6 @@ export default function Settings({ ...props }: ISettingsProps): JSX.Element {
         <Typography variant="h5" fontWeight="bold" sx={{ margin: 2, marginBottom: 1 }}>
           Settings
         </Typography>
-      </Grid>
-      <Grid item xs={12} xl={6}>
         <Avatar src={localStorage.getItem("imageurl") as string} sx={{ height: 96, width: 96, margin: 3 }} />
         <Typography variant="body1" fontWeight="bold" sx={{ marginLeft: 3 }}>
           {localStorage.getItem("fullname")}

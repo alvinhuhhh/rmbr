@@ -9,11 +9,13 @@ import {
   ListItemIcon,
   ListItemButton,
   ListItemText,
+  ListItemAvatar,
   Button,
   Checkbox,
   IconButton,
   Popover,
   Typography,
+  Avatar,
 } from "@mui/material";
 import {
   Add as AddIcon,

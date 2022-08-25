@@ -28,15 +28,18 @@ export default function Public({ ...props }: LoginProps) {
 
       // Check if user exists
       LoginService.CheckIfUserExists(jwt.email as string)
-        .then((response) => {
-          if (response?.status !== 200) return LoginService.CreateUser(jwt.email as string);
+        .then((loginResponse) => {
+          if (loginResponse?.status === 200) return;
         })
         .catch((err) => {
           console.log(err);
+          LoginService.CreateUser(jwt.email as string);
         })
         .finally(() => {
           navigate("/app/lists");
         });
+    } else {
+      console.log("Nonce error when logging in");
     }
   };
 
