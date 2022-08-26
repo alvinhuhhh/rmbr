@@ -14,10 +14,17 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
-import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import {
+  Add as AddIcon,
+  MoreVert as OptionsIcon,
+  Edit as EditIcon,
+  Share as ShareIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
+import ShareDialog from "./share";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
@@ -25,10 +32,12 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   const [lists, setLists] = useState<IList[]>([]);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [shareDialogOpen, setShareDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
+  const [shareDialogData, setShareDialogData] = useState();
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList>();
 
@@ -45,6 +54,12 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     setDialogData(selectedItem as IList);
     setDialogType("edit");
     setDialogOpen(true);
+  };
+
+  const handleShareClick = () => {
+    setOptionsAnchor(null);
+    setShareDialogData(undefined);
+    setShareDialogOpen(true);
   };
 
   const handleDeleteClick = () => {
@@ -110,6 +125,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     }
   };
 
+  const handleShare = async () => {};
+
   useEffect(() => {
     TodoListsService.GetLists().then((data) => setLists(data));
   }, []);
@@ -173,6 +190,14 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
+              <ListItemButton id="editItem" onClick={handleShareClick}>
+                <ListItemIcon>
+                  <ShareIcon />
+                </ListItemIcon>
+                Share
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
               <ListItemButton id="deleteItem" onClick={handleDeleteClick}>
                 <ListItemIcon>
                   <DeleteIcon />
@@ -190,6 +215,14 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         data={dialogData}
         setData={setDialogData}
         save={handleSave}
+      />
+      <ShareDialog
+        title="Share with"
+        open={shareDialogOpen}
+        setOpen={setShareDialogOpen}
+        data={shareDialogData}
+        setData={setShareDialogData}
+        save={handleShare}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

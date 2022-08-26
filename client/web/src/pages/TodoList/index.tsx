@@ -167,7 +167,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                   <ListItemText
                     primary={todo.title}
                     primaryTypographyProps={
-                      (todo.done && { sx: { textDecorationLine: "line-through", color: "#aaaaaa" } }) || {}
+                      (todo.done && { sx: { textDecorationLine: "line-through", color: "#999999" } }) || {}
                     }
                   />
                   {todo.priority && todo.priority > 0 && (
