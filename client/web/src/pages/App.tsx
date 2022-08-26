@@ -71,7 +71,7 @@ export default function App() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            {localStorage.getItem("email")}
+            Rmbr
           </Typography>
           <IconButton size="small" color="inherit" onClick={theme.toggleDarkMode}>
             {theme.mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}

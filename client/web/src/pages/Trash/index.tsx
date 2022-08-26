@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import {
   Grid,
   Box,
@@ -51,26 +52,28 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
   const handleEmptyClick = async () => {};
 
   useEffect(() => {
-    TrashService.GetTrash().then((data) => setTrashed(data));
+    TrashService.GetTrash().then((data) =>
+      setTrashed(data.sort((a, b) => (dayjs(a.updatedDate).isBefore(b.updatedDate) ? 1 : -1)))
+    );
   }, []);
 
   return (
     <Grid container justifyContent="center">
       <Grid item xs={12} xl={6}>
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ padding: 2 }}>
+        <Grid container justifyContent="space-between" alignItems="center" spacing={1} sx={{ padding: 2 }}>
           <Grid item>
             <Box>
               <Typography variant="h5" fontWeight="bold" display="block">
                 Trash
               </Typography>
-              <Typography variant="body2" display="block">
+              <Typography variant="subtitle2" display="block">
                 Items in trash will be deleted after 30 days.
               </Typography>
             </Box>
           </Grid>
           <Grid item>
             <Button variant="outlined" size="small" onClick={handleEmptyClick} sx={{ float: "right" }}>
-              Empty
+              <DeleteIcon />
             </Button>
           </Grid>
         </Grid>
@@ -86,7 +89,10 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
                 }
                 divider
               >
-                <ListItemText primary={item.title} />
+                <ListItemText
+                  primary={item.title}
+                  secondary={`Deleted on ${dayjs(item.updatedDate).format("DD/MM/YYYY")}`}
+                />
               </ListItem>
             ))
           ) : (
