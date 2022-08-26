@@ -2,6 +2,8 @@
 
 Rmbr is a fullstack todo app, because every developer needs to make a todo app.
 
+## Key features
+
 ## Application stack
 
 - [MongoDB](https://www.mongodb.com/)

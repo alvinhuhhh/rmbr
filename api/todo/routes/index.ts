@@ -3,6 +3,7 @@ import { Router } from "express";
 import UserController from "../controllers/user.controller";
 import ListController from "../controllers/list.controller";
 import TodoController from "../controllers/todo.controller";
+import TrashController from "../controllers/trash.controller";
 
 const router = Router();
 
@@ -21,5 +22,7 @@ router.get("/todo/:listId/:todoId", TodoController.GetTodoById);
 router.post("/todo/:listId", TodoController.CreateTodo);
 router.put("/todo/:listId/:todoId", TodoController.UpdateTodo);
 router.delete("/todo/:listId/:todoId", TodoController.DeleteTodo);
+
+router.get("/trash", TrashController.GetTrash);
 
 export default router;

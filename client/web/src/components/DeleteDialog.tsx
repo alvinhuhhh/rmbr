@@ -13,7 +13,7 @@ export default function DeleteDialog({
     <Dialog open={open} onClose={onClose} {...props}>
       <DialogTitle>{`Delete ${itemType}?`}</DialogTitle>
       <DialogContent>
-        Are you sure you want to delete <b>{itemName}</b>?
+        Are you sure you want to delete <b>{itemName}</b> {itemType === "permanently" && "permanently"}?
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>
