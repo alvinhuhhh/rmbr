@@ -164,7 +164,12 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                   <Checkbox checked={todo.done} onClick={(event) => handleToggleDone(event, todo)} />
                 </ListItemIcon>
                 <ListItemButton onClick={(event) => handleEditClick(event, todo)}>
-                  <ListItemText primary={todo.title} />
+                  <ListItemText
+                    primary={todo.title}
+                    primaryTypographyProps={
+                      (todo.done && { sx: { textDecorationLine: "line-through", color: "#aaaaaa" } }) || {}
+                    }
+                  />
                   {todo.priority && todo.priority > 0 && (
                     <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />
                   )}
