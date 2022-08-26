@@ -19,6 +19,10 @@ export default class UserService {
 
       // Create new user
       const newUser = new User();
+      newUser.fullName = user.fullName;
+      newUser.givenName = user.givenName;
+      newUser.familyName = user.familyName;
+      newUser.profilePicUrl = user.profilePicUrl;
       newUser.email = user.email;
       newUser.createdDate = new Date();
       await newUser.save();

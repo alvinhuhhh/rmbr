@@ -23,7 +23,7 @@ export default function Public({ ...props }: LoginProps) {
       localStorage.setItem("fullname", jwt.name as string);
       localStorage.setItem("givenname", jwt.given_name as string);
       localStorage.setItem("familyname", jwt.family_name as string);
-      localStorage.setItem("imageurl", jwt.picture as string);
+      localStorage.setItem("profilepicurl", jwt.picture as string);
       localStorage.setItem("email", jwt.email as string);
 
       // Check if user exists
@@ -33,7 +33,7 @@ export default function Public({ ...props }: LoginProps) {
         })
         .catch((err) => {
           console.log(err);
-          LoginService.CreateUser(jwt.email as string);
+          LoginService.CreateUser(jwt);
         })
         .finally(() => {
           navigate("/app/lists");

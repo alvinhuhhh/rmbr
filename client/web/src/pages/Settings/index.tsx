@@ -9,7 +9,10 @@ export default function Settings({ ...props }: ISettingsProps): JSX.Element {
         <Typography variant="h5" fontWeight="bold" sx={{ marginBottom: 3 }}>
           Settings
         </Typography>
-        <Avatar src={localStorage.getItem("imageurl") as string} sx={{ height: 132, width: 132, marginBottom: 3 }} />
+        <Avatar
+          src={localStorage.getItem("profilepicurl") as string}
+          sx={{ height: 132, width: 132, marginBottom: 3 }}
+        />
         <Typography variant="body1" fontWeight="bold">
           {localStorage.getItem("fullname")}
         </Typography>

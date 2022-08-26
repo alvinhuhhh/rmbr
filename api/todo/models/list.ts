@@ -27,6 +27,7 @@ const listSchema = new Schema<IList>({
     required: true,
   },
   todos: [todoSchema],
+  sharedUsers: [{ user: String }],
 });
 
 export default listSchema;

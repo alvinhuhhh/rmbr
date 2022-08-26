@@ -7,5 +7,6 @@ export interface IList {
   updatedBy?: string;
   updatedDate?: Date;
   title: string;
-  todos: ITodo[];
+  todos: Array<ITodo>;
+  sharedUsers: Array<{ user: string }>;
 }
