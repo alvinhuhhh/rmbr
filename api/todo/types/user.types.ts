@@ -11,5 +11,5 @@ export interface IUser {
   createdDate: Date;
   updatedDate?: Date;
   lists: Types.DocumentArray<IList>;
-  sharedLists: Types.DocumentArray<{ user: string; listId: number }>;
+  sharedLists: Types.DocumentArray<{ email: string; listId: number }>;
 }

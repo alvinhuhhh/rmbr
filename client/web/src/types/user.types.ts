@@ -10,5 +10,5 @@ export interface IUser {
   createdDate: Date;
   updatedDate?: Date;
   lists: Array<IList>;
-  sharedLists: Array<{ user: string; listId: number }>;
+  sharedLists: Array<{ email: string; listId: number }>;
 }

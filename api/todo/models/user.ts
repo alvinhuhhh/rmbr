@@ -36,7 +36,7 @@ const userSchema = new Schema<IUser>({
   lists: [listSchema],
   sharedLists: [
     {
-      user: String,
+      email: String,
       listId: Schema.Types.ObjectId,
     },
   ],

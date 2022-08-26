@@ -37,7 +37,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
-  const [shareDialogData, setShareDialogData] = useState();
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList>();
 
@@ -58,7 +57,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   const handleShareClick = () => {
     setOptionsAnchor(null);
-    setShareDialogData(undefined);
+    setDialogData(selectedItem as IList);
     setShareDialogOpen(true);
   };
 
@@ -124,8 +123,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         break;
     }
   };
-
-  const handleShare = async () => {};
 
   useEffect(() => {
     TodoListsService.GetLists().then((data) => setLists(data));
@@ -217,12 +214,11 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         save={handleSave}
       />
       <ShareDialog
-        title="Share with"
+        title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        data={shareDialogData}
-        setData={setShareDialogData}
-        save={handleShare}
+        data={dialogData}
+        setData={setDialogData}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

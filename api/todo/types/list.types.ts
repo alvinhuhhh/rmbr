@@ -10,5 +10,5 @@ export interface IList {
   deleted: boolean;
   title: string;
   todos: Types.DocumentArray<ITodo>;
-  sharedUsers: Types.DocumentArray<{ user: string }>;
+  sharedUsers: Types.DocumentArray<{ email: string }>;
 }
