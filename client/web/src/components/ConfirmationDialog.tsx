@@ -1,36 +1,38 @@
 import React, { MouseEventHandler } from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 
-export default function DeleteDialog({
+export default function ConfirmationDialog({
   open,
   onClose,
   onConfirm,
-  itemType,
-  itemName,
+  dialogTitle,
+  dialogContent,
+  dialogCancel,
+  dialogConfirm,
   ...props
-}: IDeleteDialogProps): JSX.Element {
+}: IConfirmationDialogProps): JSX.Element {
   return (
     <Dialog open={open} onClose={onClose} {...props}>
-      <DialogTitle>{`Delete ${itemType}?`}</DialogTitle>
-      <DialogContent>
-        Are you sure you want to delete <b>{itemName}</b> {itemType === "permanently" && "permanently"}?
-      </DialogContent>
+      <DialogTitle>{dialogTitle}</DialogTitle>
+      <DialogContent>{dialogContent}</DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>
-          Cancel
+          {dialogCancel}
         </Button>
         <Button variant="contained" onClick={onConfirm}>
-          Delete
+          {dialogConfirm}
         </Button>
       </DialogActions>
     </Dialog>
   );
 }
 
-interface IDeleteDialogProps {
+interface IConfirmationDialogProps {
   open: boolean;
   onClose: MouseEventHandler;
   onConfirm: MouseEventHandler;
-  itemType: string;
-  itemName: string;
+  dialogTitle: string;
+  dialogContent: JSX.Element;
+  dialogCancel: string;
+  dialogConfirm: string;
 }

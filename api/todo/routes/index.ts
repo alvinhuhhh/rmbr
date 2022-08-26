@@ -24,5 +24,8 @@ router.put("/todo/:listId/:todoId", TodoController.UpdateTodo);
 router.delete("/todo/:listId/:todoId", TodoController.DeleteTodo);
 
 router.get("/trash", TrashController.GetTrash);
+router.put("/trash/:listId", TrashController.RestoreItem);
+router.delete("/trash/:listId", TrashController.DeleteItem);
+router.delete("/trash", TrashController.DeleteAll);
 
 export default router;

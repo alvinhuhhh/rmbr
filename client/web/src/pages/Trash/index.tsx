@@ -17,11 +17,12 @@ import { MoreVert as OptionsIcon, Restore as RestoreIcon, Delete as DeleteIcon }
 import { IList } from "../../types/lists.types";
 import { ITodo } from "../../types/todo.types";
 import TrashService from "../../services/Trash/trash.service";
-import DeleteDialog from "../../components/DeleteDialog";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function Trash({ ...props }: ITrashProps): JSX.Element {
   const [trashed, setTrashed] = useState<Array<IList | ITodo>>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
+  const [emptyDialogOpen, setEmptyDialogOpen] = useState<boolean>(false);
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList | ITodo>();
 
@@ -35,7 +36,16 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
     setSelectedItem(undefined);
   };
 
-  const handleRestoreClick = async () => {};
+  const handleRestoreClick = async (id: number) => {
+    let status = await TrashService.RestoreItem(id);
+    if (status === 204) {
+      setOptionsAnchor(null);
+      setSelectedItem(undefined);
+      TrashService.GetTrash().then((data) => setTrashed(data));
+    } else {
+      throw new Error(status?.toString());
+    }
+  };
 
   const handleDeleteClick = () => {
     setOptionsAnchor(null);
@@ -47,9 +57,34 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
     setSelectedItem(undefined);
   };
 
-  const handleConfirmDelete = async (id: number) => {};
+  const handleConfirmDelete = async (id: number) => {
+    let status = await TrashService.DeleteItem(id);
+    if (status === 204) {
+      setDeleteDialogOpen(false);
+      setSelectedItem(undefined);
+      TrashService.GetTrash().then((data) => setTrashed(data));
+    } else {
+      throw new Error(status?.toString());
+    }
+  };
 
-  const handleEmptyClick = async () => {};
+  const handleEmptyClick = () => {
+    setEmptyDialogOpen(true);
+  };
+
+  const handleCancelEmpty = () => {
+    setEmptyDialogOpen(false);
+  };
+
+  const handleConfirmEmpty = async () => {
+    let status = await TrashService.DeleteAll();
+    if (status === 204) {
+      setEmptyDialogOpen(false);
+      TrashService.GetTrash().then((data) => setTrashed(data));
+    } else {
+      throw new Error(status?.toString());
+    }
+  };
 
   useEffect(() => {
     TrashService.GetTrash().then((data) =>
@@ -113,7 +148,7 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
         >
           <List>
             <ListItem disablePadding>
-              <ListItemButton id="restoreItem" onClick={handleRestoreClick}>
+              <ListItemButton id="restoreItem" onClick={() => handleRestoreClick(selectedItem?._id || -1)}>
                 <ListItemIcon>
                   <RestoreIcon />
                 </ListItemIcon>
@@ -131,12 +166,31 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
           </List>
         </Popover>
       </Grid>
-      <DeleteDialog
+      <ConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        itemType="permanently"
-        itemName={selectedItem?.title || ""}
+        dialogTitle="Delete permanently?"
+        dialogContent={
+          <Typography>
+            Are you sure you want to delete <b>{selectedItem?.title}</b> permanently?
+          </Typography>
+        }
+        dialogCancel="Cancel"
+        dialogConfirm="Delete"
+      />
+      <ConfirmationDialog
+        open={emptyDialogOpen}
+        onClose={handleCancelEmpty}
+        onConfirm={() => handleConfirmEmpty()}
+        dialogTitle="Empty trash?"
+        dialogContent={
+          <Typography>
+            All items will be deleted <b>permanently</b>.
+          </Typography>
+        }
+        dialogCancel="Cancel"
+        dialogConfirm="Delete"
       />
     </Grid>
   );

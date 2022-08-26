@@ -29,7 +29,7 @@ import { ITodo } from "../../types/todo.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import TodoService from "../../services/Todo/todo.service";
 import TodoDialog from "./dialog";
-import DeleteDialog from "../../components/DeleteDialog";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 import PriorityColorMap from "../../components/PriorityColorMap";
 
 export default function TodoList({ ...props }: TodoListProps): JSX.Element {
@@ -219,12 +219,18 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
         setData={setDialogData}
         save={handleSave}
       />
-      <DeleteDialog
+      <ConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        itemType="todo"
-        itemName={selectedItem?.title || ""}
+        dialogTitle="Delete todo?"
+        dialogContent={
+          <Typography>
+            Are you sure you want to delete <b>{selectedItem?.title}</b>?
+          </Typography>
+        }
+        dialogCancel="Cancel"
+        dialogConfirm="Delete"
       />
     </Grid>
   );

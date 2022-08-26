@@ -18,7 +18,7 @@ import { Add as AddIcon, MoreVert as OptionsIcon, Edit as EditIcon, Delete as De
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import ListDialog from "./dialog";
-import DeleteDialog from "../../components/DeleteDialog";
+import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const navigate = useNavigate();
@@ -191,12 +191,18 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         setData={setDialogData}
         save={handleSave}
       />
-      <DeleteDialog
+      <ConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        itemType="list"
-        itemName={selectedItem?.title || ""}
+        dialogTitle="Delete list?"
+        dialogContent={
+          <Typography>
+            Are you sure you want to delete <b>{selectedItem?.title}</b>?
+          </Typography>
+        }
+        dialogCancel="Cancel"
+        dialogConfirm="Delete"
       />
     </Grid>
   );
