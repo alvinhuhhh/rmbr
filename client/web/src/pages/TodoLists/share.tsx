@@ -18,6 +18,7 @@ import SharedService from "../../services/Shared/shared.service";
 
 export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
   const email: string = localStorage.getItem("email") as string;
+
   const [userEmail, setUserEmail] = useState<string>("");
   const [serverValidation, setServerValidation] = useState<string>("");
 
@@ -33,7 +34,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
 
   const handleShareClick = async () => {
     try {
-      let response = await SharedService.CreateShare(userEmail, data as IList);
+      let response = await SharedService.CreateShare(email, userEmail, data as IList);
       if (response?.status === 201) {
         TodoListsService.GetListById(email, data?._id?.toString() as string).then((data) => setData(data));
         setUserEmail("");

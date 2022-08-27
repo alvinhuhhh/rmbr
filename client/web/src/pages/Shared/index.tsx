@@ -27,6 +27,7 @@ import SharedService from "../../services/Shared/shared.service";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function Shared({ ...props }: ISharedProps): JSX.Element {
+  const email: string = localStorage.getItem("email") as string;
   const navigate = useNavigate();
 
   const [lists, setLists] = useState<IList[]>([]);
@@ -40,7 +41,7 @@ export default function Shared({ ...props }: ISharedProps): JSX.Element {
   const [selectedItem, setSelectedItem] = useState<IList>();
 
   useEffect(() => {
-    SharedService.GetSharedLists().then((data) => setLists(data));
+    SharedService.GetSharedLists(email).then((data) => setLists(data));
   }, []);
 
   return (
