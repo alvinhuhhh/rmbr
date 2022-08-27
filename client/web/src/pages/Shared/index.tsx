@@ -48,7 +48,7 @@ export default function Shared({ ...props }: ISharedProps): JSX.Element {
       <Grid item xs={12} xl={6}>
         <Box sx={{ margin: 2, marginBottom: 1 }}>
           <Typography variant="h5" fontWeight="bold" display="inline">
-            Lists
+            Shared
           </Typography>
         </Box>
         <List sx={{ maxHeight: "calc(100vh - 132px)", overflow: "auto" }}>

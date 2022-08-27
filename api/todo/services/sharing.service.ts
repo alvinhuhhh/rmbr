@@ -12,16 +12,20 @@ export default class SharingService {
       if (user && targetUser) {
         const existingList = user.lists.id(list._id);
         if (existingList) {
-          // Add target user email to list sharedUsers
           if (!existingList.sharedUsers.find((user) => user.email === targetUserEmail)) {
+            // Add target user email to list sharedUsers
             existingList.updatedBy = email;
             existingList.updatedDate = new Date();
             existingList.sharedUsers.push({ email: targetUserEmail });
-            await user.save();
+
+            // Add list to user sharedLists
+            user.sharedLists.push({ email: email, listId: list._id });
 
             // Add list id to target user sharedLists
             targetUser.updatedDate = new Date();
             targetUser.sharedLists.push({ email: email, listId: list._id });
+
+            await user.save();
             await targetUser.save();
 
             return { succeeded: true, message: "" };
@@ -41,19 +45,20 @@ export default class SharingService {
 
   public static async GetSharedLists(email: string): Promise<Array<IList> | undefined> {
     try {
-      let result: Array<IList> = [];
-
       const user = await User.findOne({ email: email });
       if (user) {
-        user.sharedLists.forEach((ref) => {
-          User.findOne({ email: ref.email }).then((u) => {
-            const list = u?.lists.id(ref.listId);
-            list && result.push(list);
-          });
-        });
-      }
+        let result: Array<IList> = [];
 
-      return result;
+        for (let i = 0; i < user.sharedLists.length; i++) {
+          const u = await User.findOne({ email: user.sharedLists[i].email });
+          if (u) {
+            const list = u.lists.id(user.sharedLists[i].listId);
+            list && result.push(list);
+          }
+        }
+
+        return result;
+      }
     } catch (err: any) {
       console.log(err);
     }
