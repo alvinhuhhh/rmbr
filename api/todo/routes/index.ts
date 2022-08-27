@@ -4,6 +4,7 @@ import UserController from "../controllers/user.controller";
 import ListController from "../controllers/list.controller";
 import TodoController from "../controllers/todo.controller";
 import TrashController from "../controllers/trash.controller";
+import SharingController from "../controllers/sharing.controller";
 
 const router = Router();
 
@@ -27,5 +28,9 @@ router.get("/trash", TrashController.GetTrash);
 router.put("/trash/:listId", TrashController.RestoreItem);
 router.delete("/trash/:listId", TrashController.DeleteItem);
 router.delete("/trash", TrashController.DeleteAll);
+
+router.get("/sharing", SharingController.GetSharedLists);
+router.post("/sharing/:targetUserEmail", SharingController.CreateShare);
+router.put("/sharing/:targetUserEmail", SharingController.UpdateShare);
 
 export default router;
