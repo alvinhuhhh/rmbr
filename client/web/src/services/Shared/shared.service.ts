@@ -12,4 +12,17 @@ export default class SharedService {
       return err.response;
     }
   }
+
+  public static async UpdateShare() {}
+
+  public static async GetSharedLists(): Promise<Array<IList>> {
+    try {
+      let response = await axios.get(`${appConfig.api.url}/sharing/list`);
+      console.log(`[GetSharedLists] ${response.status} ${response.statusText}`);
+      if (response.status === 200) return response.data;
+    } catch (err: any) {
+      console.log(err);
+    }
+    return [];
+  }
 }

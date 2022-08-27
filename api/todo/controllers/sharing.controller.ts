@@ -3,8 +3,6 @@ import { IList } from "../types/list.types";
 import SharingService from "../services/sharing.service";
 
 export default class SharingController {
-  public static async GetSharedLists(req: Request, res: Response): Promise<void> {}
-
   public static async CreateShare(req: Request, res: Response): Promise<void> {
     const email = req.email;
     if (email) {
@@ -22,4 +20,18 @@ export default class SharingController {
   }
 
   public static async UpdateShare(req: Request, res: Response): Promise<void> {}
+
+  public static async GetSharedLists(req: Request, res: Response): Promise<void> {
+    const email = req.email;
+    if (email) {
+      try {
+        const lists = await SharingService.GetSharedLists(email);
+
+        if (lists) res.status(200).send(lists);
+        else res.status(404).send();
+      } catch (err: any) {
+        console.log(err);
+      }
+    } else res.status(500).send();
+  }
 }

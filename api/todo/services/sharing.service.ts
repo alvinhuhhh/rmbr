@@ -36,4 +36,26 @@ export default class SharingService {
       return { succeeded: false, message: err.toString() };
     }
   }
+
+  public static async UpdateShare(): Promise<void> {}
+
+  public static async GetSharedLists(email: string): Promise<Array<IList> | undefined> {
+    try {
+      let result: Array<IList> = [];
+
+      const user = await User.findOne({ email: email });
+      if (user) {
+        user.sharedLists.forEach((ref) => {
+          User.findOne({ email: ref.email }).then((u) => {
+            const list = u?.lists.id(ref.listId);
+            list && result.push(list);
+          });
+        });
+      }
+
+      return result;
+    } catch (err: any) {
+      console.log(err);
+    }
+  }
 }

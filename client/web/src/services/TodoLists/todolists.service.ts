@@ -3,7 +3,7 @@ import appConfig from "../../config";
 import { IList } from "../../types/lists.types";
 
 export default class TodoListsService {
-  public static async GetLists(): Promise<IList[]> {
+  public static async GetLists(): Promise<Array<IList>> {
     try {
       let response = await axios.get(`${appConfig.api.url}/list`);
       console.log(`[GetLists] ${response.status} ${response.statusText}`);

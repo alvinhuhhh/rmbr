@@ -29,8 +29,9 @@ router.put("/trash/:listId", TrashController.RestoreItem);
 router.delete("/trash/:listId", TrashController.DeleteItem);
 router.delete("/trash", TrashController.DeleteAll);
 
-router.get("/sharing", SharingController.GetSharedLists);
 router.post("/sharing/:targetUserEmail", SharingController.CreateShare);
 router.put("/sharing/:targetUserEmail", SharingController.UpdateShare);
+
+router.get("/sharing/list", SharingController.GetSharedLists);
 
 export default router;
