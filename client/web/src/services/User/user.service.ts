@@ -5,18 +5,17 @@ import appConfig from "../../config";
 import { IUser } from "../../types/user.types";
 
 export default class UserService {
-  public static async CheckIfUserExists(email: string): Promise<AxiosResponse | undefined> {
+  public static async CheckIfUserExists(email: string): Promise<AxiosResponse> {
     try {
       let response = await axios.get(`${appConfig.api.url}/user/${email}`);
       console.log(`[CheckIfUserExists] ${response.status} ${response.statusText}`);
       return response;
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      return err.response;
     }
-    return;
   }
 
-  public static async CreateUser(jwt: JWTPayload): Promise<AxiosResponse | undefined> {
+  public static async CreateUser(jwt: JWTPayload): Promise<AxiosResponse> {
     const user: IUser = {
       fullName: jwt.name as string,
       givenName: jwt.given_name as string,
@@ -31,9 +30,8 @@ export default class UserService {
       let response = await axios.post(`${appConfig.api.url}/user`, user);
       console.log(`[CreateUser] ${response.status} ${response.statusText}`);
       return response;
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      return err.response;
     }
-    return;
   }
 }

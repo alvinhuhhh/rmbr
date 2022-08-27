@@ -29,14 +29,11 @@ export default function Public({ ...props }: LoginProps) {
       // Check if user exists
       UserService.CheckIfUserExists(jwt.email as string)
         .then((loginResponse) => {
-          if (loginResponse?.status === 200) return;
+          if (loginResponse?.status === 200) navigate("app/lists");
+          else UserService.CreateUser(jwt).then((response) => response.status === 201 && navigate("app/lists"));
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err);
-          UserService.CreateUser(jwt);
-        })
-        .finally(() => {
-          navigate("/app/lists");
         });
     } else {
       console.log("Nonce error when logging in");
