@@ -5,7 +5,7 @@ import { IServiceResponse } from "../types/service.types";
 export default class SharingService {
   public static async CreateShare(email: string, targetUserEmail: string, list: IList): Promise<IServiceResponse> {
     try {
-      if (email === targetUserEmail) return { succeeded: false, validationMessage: "List cannot be shared with owner" };
+      if (email === targetUserEmail) return { succeeded: false, message: "List cannot be shared with owner" };
 
       const user = await User.findOne({ email: email });
       const targetUser = await User.findOne({ email: targetUserEmail });
@@ -24,16 +24,16 @@ export default class SharingService {
             targetUser.sharedLists.push({ email: email, listId: list._id });
             await targetUser.save();
 
-            return { succeeded: true, validationMessage: "" };
+            return { succeeded: true, message: "" };
           }
-          return { succeeded: false, validationMessage: "User has already been added to shared users" };
+          return { succeeded: false, message: "User has already been added to shared users" };
         }
-        return { succeeded: false, validationMessage: "List does not exist" };
+        return { succeeded: false, message: "List does not exist" };
       }
-      return { succeeded: false, validationMessage: "User does not exist. Send an invite?" };
+      return { succeeded: false, message: "User does not exist. Send an invite?" };
     } catch (err: any) {
       console.log(err);
-      return { succeeded: false, validationMessage: err.toString() };
+      return { succeeded: false, message: err.toString() };
     }
   }
 }

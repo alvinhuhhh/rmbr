@@ -11,7 +11,7 @@ export default class ListController {
 
         if (lists) res.status(200).send(lists);
         else res.status(404).send();
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -26,7 +26,7 @@ export default class ListController {
 
         if (list) res.status(200).send(list);
         else res.status(404).send();
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -39,9 +39,9 @@ export default class ListController {
         const list = req.body;
         const response = await ListService.CreateList(email, list as IList);
 
-        if (response) res.status(201).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(201).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -54,9 +54,9 @@ export default class ListController {
         const list = req.body;
         const response = await ListService.UpdateList(email, list as IList);
 
-        if (response) res.status(204).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -69,9 +69,9 @@ export default class ListController {
         const listId = req.params.listId;
         const response = await ListService.DeleteList(email, listId);
 
-        if (response) res.status(204).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();

@@ -1,12 +1,13 @@
 import User from "../models/user";
 import { IList } from "../types/list.types";
+import { IServiceResponse } from "../types/service.types";
 
 export default class ListService {
   public static async GetLists(email: string): Promise<Array<IList> | undefined> {
     try {
       const user = await User.findOne({ email: email });
       if (user) return user.lists.filter((list) => !list.deleted);
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
   }
@@ -18,12 +19,12 @@ export default class ListService {
         const list = user.lists.id(listId);
         if (list && !list.deleted) return list;
       }
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
   }
 
-  public static async CreateList(email: string, list: IList): Promise<boolean> {
+  public static async CreateList(email: string, list: IList): Promise<IServiceResponse> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
@@ -34,16 +35,16 @@ export default class ListService {
         user.lists.push(list);
         await user.save();
 
-        return true;
+        return { succeeded: true, message: "" };
       }
-      return false;
-    } catch (err) {
+      return { succeeded: false, message: "User does not exist" };
+    } catch (err: any) {
       console.log(err);
-      return false;
+      return { succeeded: false, message: err.toString() };
     }
   }
 
-  public static async UpdateList(email: string, list: IList): Promise<boolean> {
+  public static async UpdateList(email: string, list: IList): Promise<IServiceResponse> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
@@ -55,17 +56,17 @@ export default class ListService {
           existingList.todos = list.todos;
           await user.save();
 
-          return true;
+          return { succeeded: true, message: "" };
         }
       }
-      return false;
-    } catch (err) {
+      return { succeeded: false, message: "User does not exist" };
+    } catch (err: any) {
       console.log(err);
-      return false;
+      return { succeeded: false, message: err.toString() };
     }
   }
 
-  public static async DeleteList(email: string, listId: string): Promise<boolean> {
+  public static async DeleteList(email: string, listId: string): Promise<IServiceResponse> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
@@ -76,13 +77,13 @@ export default class ListService {
           existingList.deleted = true;
           await user.save();
 
-          return true;
+          return { succeeded: true, message: "" };
         }
       }
-      return false;
-    } catch (err) {
+      return { succeeded: false, message: "User does not exist" };
+    } catch (err: any) {
       console.log(err);
-      return false;
+      return { succeeded: false, message: err.toString() };
     }
   }
 }

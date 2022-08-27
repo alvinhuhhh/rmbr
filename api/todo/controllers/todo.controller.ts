@@ -12,7 +12,7 @@ export default class TodoController {
 
         if (todos) res.status(200).send(todos);
         else res.status(404).send();
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -28,7 +28,7 @@ export default class TodoController {
 
         if (todo) res.status(200).send(todo);
         else res.status(404).send();
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -42,9 +42,9 @@ export default class TodoController {
         const listId = req.params.listId;
         const response = await TodoService.CreateTodo(email, listId, todo as ITodo);
 
-        if (response) res.status(201).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(201).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -58,9 +58,9 @@ export default class TodoController {
         const listId = req.params.listId;
         const response = await TodoService.UpdateTodo(email, listId, todo as ITodo);
 
-        if (response) res.status(204).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -74,9 +74,9 @@ export default class TodoController {
         const todoId = req.params.todoId;
         const response = await TodoService.DeleteTodo(email, listId, todoId);
 
-        if (response) res.status(204).send();
-        else res.status(500).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();

@@ -1,21 +1,22 @@
 import User from "../models/user";
 import { IUser } from "../types/user.types";
+import { IServiceResponse } from "../types/service.types";
 
 export default class UserService {
   public static async GetUserByEmail(email: string): Promise<IUser | undefined> {
     try {
       const user = await User.findOne({ email: email });
       if (user) return user;
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
   }
 
-  public static async CreateUser(user: IUser): Promise<boolean> {
+  public static async CreateUser(user: IUser): Promise<IServiceResponse> {
     try {
       // Check if user exists
       const existingUser = await User.findOne({ email: user.email });
-      if (existingUser) return false;
+      if (existingUser) return { succeeded: false, message: "User already exists" };
 
       // Create new user
       const newUser = new User();
@@ -27,14 +28,14 @@ export default class UserService {
       newUser.createdDate = new Date();
       await newUser.save();
 
-      return true;
-    } catch (err) {
+      return { succeeded: true, message: "" };
+    } catch (err: any) {
       console.log(err);
-      return false;
+      return { succeeded: false, message: err.toString() };
     }
   }
 
-  public static async UpdateUser(user: IUser): Promise<boolean> {
+  public static async UpdateUser(user: IUser): Promise<IServiceResponse> {
     try {
       // Get existing user
       const existingUser = await User.findById(user._id);
@@ -44,12 +45,16 @@ export default class UserService {
         existingUser.updatedDate = new Date();
         await existingUser.save();
 
-        return true;
+        return { succeeded: true, message: "" };
       }
-      return false;
-    } catch (err) {
+      return { succeeded: false, message: "User does not exist" };
+    } catch (err: any) {
       console.log(err);
-      return false;
+      return { succeeded: false, message: err.toString() };
     }
+  }
+
+  public static async DeleteUser(): Promise<IServiceResponse> {
+    return { succeeded: true, message: "" };
   }
 }

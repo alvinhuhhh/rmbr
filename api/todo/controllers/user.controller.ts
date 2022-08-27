@@ -10,7 +10,7 @@ export default class UserController {
 
       if (user) res.status(200).send(user);
       else res.status(404).send();
-    } catch (err) {
+    } catch (err: any) {
       console.log(err);
     }
   }
@@ -20,10 +20,11 @@ export default class UserController {
       const user = req.body;
       const response = await UserService.CreateUser(user as IUser);
 
-      if (response) res.status(201).send();
-      else res.status(500).send();
-    } catch (err) {
+      if (response.succeeded) res.status(201).send();
+      else res.status(422).send(response.message);
+    } catch (err: any) {
       console.log(err);
+      res.status(500).send(err.toString());
     }
   }
 
@@ -32,10 +33,11 @@ export default class UserController {
       const user = req.body;
       const response = await UserService.UpdateUser(user as IUser);
 
-      if (response) res.status(204).send();
-      else res.status(500).send();
-    } catch (err) {
+      if (response.succeeded) res.status(204).send();
+      else res.status(422).send(response.message);
+    } catch (err: any) {
       console.log(err);
+      res.status(500).send(err.toString());
     }
   }
 }

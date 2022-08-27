@@ -9,7 +9,7 @@ export default class TrashController {
         const trashed = await TrashService.GetTrash(email);
 
         if (trashed) res.status(200).send(trashed);
-      } catch (err) {
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -18,10 +18,15 @@ export default class TrashController {
   public static async RestoreItem(req: Request, res: Response): Promise<void> {
     const email = req.email;
     if (email) {
-      const listId = req.params.listId;
-      const response = await TrashService.RestoreItem(email, listId);
+      try {
+        const listId = req.params.listId;
+        const response = await TrashService.RestoreItem(email, listId);
 
-      if (response) res.status(204).send();
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
+        console.log(err);
+      }
     } else res.status(500).send();
   }
 
@@ -32,8 +37,9 @@ export default class TrashController {
         const listId = req.params.listId;
         const response = await TrashService.DeleteItem(email, listId);
 
-        if (response) res.status(204).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
@@ -45,8 +51,9 @@ export default class TrashController {
       try {
         const response = await TrashService.DeleteAll(email);
 
-        if (response) res.status(204).send();
-      } catch (err) {
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();

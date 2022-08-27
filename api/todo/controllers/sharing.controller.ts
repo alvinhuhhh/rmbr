@@ -14,8 +14,8 @@ export default class SharingController {
         const response = await SharingService.CreateShare(email, targetUserEmail, list as IList);
 
         if (response.succeeded) res.status(201).send();
-        else res.status(422).send(response.validationMessage);
-      } catch (err) {
+        else res.status(422).send(response.message);
+      } catch (err: any) {
         console.log(err);
       }
     } else res.status(500).send();
