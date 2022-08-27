@@ -31,7 +31,7 @@ export default class TodoService {
         const todos = user.lists.id(listId)?.todos;
         if (todos) {
           // Create todo
-          todo.createdBy = email;
+          todo.createdBy = todo.createdBy;
           todo.createdDate = new Date();
           todo.deleted = false;
           todos.push(todo);
@@ -55,7 +55,7 @@ export default class TodoService {
         if (todos) {
           const existingTodo = todos.id(todo._id);
           if (existingTodo) {
-            existingTodo.updatedBy = email;
+            existingTodo.updatedBy = todo.updatedBy;
             existingTodo.updatedDate = new Date();
             existingTodo.title = todo.title;
             existingTodo.notes = todo.notes;

@@ -44,7 +44,7 @@ export default function App() {
 
   const handleSharedClick = () => {
     setIsDrawerOpen(!isDrawerOpen);
-    navigate("/app/shared");
+    navigate("/app/shared/lists");
   };
 
   const handleTrashClick = () => {

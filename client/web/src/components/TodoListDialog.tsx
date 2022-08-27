@@ -1,6 +1,6 @@
 import React from "react";
 import { Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Button } from "@mui/material";
-import { IList } from "../../types/lists.types";
+import { IList } from "../types/lists.types";
 
 export default function ListDialog({
   title,

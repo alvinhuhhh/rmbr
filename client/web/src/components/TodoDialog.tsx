@@ -13,7 +13,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Bookmark as PriorityIcon } from "@mui/icons-material";
-import { ITodo } from "../../types/todo.types";
+import { ITodo } from "../types/todo.types";
 
 export default function TodoDialog({
   title,

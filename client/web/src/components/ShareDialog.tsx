@@ -7,14 +7,17 @@ import {
   Grid,
   TextField,
   Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
   Divider,
   Typography,
-  IconButton,
 } from "@mui/material";
-import { Close as CloseIcon } from "@mui/icons-material";
-import { IList } from "../../types/lists.types";
-import TodoListsService from "../../services/TodoLists/todolists.service";
-import SharedService from "../../services/Shared/shared.service";
+import { Close as CloseIcon, Remove as RemoveIcon } from "@mui/icons-material";
+import { IList } from "../types/lists.types";
+import TodoListsService from "../services/TodoLists/todolists.service";
+import SharedService from "../services/Shared/shared.service";
 
 export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
   const email: string = localStorage.getItem("email") as string;
@@ -31,6 +34,8 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
     const { value } = event.target;
     setUserEmail(value);
   };
+
+  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, user: string) => {};
 
   const handleShareClick = async () => {
     try {
@@ -68,20 +73,32 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
             <Typography variant="body1" fontWeight="bold">
               Owner
             </Typography>
-            {data?.createdBy}
+            <List disablePadding>
+              <ListItem disablePadding>
+                <ListItemText primary={data?.createdBy} />
+              </ListItem>
+            </List>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body1" fontWeight="bold">
               Shared with
             </Typography>
-            {data?.sharedUsers && data.sharedUsers.length > 0 ? (
-              data.sharedUsers.map((u) => <Typography key={u.email}>{u.email}</Typography>)
-            ) : (
-              <Typography>No users</Typography>
-            )}
-          </Grid>
-          <Grid item xs={12}>
-            <Divider />
+            <List disablePadding>
+              {data?.sharedUsers && data.sharedUsers.length > 0 ? (
+                data.sharedUsers.map((u) => (
+                  <ListItem key={u.email} disablePadding>
+                    <ListItemText primary={u.email}></ListItemText>
+                    <Button size="small" onClick={(event) => handleRemoveClick(event, u.email)}>
+                      Remove
+                    </Button>
+                  </ListItem>
+                ))
+              ) : (
+                <ListItem key={-1} disablePadding>
+                  <ListItemText primary="No users" />
+                </ListItem>
+              )}
+            </List>
           </Grid>
           <Grid item xs={12} container justifyContent="center" alignItems="top" spacing={1}>
             <Grid item xs={12}>
@@ -102,7 +119,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
               />
             </Grid>
             <Grid item>
-              <Button variant="contained" onClick={handleShareClick}>
+              <Button variant="contained" onClick={handleShareClick} disabled={!userEmail}>
                 Share
               </Button>
             </Grid>

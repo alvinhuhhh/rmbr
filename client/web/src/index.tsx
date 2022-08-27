@@ -9,7 +9,8 @@ import Public from "./pages/Public";
 import NotFound from "./pages/NotFound";
 import TodoLists from "./pages/TodoLists";
 import TodoList from "./pages/TodoList";
-import Shared from "./pages/Shared";
+import SharedTodoLists from "./pages/SharedTodoLists";
+import SharedTodoList from "./pages/SharedTodoList";
 import Trash from "./pages/Trash";
 import Settings from "./pages/Settings";
 
@@ -68,7 +69,8 @@ root.render(
           >
             <Route path="lists" element={<TodoLists />} />
             <Route path="lists/:listId" element={<TodoList />} />
-            <Route path="shared" element={<Shared />} />
+            <Route path="shared/lists" element={<SharedTodoLists />} />
+            <Route path="shared/lists/:email/:listId" element={<SharedTodoList />} />
             <Route path="trash" element={<Trash />} />
             <Route path="settings" element={<Settings />} />
           </Route>

@@ -30,9 +30,9 @@ import TodoDialog from "../../components/TodoDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 import PriorityColorMap from "../../components/PriorityColorMap";
 
-export default function TodoList({ ...props }: TodoListProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
-  const { listId } = useParams();
+export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.Element {
+  const user: string = localStorage.getItem("email") as string;
+  const { email, listId } = useParams();
 
   const [list, setList] = useState<IList>();
   const [todos, setTodos] = useState<ITodo[]>([]);
@@ -83,22 +83,22 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     event.stopPropagation();
 
     let data: ITodo = { ...todo };
-    data.updatedBy = email;
+    data.updatedBy = user;
     data.updatedDate = new Date(dayjs().format());
     data.done = !data.done;
 
-    let response = await TodoService.UpdateTodo(email, listId as string, data);
+    let response = await TodoService.UpdateTodo(email as string, listId as string, data);
     if (response.status === 204) {
-      TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+      TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
     }
   };
 
   const handleConfirmDelete = async (id: number) => {
-    let response = await TodoService.DeleteTodo(email, listId as string, id);
+    let response = await TodoService.DeleteTodo(email as string, listId as string, id);
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+      TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
     }
   };
 
@@ -107,25 +107,25 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     let response;
     switch (dialogType) {
       case "create":
-        data.createdBy = sessionStorage.getItem("email") || "";
+        data.createdBy = user;
         data.createdDate = new Date(dayjs().format());
         data.done = false;
         data.priority = data.priority || -1;
 
-        response = await TodoService.CreateTodo(email, listId as string, data);
+        response = await TodoService.CreateTodo(email as string, listId as string, data);
         if (response.status === 201) {
           setDialogOpen(false);
-          TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+          TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
         }
         break;
       case "edit":
-        data.updatedBy = sessionStorage.getItem("email") || "";
+        data.updatedBy = user;
         data.updatedDate = new Date(dayjs().format());
 
-        response = await TodoService.UpdateTodo(email, listId as string, data);
+        response = await TodoService.UpdateTodo(email as string, listId as string, data);
         if (response.status === 204) {
           setDialogOpen(false);
-          TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+          TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
         }
         break;
       default:
@@ -134,8 +134,8 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   };
 
   useEffect(() => {
-    TodoListsService.GetListById(email, listId as string).then((data) => setList(data));
-    TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+    TodoListsService.GetListById(email as string, listId as string).then((data) => setList(data));
+    TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
   }, []);
 
   return (
@@ -172,6 +172,9 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                       (todo.done && { sx: { textDecorationLine: "line-through", color: "#999999" } }) || {}
                     }
                     secondary={todo.notes}
+                    secondaryTypographyProps={
+                      (todo.done && { sx: { textDecorationLine: "line-through", color: "#999999" } }) || {}
+                    }
                   />
                   {todo.priority && todo.priority > 0 && (
                     <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />
@@ -244,4 +247,4 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   );
 }
 
-interface TodoListProps {}
+interface ISharedTodoListProps {}

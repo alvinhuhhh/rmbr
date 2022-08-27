@@ -9,13 +9,11 @@ import {
   ListItemIcon,
   ListItemButton,
   ListItemText,
-  Button,
   IconButton,
   Popover,
   Typography,
 } from "@mui/material";
 import {
-  Add as AddIcon,
   MoreVert as OptionsIcon,
   Edit as EditIcon,
   Share as ShareIcon,
@@ -23,11 +21,12 @@ import {
 } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
+import SharedService from "../../services/Shared/shared.service";
 import ListDialog from "../../components/TodoListDialog";
 import ShareDialog from "../../components/ShareDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
-export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
+export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element {
   const email: string = localStorage.getItem("email") as string;
   const navigate = useNavigate();
 
@@ -37,22 +36,13 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
-  const [dialogType, setDialogType] = useState<string>("");
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList>();
-
-  const handleAddClick = () => {
-    setDialogTitle("New list");
-    setDialogData({} as IList);
-    setDialogType("create");
-    setDialogOpen(true);
-  };
 
   const handleEditClick = () => {
     setOptionsAnchor(null);
     setDialogTitle("Edit list");
     setDialogData(selectedItem as IList);
-    setDialogType("edit");
     setDialogOpen(true);
   };
 
@@ -68,7 +58,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   };
 
   const handleListClick = (event: React.MouseEvent<HTMLElement>, list: IList) => {
-    navigate(`/app/lists/${list._id}`);
+    navigate(`/app/shared/lists/${list.createdBy}/${list._id}`);
   };
 
   const handleOptionsClick = (event: React.MouseEvent<HTMLButtonElement>, list: IList) => {
@@ -86,46 +76,22 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     setSelectedItem(undefined);
   };
 
-  const handleConfirmDelete = async (id: number) => {
-    let response = await TodoListsService.DeleteList(email, id);
-    if (response.status === 204) {
-      setDeleteDialogOpen(false);
-      setSelectedItem(undefined);
-      TodoListsService.GetLists(email).then((data) => setLists(data));
-    }
-  };
+  const handleConfirmDelete = async (id: number) => {};
 
   const handleSave = async () => {
     let data: IList = { ...(dialogData as IList) };
-    let response;
-    switch (dialogType) {
-      case "create":
-        data.createdBy = email;
-        data.createdDate = new Date(dayjs().format());
+    data.updatedBy = email;
+    data.updatedDate = new Date(dayjs().format());
 
-        response = await TodoListsService.CreateList(email, data);
-        if (response.status === 201) {
-          setDialogOpen(false);
-          TodoListsService.GetLists(email).then((data) => setLists(data));
-        }
-        break;
-      case "edit":
-        data.updatedBy = email;
-        data.updatedDate = new Date(dayjs().format());
-
-        response = await TodoListsService.UpdateList(email, data);
-        if (response.status === 204) {
-          setDialogOpen(false);
-          TodoListsService.GetLists(email).then((data) => setLists(data));
-        }
-        break;
-      default:
-        break;
+    let response = await TodoListsService.UpdateList(data.createdBy, data);
+    if (response.status === 204) {
+      setDialogOpen(false);
+      SharedService.GetSharedLists(email).then((data) => setLists(data));
     }
   };
 
   useEffect(() => {
-    TodoListsService.GetLists(email).then((data) => setLists(data));
+    SharedService.GetSharedLists(email).then((data) => setLists(data));
   }, []);
 
   return (
@@ -133,11 +99,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
       <Grid item xs={12} xl={6}>
         <Box sx={{ margin: 2, marginBottom: 1 }}>
           <Typography variant="h5" fontWeight="bold" display="inline">
-            Lists
+            Shared
           </Typography>
-          <Button variant="outlined" size="small" onClick={handleAddClick} sx={{ float: "right" }}>
-            <AddIcon />
-          </Button>
         </Box>
         <List sx={{ maxHeight: "calc(100vh - 132px)", overflow: "auto" }}>
           {lists.length > 0 &&
@@ -153,19 +116,10 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
                 divider
               >
                 <ListItemButton onClick={(event) => handleListClick(event, list)}>
-                  <ListItemText primary={list.title} />
+                  <ListItemText primary={list.title} secondary={`${list.createdBy}`} />
                 </ListItemButton>
               </ListItem>
             ))}
-          <ListItem disableGutters>
-            <ListItemButton onClick={handleAddClick}>
-              <ListItemText
-                primary="+ New list"
-                primaryTypographyProps={{ fontWeight: "bold" }}
-                secondary="Click to create a new list"
-              />
-            </ListItemButton>
-          </ListItem>
         </List>
         <Popover
           id="optionsPopover"
@@ -224,11 +178,13 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        dialogTitle="Delete list?"
+        dialogTitle="Delete shared list?"
         dialogContent={
-          <Typography>
-            Are you sure you want to delete <b>{selectedItem?.title}</b>?
-          </Typography>
+          <React.Fragment>
+            <Typography>
+              Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list?
+            </Typography>
+          </React.Fragment>
         }
         dialogCancel="Cancel"
         dialogConfirm="Delete"
@@ -237,4 +193,4 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   );
 }
 
-interface ITodoListsProps {}
+interface ISharedProps {}

@@ -29,7 +29,7 @@ export default class ListService {
       const user = await User.findOne({ email: email });
       if (user) {
         // Create list
-        list.createdBy = email;
+        list.createdBy = list.createdBy;
         list.createdDate = new Date();
         list.deleted = false;
         user.lists.push(list);
@@ -50,7 +50,7 @@ export default class ListService {
       if (user) {
         const existingList = user.lists.id(list._id);
         if (existingList) {
-          existingList.updatedBy = email;
+          existingList.updatedBy = list.updatedBy;
           existingList.updatedDate = new Date();
           existingList.title = list.title;
           existingList.todos = list.todos;
