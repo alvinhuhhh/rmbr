@@ -13,7 +13,8 @@ export default class SharingController {
         const targetUserEmail = req.params.targetUserEmail;
         const response = await SharingService.CreateShare(email, targetUserEmail, list as IList);
 
-        if (response) res.status(201).send();
+        if (response.succeeded) res.status(201).send();
+        else res.status(422).send(response.validationMessage);
       } catch (err) {
         console.log(err);
       }

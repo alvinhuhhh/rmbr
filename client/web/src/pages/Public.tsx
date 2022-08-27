@@ -4,7 +4,7 @@ import { LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "jose";
-import LoginService from "../services/Login/login.service";
+import UserService from "../services/User/user.service";
 
 declare global {
   var google: any;
@@ -27,13 +27,13 @@ export default function Public({ ...props }: LoginProps) {
       localStorage.setItem("email", jwt.email as string);
 
       // Check if user exists
-      LoginService.CheckIfUserExists(jwt.email as string)
+      UserService.CheckIfUserExists(jwt.email as string)
         .then((loginResponse) => {
           if (loginResponse?.status === 200) return;
         })
         .catch((err) => {
           console.log(err);
-          LoginService.CreateUser(jwt);
+          UserService.CreateUser(jwt);
         })
         .finally(() => {
           navigate("/app/lists");

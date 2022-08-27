@@ -4,10 +4,16 @@ import { JWTPayload } from "jose";
 import appConfig from "../../config";
 import { IUser } from "../../types/user.types";
 
-export default class LoginService {
-  public static async CheckIfUserExists(email: string): Promise<AxiosResponse> {
-    let response = axios.get(`${appConfig.api.url}/user/${email}`);
-    return response;
+export default class UserService {
+  public static async CheckIfUserExists(email: string): Promise<AxiosResponse | undefined> {
+    try {
+      let response = await axios.get(`${appConfig.api.url}/user/${email}`);
+      console.log(`[CheckIfUserExists] ${response.status} ${response.statusText}`);
+      return response;
+    } catch (err) {
+      console.log(err);
+    }
+    return;
   }
 
   public static async CreateUser(jwt: JWTPayload): Promise<AxiosResponse | undefined> {

@@ -13,10 +13,12 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
+import TodoListsService from "../../services/TodoLists/todolists.service";
 import SharedService from "../../services/Shared/shared.service";
 
 export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
   const [userEmail, setUserEmail] = useState<string>("");
+  const [serverValidation, setServerValidation] = useState<string>("");
 
   const onClose = () => {
     setUserEmail("");
@@ -26,6 +28,20 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined = (event) => {
     const { value } = event.target;
     setUserEmail(value);
+  };
+
+  const handleShareClick = async () => {
+    try {
+      let response = await SharedService.CreateShare(userEmail, data as IList);
+      if (response?.status === 201) {
+        TodoListsService.GetListById(data?._id?.toString() as string).then((data) => setData(data));
+        setUserEmail("");
+      } else {
+        setServerValidation(response.data);
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
   };
 
   return (
@@ -65,7 +81,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
           <Grid item xs={12}>
             <Divider />
           </Grid>
-          <Grid item xs={12} container justifyContent="center" alignItems="center" spacing={1}>
+          <Grid item xs={12} container justifyContent="center" alignItems="top" spacing={1}>
             <Grid item xs={12}>
               <Typography variant="body1" fontWeight="bold">
                 Share with
@@ -80,10 +96,13 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
                 size="small"
                 hiddenLabel
                 fullWidth
+                {...(serverValidation && { error: true, helperText: serverValidation })}
               />
             </Grid>
             <Grid item>
-              <Button variant="contained">Share</Button>
+              <Button variant="contained" onClick={handleShareClick}>
+                Share
+              </Button>
             </Grid>
           </Grid>
         </Grid>
