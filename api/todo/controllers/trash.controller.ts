@@ -3,7 +3,7 @@ import TrashService from "../services/trash.service";
 
 export default class TrashController {
   public static async GetTrash(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const trashed = await TrashService.GetTrash(email);
@@ -16,7 +16,7 @@ export default class TrashController {
   }
 
   public static async RestoreItem(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -31,7 +31,7 @@ export default class TrashController {
   }
 
   public static async DeleteItem(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -46,7 +46,7 @@ export default class TrashController {
   }
 
   public static async DeleteAll(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const response = await TrashService.DeleteAll(email);

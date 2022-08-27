@@ -69,15 +69,6 @@ export default function Shared({ ...props }: ISharedProps): JSX.Element {
                 </ListItemButton>
               </ListItem>
             ))}
-          <ListItem disableGutters>
-            <ListItemButton>
-              <ListItemText
-                primary="+ New list"
-                primaryTypographyProps={{ fontWeight: "bold" }}
-                secondary="Click to create a new list"
-              />
-            </ListItemButton>
-          </ListItem>
         </List>
       </Grid>
     </Grid>

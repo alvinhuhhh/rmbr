@@ -12,7 +12,6 @@ export default async function verify(req: Request, res: Response, next: NextFunc
       audience: process.env.CLIENT_ID,
     });
     if (ticket) {
-      req.email = ticket.getPayload()?.email;
       next();
     }
   } catch (err) {

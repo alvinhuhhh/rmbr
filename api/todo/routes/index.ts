@@ -12,25 +12,25 @@ router.get("/user/:email", UserController.GetUserByEmail);
 router.post("/user", UserController.CreateUser);
 router.put("/user/:email", UserController.UpdateUser);
 
-router.get("/list", ListController.GetLists);
-router.get("/list/:listId", ListController.GetListById);
-router.post("/list", ListController.CreateList);
-router.put("/list/:listId", ListController.UpdateList);
-router.delete("/list/:listId", ListController.DeleteList);
+router.get("/list/:email", ListController.GetLists);
+router.get("/list/:email/:listId", ListController.GetListById);
+router.post("/list/:email", ListController.CreateList);
+router.put("/list/:email/:listId", ListController.UpdateList);
+router.delete("/list/:email/:listId", ListController.DeleteList);
 
-router.get("/todo/:listId", TodoController.GetTodos);
-router.get("/todo/:listId/:todoId", TodoController.GetTodoById);
-router.post("/todo/:listId", TodoController.CreateTodo);
-router.put("/todo/:listId/:todoId", TodoController.UpdateTodo);
-router.delete("/todo/:listId/:todoId", TodoController.DeleteTodo);
+router.get("/todo/:email/:listId", TodoController.GetTodos);
+router.get("/todo/:email/:listId/:todoId", TodoController.GetTodoById);
+router.post("/todo/:email/:listId", TodoController.CreateTodo);
+router.put("/todo/:email/:listId/:todoId", TodoController.UpdateTodo);
+router.delete("/todo/:email/:listId/:todoId", TodoController.DeleteTodo);
 
-router.get("/trash", TrashController.GetTrash);
-router.put("/trash/:listId", TrashController.RestoreItem);
-router.delete("/trash/:listId", TrashController.DeleteItem);
-router.delete("/trash", TrashController.DeleteAll);
+router.get("/trash/email/", TrashController.GetTrash);
+router.put("/trash/email/:listId", TrashController.RestoreItem);
+router.delete("/trash/email/:listId", TrashController.DeleteItem);
+router.delete("/trash/email/", TrashController.DeleteAll);
 
-router.post("/sharing/:targetUserEmail", SharingController.CreateShare);
-router.put("/sharing/:targetUserEmail", SharingController.UpdateShare);
+router.post("/sharing/:email/:targetUserEmail", SharingController.CreateShare);
+router.put("/sharing/:email/:targetUserEmail", SharingController.UpdateShare);
 
 router.get("/sharing/list", SharingController.GetSharedLists);
 

@@ -4,7 +4,7 @@ import TodoService from "../services/todo.service";
 
 export default class TodoController {
   public static async GetTodos(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -19,7 +19,7 @@ export default class TodoController {
   }
 
   public static async GetTodoById(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -35,7 +35,7 @@ export default class TodoController {
   }
 
   public static async CreateTodo(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const todo = req.body;
@@ -51,7 +51,7 @@ export default class TodoController {
   }
 
   public static async UpdateTodo(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const todo = req.body;
@@ -67,7 +67,7 @@ export default class TodoController {
   }
 
   public static async DeleteTodo(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;

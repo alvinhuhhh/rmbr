@@ -4,7 +4,7 @@ import ListService from "../services/list.service";
 
 export default class ListController {
   public static async GetLists(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const lists = await ListService.GetLists(email);
@@ -18,7 +18,7 @@ export default class ListController {
   }
 
   public static async GetListById(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;
@@ -33,7 +33,7 @@ export default class ListController {
   }
 
   public static async CreateList(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const list = req.body;
@@ -48,7 +48,7 @@ export default class ListController {
   }
 
   public static async UpdateList(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const list = req.body;
@@ -63,7 +63,7 @@ export default class ListController {
   }
 
   public static async DeleteList(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const listId = req.params.listId;

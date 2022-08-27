@@ -4,7 +4,7 @@ import SharingService from "../services/sharing.service";
 
 export default class SharingController {
   public static async CreateShare(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const list = req.body;
@@ -22,7 +22,7 @@ export default class SharingController {
   public static async UpdateShare(req: Request, res: Response): Promise<void> {}
 
   public static async GetSharedLists(req: Request, res: Response): Promise<void> {
-    const email = req.email;
+    const email = req.params.email;
     if (email) {
       try {
         const lists = await SharingService.GetSharedLists(email);
