@@ -24,10 +24,10 @@ router.post("/todo/:email/:listId", TodoController.CreateTodo);
 router.put("/todo/:email/:listId/:todoId", TodoController.UpdateTodo);
 router.delete("/todo/:email/:listId/:todoId", TodoController.DeleteTodo);
 
-router.get("/trash/email/", TrashController.GetTrash);
-router.put("/trash/email/:listId", TrashController.RestoreItem);
-router.delete("/trash/email/:listId", TrashController.DeleteItem);
-router.delete("/trash/email/", TrashController.DeleteAll);
+router.get("/trash/:email", TrashController.GetTrash);
+router.put("/trash/:email/:listId", TrashController.RestoreItem);
+router.delete("/trash/:email/:listId", TrashController.DeleteItem);
+router.delete("/trash/:email", TrashController.DeleteAll);
 
 router.post("/sharing/:email/:targetUserEmail", SharingController.CreateShare);
 router.put("/sharing/:email/:targetUserEmail", SharingController.UpdateShare);

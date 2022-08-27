@@ -4,9 +4,9 @@ import { IList } from "../../types/lists.types";
 import { ITodo } from "../../types/todo.types";
 
 export default class TrashService {
-  public static async GetTrash(): Promise<Array<IList | ITodo>> {
+  public static async GetTrash(email: string): Promise<Array<IList | ITodo>> {
     try {
-      let response = await axios.get(`${appConfig.api.url}/trash`);
+      let response = await axios.get(`${appConfig.api.url}/trash/${email}`);
       console.log(`[GetTrash] ${response.status} ${response.statusText}`);
       if (response.status === 200) return response.data;
     } catch (err) {
@@ -15,9 +15,9 @@ export default class TrashService {
     return [];
   }
 
-  public static async RestoreItem(listId: number): Promise<number | undefined> {
+  public static async RestoreItem(email: string, listId: number): Promise<number | undefined> {
     try {
-      let response = await axios.put(`${appConfig.api.url}/trash/${listId}`);
+      let response = await axios.put(`${appConfig.api.url}/trash/${email}/${listId}`);
       console.log(`[RestoreItem] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
@@ -25,9 +25,9 @@ export default class TrashService {
     }
   }
 
-  public static async DeleteItem(listId: number): Promise<number | undefined> {
+  public static async DeleteItem(email: string, listId: number): Promise<number | undefined> {
     try {
-      let response = await axios.delete(`${appConfig.api.url}/trash/${listId}`);
+      let response = await axios.delete(`${appConfig.api.url}/trash/${email}/${listId}`);
       console.log(`[DeleteItem] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
@@ -35,9 +35,9 @@ export default class TrashService {
     }
   }
 
-  public static async DeleteAll(): Promise<number | undefined> {
+  public static async DeleteAll(email: string): Promise<number | undefined> {
     try {
-      let response = await axios.delete(`${appConfig.api.url}/trash`);
+      let response = await axios.delete(`${appConfig.api.url}/trash/${email}`);
       console.log(`[DeleteAll] ${response.status} ${response.statusText}`);
       return response.status;
     } catch (err) {
