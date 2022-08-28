@@ -19,7 +19,21 @@ export default class SharingController {
     } else res.status(500).send();
   }
 
-  public static async UpdateShare(req: Request, res: Response): Promise<void> {}
+  public static async RemoveShare(req: Request, res: Response): Promise<void> {
+    const email = req.params.email;
+    if (email) {
+      try {
+        const list = req.body;
+        const targetUserEmail = req.params.targetUserEmail;
+        const response = await SharingService.RemoveShare(email, targetUserEmail, list as IList);
+
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
+      } catch (err: any) {
+        console.log(err);
+      }
+    } else res.status(500).send();
+  }
 
   public static async GetSharedLists(req: Request, res: Response): Promise<void> {
     const email = req.params.email;

@@ -35,7 +35,16 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
     setUserEmail(value);
   };
 
-  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, user: string) => {};
+  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, targetUserEmail: string) => {
+    try {
+      let response = await SharedService.RemoveShare(email, targetUserEmail, data as IList);
+      if (response?.status === 204) {
+        TodoListsService.GetListById(email, data?._id?.toString() as string).then((data) => setData(data));
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
   const handleShareClick = async () => {
     try {

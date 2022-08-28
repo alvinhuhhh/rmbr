@@ -13,7 +13,15 @@ export default class SharedService {
     }
   }
 
-  public static async UpdateShare(email: string) {}
+  public static async RemoveShare(email: string, targetUserEmail: string, list: IList): Promise<AxiosResponse> {
+    try {
+      let response = await axios.put(`${appConfig.api.url}/sharing/${email}/${targetUserEmail}`, list);
+      console.log(`[RemoveShare] ${response.status} ${response.statusText}`);
+      return response;
+    } catch (err: any) {
+      return err.response;
+    }
+  }
 
   public static async GetSharedLists(email: string): Promise<Array<IList>> {
     try {
