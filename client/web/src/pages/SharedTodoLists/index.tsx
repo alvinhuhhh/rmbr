@@ -76,7 +76,19 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
     setSelectedItem(undefined);
   };
 
-  const handleConfirmDelete = async (id: number) => {};
+  const handleConfirmDelete = async (id: number) => {
+    try {
+      let response;
+      if (selectedItem?.createdBy === email) response = await TodoListsService.DeleteList(email, id);
+      else response = await SharedService.RemoveShare(email, email, selectedItem as IList);
+
+      if (response?.status === 204) {
+        setDeleteDialogOpen(false);
+      }
+    } catch (err: any) {
+      console.log(err);
+    }
+  };
 
   const handleSave = async () => {
     let data: IList = { ...(dialogData as IList) };
@@ -183,11 +195,16 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
         dialogTitle="Delete shared list?"
         dialogContent={
-          <React.Fragment>
+          selectedItem?.createdBy === email ? (
             <Typography>
-              Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list?
+              Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list? Shared users will lose
+              access to this list.
             </Typography>
-          </React.Fragment>
+          ) : (
+            <Typography>
+              Are you sure you want to leave the shared <b>{selectedItem?.title}</b> list?
+            </Typography>
+          )
         }
         dialogCancel="Cancel"
         dialogConfirm="Delete"
