@@ -6,10 +6,6 @@ import { useNavigate } from "react-router-dom";
 import { decodeJwt } from "jose";
 import UserService from "../services/User/user.service";
 
-declare global {
-  var google: any;
-}
-
 export default function Public({ ...props }: LoginProps) {
   const theme = useContext(ThemeContext);
   const navigate = useNavigate();
@@ -46,12 +42,12 @@ export default function Public({ ...props }: LoginProps) {
     sessionStorage.setItem("nonce", nonce);
 
     globalThis.google.accounts.id.initialize({
-      client_id: process.env.REACT_APP_CLIENT_ID,
+      client_id: process.env.REACT_APP_CLIENT_ID as string,
       callback: handleCallback,
       nonce: nonce,
     });
 
-    globalThis.google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+    globalThis.google.accounts.id.renderButton(document.getElementById("signInDiv") as HTMLElement, {
       theme: "filled_blue",
       size: "large",
     });

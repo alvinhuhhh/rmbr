@@ -1,16 +1,33 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Grid, Typography, Avatar, Button } from "@mui/material";
 import SettingsService from "../../services/Settings/settings.service";
 import AccountDeleteConfirmationDialog from "./dialog";
 
 export default function Settings({ ...props }: ISettingsProps): JSX.Element {
+  const email: string = localStorage.getItem("email") as string;
+  const navigate = useNavigate();
+
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
   const handleDeleteAccountClick = () => {
     setDeleteDialogOpen(true);
   };
 
-  const handleConfirmDelete = () => {};
+  const handleConfirmDelete = async () => {
+    let response = await SettingsService.DeleteUser(email);
+    if (response.status === 204) {
+      // Revoke Google OAuth grant
+      globalThis.google.accounts.id.revoke(email, (response) => {
+        if (response.successful) {
+          // Log out
+          sessionStorage.clear();
+          localStorage.clear();
+          navigate("/");
+        } else console.log(response.error);
+      });
+    }
+  };
 
   return (
     <Grid container justifyContent="center" sx={{ margin: 2 }}>
@@ -44,7 +61,7 @@ export default function Settings({ ...props }: ISettingsProps): JSX.Element {
             </Typography>
             <Typography sx={{ marginTop: 1 }}>• All data will be deleted permanently</Typography>
             <Typography>• All users will lose access to shared lists</Typography>
-            <Typography>• Google authorization consent will be revoked</Typography>
+            <Typography>• Google OAuth grant will be revoked</Typography>
           </React.Fragment>
         }
         dialogCancel="Cancel"

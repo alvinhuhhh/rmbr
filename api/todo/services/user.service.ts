@@ -1,7 +1,6 @@
 import User from "../models/user";
 import { IUser } from "../types/user.types";
 import { IServiceResponse } from "../types/service.types";
-// import google from "https://accounts.google.com/gsi/client";
 
 export default class UserService {
   public static async GetUserByEmail(email: string): Promise<IUser | undefined> {
@@ -56,11 +55,6 @@ export default class UserService {
   }
 
   public static async DeleteUser(email: string): Promise<IServiceResponse> {
-    const google = require("https://accounts.google.com/gsi/client");
-    // Revoke Google OAuth grant
-    google.accounts.id.revoke(email, (response: any) => {
-      console.log(response.error);
-    });
     return { succeeded: true, message: "" };
   }
 }

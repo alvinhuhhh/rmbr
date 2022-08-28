@@ -40,4 +40,17 @@ export default class UserController {
       res.status(500).send(err.toString());
     }
   }
+
+  public static async DeleteUser(req: Request, res: Response): Promise<void> {
+    try {
+      const email = req.params.email;
+      const response = await UserService.DeleteUser(email);
+
+      if (response.succeeded) res.status(204).send();
+      else res.status(500).send(response.message);
+    } catch (err: any) {
+      console.log(err);
+      res.status(500).send(err.toString());
+    }
+  }
 }

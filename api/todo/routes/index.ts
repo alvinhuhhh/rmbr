@@ -11,6 +11,7 @@ const router = Router();
 router.get("/user/:email", UserController.GetUserByEmail);
 router.post("/user", UserController.CreateUser);
 router.put("/user/:email", UserController.UpdateUser);
+router.delete("/user/:email", UserController.DeleteUser);
 
 router.get("/list/:email", ListController.GetLists);
 router.get("/list/:email/:listId", ListController.GetListById);
