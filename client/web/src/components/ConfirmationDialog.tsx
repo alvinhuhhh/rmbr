@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react";
+import React from "react";
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@mui/material";
 
 export default function ConfirmationDialog({
@@ -29,8 +29,8 @@ export default function ConfirmationDialog({
 
 interface IConfirmationDialogProps {
   open: boolean;
-  onClose: MouseEventHandler;
-  onConfirm: MouseEventHandler;
+  onClose: React.MouseEventHandler;
+  onConfirm: React.MouseEventHandler;
   dialogTitle: string;
   dialogContent: JSX.Element;
   dialogCancel: string;

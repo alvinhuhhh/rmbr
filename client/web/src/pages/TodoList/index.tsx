@@ -174,6 +174,9 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
                       (todo.done && { sx: { textDecorationLine: "line-through", color: "#999999" } }) || {}
                     }
                     secondary={todo.notes}
+                    secondaryTypographyProps={
+                      (todo.done && { sx: { textDecorationLine: "line-through", color: "#999999" } }) || {}
+                    }
                   />
                   {todo.priority && todo.priority > 0 && (
                     <PriorityIcon color={PriorityColorMap[todo.priority]} fontSize="small" />
