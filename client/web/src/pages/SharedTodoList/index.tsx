@@ -98,7 +98,6 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
     }
   };
 
@@ -115,7 +114,6 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
         response = await TodoService.CreateTodo(email as string, listId as string, data);
         if (response.status === 201) {
           setDialogOpen(false);
-          TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
         }
         break;
       case "edit":
@@ -125,7 +123,6 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
         response = await TodoService.UpdateTodo(email as string, listId as string, data);
         if (response.status === 204) {
           setDialogOpen(false);
-          TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
         }
         break;
       default:
@@ -137,6 +134,11 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
     TodoListsService.GetListById(email as string, listId as string).then((data) => setList(data));
     TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
   }, []);
+
+  useEffect(() => {
+    TodoListsService.GetListById(email as string, listId as string).then((data) => setList(data));
+    TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
+  }, [dialogOpen, deleteDialogOpen]);
 
   return (
     <Grid container justifyContent="center">

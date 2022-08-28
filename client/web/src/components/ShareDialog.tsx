@@ -27,6 +27,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
 
   const onClose = () => {
     setUserEmail("");
+    setServerValidation("");
     setOpen(false);
   };
 

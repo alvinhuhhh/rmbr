@@ -17,6 +17,7 @@ import {
 import {
   Add as AddIcon,
   MoreVert as OptionsIcon,
+  Share as SharedIcon,
   Edit as EditIcon,
   Share as ShareIcon,
   Delete as DeleteIcon,
@@ -91,7 +92,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TodoListsService.GetLists(email).then((data) => setLists(data));
     }
   };
 
@@ -106,7 +106,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         response = await TodoListsService.CreateList(email, data);
         if (response.status === 201) {
           setDialogOpen(false);
-          TodoListsService.GetLists(email).then((data) => setLists(data));
         }
         break;
       case "edit":
@@ -116,7 +115,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         response = await TodoListsService.UpdateList(email, data);
         if (response.status === 204) {
           setDialogOpen(false);
-          TodoListsService.GetLists(email).then((data) => setLists(data));
         }
         break;
       default:
@@ -127,6 +125,10 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   useEffect(() => {
     TodoListsService.GetLists(email).then((data) => setLists(data));
   }, []);
+
+  useEffect(() => {
+    TodoListsService.GetLists(email).then((data) => setLists(data));
+  }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (
     <Grid container justifyContent="center">
@@ -154,6 +156,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
               >
                 <ListItemButton onClick={(event) => handleListClick(event, list)}>
                   <ListItemText primary={list.title} />
+                  {list.sharedUsers.length ? <SharedIcon fontSize="small" /> : null}
                 </ListItemButton>
               </ListItem>
             ))}
@@ -224,11 +227,18 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        dialogTitle="Delete list?"
+        dialogTitle={selectedItem?.sharedUsers.length ? "Delete shared list?" : "Delete list?"}
         dialogContent={
-          <Typography>
-            Are you sure you want to delete <b>{selectedItem?.title}</b>?
-          </Typography>
+          selectedItem?.sharedUsers.length ? (
+            <Typography>
+              Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list? Shared users will lose
+              access to this list.
+            </Typography>
+          ) : (
+            <Typography>
+              Are you sure you want to delete <b>{selectedItem?.title}</b>?
+            </Typography>
+          )
         }
         dialogCancel="Cancel"
         dialogConfirm="Delete"

@@ -86,13 +86,16 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
     let response = await TodoListsService.UpdateList(data.createdBy, data);
     if (response.status === 204) {
       setDialogOpen(false);
-      SharedService.GetSharedLists(email).then((data) => setLists(data));
     }
   };
 
   useEffect(() => {
     SharedService.GetSharedLists(email).then((data) => setLists(data));
   }, []);
+
+  useEffect(() => {
+    SharedService.GetSharedLists(email).then((data) => setLists(data));
+  }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (
     <Grid container justifyContent="center">

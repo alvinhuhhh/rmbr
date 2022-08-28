@@ -98,7 +98,6 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
     }
   };
 
@@ -107,7 +106,7 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     let response;
     switch (dialogType) {
       case "create":
-        data.createdBy = sessionStorage.getItem("email") || "";
+        data.createdBy = email;
         data.createdDate = new Date(dayjs().format());
         data.done = false;
         data.priority = data.priority || -1;
@@ -115,17 +114,15 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
         response = await TodoService.CreateTodo(email, listId as string, data);
         if (response.status === 201) {
           setDialogOpen(false);
-          TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
         }
         break;
       case "edit":
-        data.updatedBy = sessionStorage.getItem("email") || "";
+        data.updatedBy = email;
         data.updatedDate = new Date(dayjs().format());
 
         response = await TodoService.UpdateTodo(email, listId as string, data);
         if (response.status === 204) {
           setDialogOpen(false);
-          TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
         }
         break;
       default:
@@ -137,6 +134,11 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     TodoListsService.GetListById(email, listId as string).then((data) => setList(data));
     TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
   }, []);
+
+  useEffect(() => {
+    TodoListsService.GetListById(email, listId as string).then((data) => setList(data));
+    TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+  }, [dialogOpen, deleteDialogOpen]);
 
   return (
     <Grid container justifyContent="center">
