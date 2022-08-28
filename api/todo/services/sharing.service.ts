@@ -22,9 +22,15 @@ export default class SharingService {
             sharedUser.updatedDate = new Date();
             sharedUser.sharedLists.push({ email: list.createdBy, listId: list._id });
 
-            // Add list to owner sharedLists
-            owner.updatedDate = new Date();
-            owner.sharedLists.push({ email: list.createdBy, listId: list._id });
+            // Add list to owner sharedLists if not exists
+            if (
+              !owner.sharedLists
+                .filter((ref) => ref.email === list.createdBy)
+                .find((ref) => ref.listId.toString() === list._id.toString())
+            ) {
+              owner.updatedDate = new Date();
+              owner.sharedLists.push({ email: list.createdBy, listId: list._id });
+            }
 
             await owner.save();
             await sharedUser.save();

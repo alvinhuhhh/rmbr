@@ -30,8 +30,8 @@ Rmbr is a fullstack todo app, because every developer needs to make a todo app.
 - :white_check_mark: Lists
 - :white_check_mark: Priority flags
 - :white_check_mark: Trash
-- Sharing
-- Terraform IaC
+- :white_check_mark: Sharing
+- :white_check_mark: Terraform IaC
 - Domain name
 - SSL/TLS encryption
 
