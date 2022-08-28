@@ -155,14 +155,16 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
                 Edit
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding>
-              <ListItemButton id="editItem" onClick={handleShareClick}>
-                <ListItemIcon>
-                  <ShareIcon />
-                </ListItemIcon>
-                Share
-              </ListItemButton>
-            </ListItem>
+            {selectedItem?.createdBy === email && (
+              <ListItem disablePadding>
+                <ListItemButton id="editItem" onClick={handleShareClick}>
+                  <ListItemIcon>
+                    <ShareIcon />
+                  </ListItemIcon>
+                  Share
+                </ListItemButton>
+              </ListItem>
+            )}
             <ListItem disablePadding>
               <ListItemButton id="deleteItem" onClick={handleDeleteClick}>
                 <ListItemIcon>
