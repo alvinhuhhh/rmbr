@@ -5,9 +5,9 @@ import appConfig from "../../config";
 import { IUser } from "../../types/user.types";
 
 export default class UserService {
-  public static async CheckIfUserExists(email: string): Promise<AxiosResponse> {
+  public static async CheckIfUserExists(jwt: JWTPayload): Promise<AxiosResponse> {
     try {
-      let response = await axios.get(`${appConfig.api.url}/user/${email}`);
+      let response = await axios.get(`${appConfig.api.url}/user/${jwt.email}`);
       console.log(`[CheckIfUserExists] ${response.status} ${response.statusText}`);
       return response;
     } catch (err: any) {

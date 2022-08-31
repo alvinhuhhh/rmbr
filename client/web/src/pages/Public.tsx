@@ -3,30 +3,41 @@ import { Grid, Paper, Typography, Link, IconButton } from "@mui/material";
 import { LightMode as LightModeIcon, DarkMode as DarkModeIcon } from "@mui/icons-material";
 import { ThemeContext } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router-dom";
-import { decodeJwt } from "jose";
+import { decodeJwt, JWTPayload } from "jose";
 import UserService from "../services/User/user.service";
 
 export default function Public({ ...props }: LoginProps) {
   const theme = useContext(ThemeContext);
   const navigate = useNavigate();
 
+  const loginSuccess = (jwt: JWTPayload): void => {
+    localStorage.setItem("id", jwt.sub as string);
+    localStorage.setItem("fullname", jwt.name as string);
+    localStorage.setItem("givenname", jwt.given_name as string);
+    localStorage.setItem("familyname", jwt.family_name as string);
+    localStorage.setItem("profilepicurl", jwt.picture as string);
+    localStorage.setItem("email", jwt.email as string);
+
+    navigate("app/lists");
+  };
+
+  const loginFailure = (status: number, statusText: string): void => {
+    console.log(`${status}: ${statusText}`);
+    localStorage.clear();
+  };
+
   const handleCallback = (response: { credential: any }) => {
     const jwt = decodeJwt(response.credential);
 
     if (jwt.nonce === sessionStorage.getItem("nonce")) {
       localStorage.setItem("jwt", response.credential);
-      localStorage.setItem("id", jwt.sub as string);
-      localStorage.setItem("fullname", jwt.name as string);
-      localStorage.setItem("givenname", jwt.given_name as string);
-      localStorage.setItem("familyname", jwt.family_name as string);
-      localStorage.setItem("profilepicurl", jwt.picture as string);
-      localStorage.setItem("email", jwt.email as string);
-
       // Check if user exists
-      UserService.CheckIfUserExists(jwt.email as string)
+      UserService.CheckIfUserExists(jwt)
         .then((loginResponse) => {
-          if (loginResponse?.status === 200) navigate("app/lists");
-          else UserService.CreateUser(jwt).then((response) => response.status === 201 && navigate("app/lists"));
+          if (loginResponse?.status === 200) loginSuccess(jwt);
+          else if (loginResponse?.status === 404)
+            UserService.CreateUser(jwt).then((response) => response.status === 201 && loginSuccess(jwt));
+          else loginFailure(loginResponse?.status, loginResponse?.statusText);
         })
         .catch((err: any) => {
           console.log(err);
