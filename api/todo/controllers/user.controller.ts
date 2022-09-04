@@ -12,6 +12,7 @@ export default class UserController {
       else res.status(404).send();
     } catch (err: any) {
       console.log(err);
+      res.status(500).send(err.toString());
     }
   }
 

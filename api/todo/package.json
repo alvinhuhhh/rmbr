@@ -5,7 +5,7 @@
   "main": "build/app.js",
   "scripts": {
     "build": "npx tsc",
-    "start": "npx tsc && sudo node build/app.js",
+    "start": "npx tsc && node build/app.js",
     "test": "jest",
     "docker:build": "npm run build && docker build -t public.ecr.aws/f4k7k9n9/rmbr-api .",
     "docker:push": "docker push public.ecr.aws/f4k7k9n9/rmbr-api",

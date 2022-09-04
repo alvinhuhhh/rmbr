@@ -48,8 +48,8 @@ try {
           console.log(`API server started and listening on PORT: 443`);
         });
       } else {
-        http.createServer(app).listen(80, () => {
-          console.log(`API server started and listening on PORT: 80`);
+        http.createServer(app).listen(3000, () => {
+          console.log(`API server started and listening on PORT: 3000`);
         });
       }
     });
