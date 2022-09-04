@@ -16,9 +16,9 @@ export default class SharingService {
 
   public static async CreateShare(share: ISharing): Promise<IServiceResponse> {
     try {
-      const newShare = new Sharing({ ...share });
-      newShare.createdDate = new Date();
-      await newShare.save();
+      const sharing = new Sharing(share);
+      sharing.createdDate = new Date();
+      await sharing.save();
 
       return { succeeded: true, message: "" };
     } catch (err: any) {

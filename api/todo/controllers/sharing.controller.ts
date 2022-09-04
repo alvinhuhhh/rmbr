@@ -4,23 +4,21 @@ import SharingService from "../services/sharing.service";
 
 export default class SharingController {
   public static async GetShareById(req: Request, res: Response): Promise<void> {
-    const sharingId = req.params.sharingId;
-    if (sharingId) {
-      try {
-        const sharing = await SharingService.GetShareById(sharingId);
+    try {
+      const sharingId: string = req.params.sharingId;
+      const sharing = await SharingService.GetShareById(sharingId);
 
-        if (sharing) res.status(200).send(sharing);
-        else res.status(404).send();
-      } catch (err: any) {
-        console.log(err);
-      }
-    } else res.status(500).send();
+      if (sharing) res.status(200).send(sharing);
+      else res.status(404).send();
+    } catch (err: any) {
+      console.log(err);
+    }
   }
 
   public static async CreateShare(req: Request, res: Response): Promise<void> {
     try {
-      const share = req.body;
-      const response = await SharingService.CreateShare(share as ISharing);
+      const share: ISharing = req.body;
+      const response = await SharingService.CreateShare(share);
 
       if (response.succeeded) res.status(201).send();
       else res.status(422).send(response.message);
