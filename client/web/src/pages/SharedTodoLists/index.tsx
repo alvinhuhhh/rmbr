@@ -20,6 +20,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
+import { ISharing } from "../../types/sharing.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
 import SharingService from "../../services/Sharing/sharing.service";
 import ListDialog from "../../components/TodoListDialog";
@@ -36,6 +37,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
+  const [shareDialogData, setShareDialogData] = useState<ISharing>();
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList>();
 
@@ -48,7 +50,10 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
 
   const handleShareClick = () => {
     setOptionsAnchor(null);
-    setDialogData(selectedItem as IList);
+    selectedItem?.sharingId &&
+      SharingService.GetShareById(selectedItem.sharingId).then((data) => {
+        setShareDialogData(data);
+      });
     setShareDialogOpen(true);
   };
 
@@ -86,7 +91,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
           existingShare.updatedDate = new Date();
           existingShare.users.filter((user) => user.email !== email);
 
-          SharingService.UpdateShare(existingShare._id as number, existingShare);
+          // SharingService.UpdateShare(existingShare._id as number, existingShare);
         }
       }
 
@@ -196,8 +201,8 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
         title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        data={dialogData}
-        setData={setDialogData}
+        data={shareDialogData}
+        setData={setShareDialogData}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

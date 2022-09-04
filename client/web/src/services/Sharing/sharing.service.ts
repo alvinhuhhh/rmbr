@@ -37,9 +37,9 @@ export default class SharingService {
     }
   }
 
-  public static async UpdateShare(sharingId: number, data: ISharing): Promise<AxiosResponse> {
+  public static async UpdateShare(data: ISharing): Promise<AxiosResponse> {
     try {
-      let response = await axios.put(`${appConfig.api.url}/sharing/${sharingId}`, data);
+      let response = await axios.put(`${appConfig.api.url}/sharing`, data);
       console.log(`[UpdateShare] ${response.status} ${response.statusText}`);
       return response;
     } catch (err: any) {
@@ -52,6 +52,17 @@ export default class SharingService {
     try {
       let response = await axios.delete(`${appConfig.api.url}/sharing/${sharingId}`);
       console.log(`[DeleteShare] ${response.status} ${response.statusText}`);
+      return response;
+    } catch (err: any) {
+      console.log(err);
+      return err.response;
+    }
+  }
+
+  public static async CheckIfUserExists(email: string): Promise<AxiosResponse> {
+    try {
+      let response = await axios.get(`${appConfig.api.url}/user/${email}`);
+      console.log(`[CheckIfUserExists] ${response.status} ${response.statusText}`);
       return response;
     } catch (err: any) {
       console.log(err);

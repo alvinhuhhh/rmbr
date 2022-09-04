@@ -17,13 +17,14 @@ import {
 import {
   Add as AddIcon,
   MoreVert as OptionsIcon,
-  Share as SharedIcon,
   Edit as EditIcon,
   Share as ShareIcon,
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
+import { ISharing } from "../../types/sharing.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
+import SharingService from "../../services/Sharing/sharing.service";
 import ListDialog from "../../components/TodoListDialog";
 import ShareDialog from "../../components/ShareDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
@@ -39,6 +40,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   const [dialogTitle, setDialogTitle] = useState<string>("");
   const [dialogData, setDialogData] = useState<IList>();
   const [dialogType, setDialogType] = useState<string>("");
+  const [shareDialogData, setShareDialogData] = useState<ISharing>();
   const [optionsAnchor, setOptionsAnchor] = useState<HTMLButtonElement | null>(null);
   const [selectedItem, setSelectedItem] = useState<IList>();
 
@@ -59,7 +61,10 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   const handleShareClick = () => {
     setOptionsAnchor(null);
-    setDialogData(selectedItem as IList);
+    selectedItem?.sharingId &&
+      SharingService.GetShareById(selectedItem.sharingId).then((data) => {
+        setShareDialogData(data);
+      });
     setShareDialogOpen(true);
   };
 
@@ -156,7 +161,6 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
               >
                 <ListItemButton onClick={(event) => handleListClick(event, list)}>
                   <ListItemText primary={list.title} />
-                  {list.sharingId ? <SharedIcon fontSize="small" /> : null}
                 </ListItemButton>
               </ListItem>
             ))}
@@ -220,8 +224,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        data={dialogData}
-        setData={setDialogData}
+        data={shareDialogData}
+        setData={setShareDialogData}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

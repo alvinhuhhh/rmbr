@@ -30,8 +30,8 @@ export default class SharingController {
 
   public static async UpdateShare(req: Request, res: Response): Promise<void> {
     try {
-      const share = req.body;
-      const response = await SharingService.UpdateShare(share as ISharing);
+      const share: ISharing = req.body;
+      const response = await SharingService.UpdateShare(share);
 
       if (response.succeeded) res.status(204).send();
       else res.status(422).send(response.message);

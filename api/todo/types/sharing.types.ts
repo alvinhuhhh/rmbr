@@ -5,6 +5,6 @@ export interface ISharing {
   createdDate: Date;
   updatedDate?: Date;
   owner: string;
-  users: Types.DocumentArray<string>;
+  users: Types.DocumentArray<{ email: string }>;
   listId: Types.ObjectId;
 }

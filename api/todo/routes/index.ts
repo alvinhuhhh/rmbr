@@ -32,7 +32,7 @@ router.delete("/trash/:email", TrashController.DeleteAll);
 
 router.get("/sharing/:sharingId", SharingController.GetShareById);
 router.post("/sharing", SharingController.CreateShare);
-router.put("/sharing/:sharingId", SharingController.UpdateShare);
+router.put("/sharing", SharingController.UpdateShare);
 router.delete("/sharing/:sharingId", SharingController.DeleteShare);
 
 export default router;

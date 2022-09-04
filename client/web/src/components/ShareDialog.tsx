@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import dayjs from "dayjs";
 import {
   Dialog,
@@ -16,37 +16,60 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { ISharing } from "../types/sharing.types";
-import { IList } from "../types/lists.types";
 import SharingService from "../services/Sharing/sharing.service";
 
 export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
-
-  const [share, setShare] = useState<ISharing | undefined>(undefined);
   const [userEmail, setUserEmail] = useState<string>("");
   const [serverValidation, setServerValidation] = useState<string>("");
 
   const onClose = () => {
     setUserEmail("");
     setServerValidation("");
+    setData(undefined);
     setOpen(false);
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> | undefined = (event) => {
     const { value } = event.target;
     setUserEmail(value);
+    setServerValidation("");
   };
 
-  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, targetUserEmail: string) => {
-    try {
-      let updated: ISharing = { ...(share as ISharing) };
-      updated.updatedDate = new Date(dayjs().format());
-      updated.users.filter((user) => user.email !== userEmail);
+  const validate = async (): Promise<boolean> => {
+    const response = await SharingService.CheckIfUserExists(userEmail);
+    if (response.status === 404) {
+      setServerValidation("User does not exist. Send an invite?");
+      return false;
+    }
 
-      let response = await SharingService.UpdateShare(data?.sharingId as number, updated);
-      if (response?.status === 204) {
-        typeof data?.sharingId === "number" &&
-          SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
+    if (data?.users.find((user) => user.email === userEmail)) {
+      setServerValidation("User has already been added");
+      return false;
+    }
+
+    if (userEmail === data?.owner) {
+      setServerValidation("List cannot be shared with owner");
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, userEmail: string) => {
+    try {
+      if (data) {
+        let payload = { ...data };
+        payload.updatedDate = new Date(dayjs().format());
+        payload.users = payload.users.filter((user) => user.email !== userEmail);
+
+        let response = await SharingService.UpdateShare(payload);
+        if (response?.status === 204) {
+          SharingService.GetShareById(data._id as number).then((response) => setData(response));
+          setUserEmail("");
+          setServerValidation("");
+        } else {
+          setServerValidation(response.data);
+        }
       }
     } catch (err: any) {
       console.log(err);
@@ -55,39 +78,24 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
 
   const handleShareClick = async () => {
     try {
-      let response;
+      if (data && (await validate())) {
+        let payload = { ...data };
+        payload.updatedDate = new Date(dayjs().format());
+        payload.users.push({ email: userEmail });
+        let response = await SharingService.UpdateShare(payload);
 
-      if (share) {
-        let updated: ISharing = { ...share };
-        updated.updatedDate = new Date(dayjs().format());
-        updated.users.push({ email: userEmail });
-        response = await SharingService.UpdateShare(data?.sharingId as number, updated);
-      } else {
-        let created: ISharing = {
-          createdDate: new Date(dayjs().format()),
-          owner: data?.createdBy as string,
-          users: [{ email: userEmail }],
-          listId: data?._id as number,
-        };
-        response = await SharingService.CreateShare(created);
-      }
-
-      if (response?.status === 201) {
-        typeof data?.sharingId === "number" &&
-          SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
-        setUserEmail("");
-        setServerValidation("");
-      } else {
-        setServerValidation(response.data);
+        if (response?.status === 204) {
+          SharingService.GetShareById(data._id as number).then((response) => setData(response));
+          setUserEmail("");
+          setServerValidation("");
+        } else {
+          setServerValidation(response.data);
+        }
       }
     } catch (err: any) {
       console.log(err);
     }
   };
-
-  useEffect(() => {
-    typeof data?.sharingId === "number" && SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
-  }, [open]);
 
   return (
     <Dialog open={open}>
@@ -113,7 +121,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
             </Typography>
             <List disablePadding>
               <ListItem disablePadding>
-                <ListItemText primary={share?.owner || data?.createdBy} />
+                <ListItemText primary={data?.owner} />
               </ListItem>
             </List>
           </Grid>
@@ -122,8 +130,8 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
               Shared with
             </Typography>
             <List disablePadding>
-              {share?.users && share.users.length > 0 ? (
-                share.users.map((u) => (
+              {data?.users && data.users.length > 0 ? (
+                data.users.map((u) => (
                   <ListItem key={u.email} disablePadding>
                     <ListItemText primary={u.email}></ListItemText>
                     <Button size="small" onClick={(event) => handleRemoveClick(event, u.email)}>
@@ -173,6 +181,6 @@ interface IShareDialogProps {
   title: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: IList | undefined;
-  setData: React.Dispatch<React.SetStateAction<IList | undefined>>;
+  data: ISharing | undefined;
+  setData: React.Dispatch<React.SetStateAction<ISharing | undefined>>;
 }

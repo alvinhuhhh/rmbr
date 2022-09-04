@@ -1,13 +1,11 @@
 import User from "../models/user";
 import { IUser } from "../types/user.types";
-import { IList } from "../types/list.types";
 import { IServiceResponse } from "../types/service.types";
 
 export default class UserService {
   public static async GetUserByEmail(email: string): Promise<IUser | null> {
     try {
-      const user = await User.findOne({ email: email });
-      return user;
+      return await User.findOne({ email: email });
     } catch (err: any) {
       console.log(err);
       return null;
