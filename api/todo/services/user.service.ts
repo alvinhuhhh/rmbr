@@ -4,12 +4,13 @@ import { IList } from "../types/list.types";
 import { IServiceResponse } from "../types/service.types";
 
 export default class UserService {
-  public static async GetUserByEmail(email: string): Promise<IUser | undefined> {
+  public static async GetUserByEmail(email: string): Promise<IUser | null> {
     try {
       const user = await User.findOne({ email: email });
-      if (user) return user;
+      return user;
     } catch (err: any) {
       console.log(err);
+      return null;
     }
   }
 
@@ -59,11 +60,9 @@ export default class UserService {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        // Delete shares to others
-        // Delete shares from others
-        // Delete entire User document
         await User.deleteOne({ email: email });
       }
+      return { succeeded: false, message: "User does not exist" };
     } catch (err: any) {
       console.log(err);
       return { succeeded: false, message: err.toString() };

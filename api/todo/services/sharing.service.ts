@@ -1,20 +1,16 @@
 import Sharing from "../models/sharing";
 import { ISharing } from "../types/sharing.types";
-import { IList } from "../types/list.types";
 import { IServiceResponse } from "../types/service.types";
-import { ObjectId } from "mongodb";
 
 export default class SharingService {
-  public static async GetSharedLists(): Promise<undefined> {
-    return;
-  }
-
-  public static async GetShareById(sharingId: string): Promise<ISharing | undefined> {
+  public static async GetShareById(sharingId: string): Promise<ISharing | null> {
     try {
       const sharing = await Sharing.findById(sharingId);
       if (sharing) return sharing;
+      return null;
     } catch (err: any) {
       console.log(err);
+      return null;
     }
   }
 
@@ -52,8 +48,12 @@ export default class SharingService {
 
   public static async DeleteShare(sharingId: string): Promise<IServiceResponse> {
     try {
-      Sharing.deleteOne({ _id: new ObjectId(sharingId) });
-      return { succeeded: true, message: "" };
+      const sharing = await Sharing.findById(sharingId);
+      if (sharing) {
+        await Sharing.findByIdAndDelete(sharingId);
+        return { succeeded: true, message: "" };
+      }
+      return { succeeded: false, message: "Sharing does not exist" };
     } catch (err: any) {
       console.log(err);
       return { succeeded: false, message: err.toString() };

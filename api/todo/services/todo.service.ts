@@ -3,24 +3,36 @@ import { ITodo } from "../types/todo.types";
 import { IServiceResponse } from "../types/service.types";
 
 export default class TodoService {
-  public static async GetTodos(email: string, listId: string): Promise<Array<ITodo> | undefined> {
-    try {
-      const user = await User.findOne({ email: email });
-      if (user) return user.lists.id(listId)?.todos.filter((todo) => !todo.deleted);
-    } catch (err: any) {
-      console.log(err);
-    }
-  }
-
-  public static async GetTodoById(email: string, listId: string, todoId: string): Promise<ITodo | undefined> {
+  public static async GetTodos(email: string, listId: string): Promise<Array<ITodo> | null> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        const todo = user.lists.id(listId)?.todos.id(todoId);
-        if (todo && !todo.deleted) return todo;
+        const list = user.lists.id(listId);
+        if (list) {
+          return list.todos.filter((todo) => !todo.deleted);
+        }
       }
+      return null;
     } catch (err: any) {
       console.log(err);
+      return null;
+    }
+  }
+
+  public static async GetTodoById(email: string, listId: string, todoId: string): Promise<ITodo | null> {
+    try {
+      const user = await User.findOne({ email: email });
+      if (user) {
+        const list = user.lists.id(listId);
+        if (list) {
+          const todo = list.todos.id(todoId);
+          if (todo && !todo.deleted) return todo;
+        }
+      }
+      return null;
+    } catch (err: any) {
+      console.log(err);
+      return null;
     }
   }
 
@@ -39,6 +51,7 @@ export default class TodoService {
 
           return { succeeded: true, message: "" };
         }
+        return { succeeded: false, message: "List does not exist" };
       }
       return { succeeded: false, message: "User does not exist" };
     } catch (err: any) {
@@ -65,7 +78,9 @@ export default class TodoService {
 
             return { succeeded: true, message: "" };
           }
+          return { succeeded: false, message: "Todo does not exist" };
         }
+        return { succeeded: false, message: "List does not exist" };
       }
       return { succeeded: false, message: "User does not exist" };
     } catch (err: any) {
@@ -89,7 +104,9 @@ export default class TodoService {
 
             return { succeeded: true, message: "" };
           }
+          return { succeeded: false, message: "Todo does not exist" };
         }
+        return { succeeded: false, message: "List does not exist" };
       }
       return { succeeded: false, message: "User does not exist" };
     } catch (err: any) {

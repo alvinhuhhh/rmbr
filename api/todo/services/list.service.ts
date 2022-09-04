@@ -3,24 +3,30 @@ import { IList } from "../types/list.types";
 import { IServiceResponse } from "../types/service.types";
 
 export default class ListService {
-  public static async GetLists(email: string): Promise<Array<IList> | undefined> {
+  public static async GetLists(email: string): Promise<Array<IList> | null> {
     try {
       const user = await User.findOne({ email: email });
-      if (user) return user.lists.filter((list) => !list.deleted);
+      if (user) {
+        return user.lists.filter((list) => !list.deleted);
+      }
+      return null;
     } catch (err: any) {
       console.log(err);
+      return null;
     }
   }
 
-  public static async GetListById(email: string, listId: string): Promise<IList | undefined> {
+  public static async GetListById(email: string, listId: string): Promise<IList | null> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
         const list = user.lists.id(listId);
         if (list && !list.deleted) return list;
       }
+      return null;
     } catch (err: any) {
       console.log(err);
+      return null;
     }
   }
 

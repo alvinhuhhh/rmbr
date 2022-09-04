@@ -10,7 +10,7 @@ const router = Router();
 
 router.get("/user/:email", UserController.GetUserByEmail);
 router.post("/user", UserController.CreateUser);
-router.put("/user/:email", UserController.UpdateUser);
+router.put("/user", UserController.UpdateUser);
 router.delete("/user/:email", UserController.DeleteUser);
 
 router.get("/list/:email", ListController.GetLists);
@@ -30,9 +30,8 @@ router.put("/trash/:email/:listId", TrashController.RestoreItem);
 router.delete("/trash/:email/:listId", TrashController.DeleteItem);
 router.delete("/trash/:email", TrashController.DeleteAll);
 
-router.get("/sharing/:email", SharingController.GetSharedLists);
 router.get("/sharing/:sharingId", SharingController.GetShareById);
-router.post("/sharing/:sharingId", SharingController.CreateShare);
+router.post("/sharing", SharingController.CreateShare);
 router.put("/sharing/:sharingId", SharingController.UpdateShare);
 router.delete("/sharing/:sharingId", SharingController.DeleteShare);
 

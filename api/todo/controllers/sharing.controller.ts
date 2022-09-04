@@ -3,17 +3,6 @@ import { ISharing } from "../types/sharing.types";
 import SharingService from "../services/sharing.service";
 
 export default class SharingController {
-  public static async GetSharedLists(req: Request, res: Response): Promise<void> {
-    const email = req.params.email;
-    if (email) {
-      try {
-        const sharedLists = [];
-      } catch (err: any) {
-        console.log(err);
-      }
-    } else res.status(500).send();
-  }
-
   public static async GetShareById(req: Request, res: Response): Promise<void> {
     const sharingId = req.params.sharingId;
     if (sharingId) {
@@ -29,33 +18,29 @@ export default class SharingController {
   }
 
   public static async CreateShare(req: Request, res: Response): Promise<void> {
-    const sharingId = req.params.sharingId;
-    if (sharingId) {
-      try {
-        const share = req.body;
-        const response = await SharingService.CreateShare(share as ISharing);
+    try {
+      const share = req.body;
+      const response = await SharingService.CreateShare(share as ISharing);
 
-        if (response.succeeded) res.status(201).send();
-        else res.status(422).send(response.message);
-      } catch (err: any) {
-        console.log(err);
-      }
-    } else res.status(500).send();
+      if (response.succeeded) res.status(201).send();
+      else res.status(422).send(response.message);
+    } catch (err: any) {
+      console.log(err);
+      res.status(500).send();
+    }
   }
 
   public static async UpdateShare(req: Request, res: Response): Promise<void> {
-    const sharingId = req.params.sharingId;
-    if (sharingId) {
-      try {
-        const share = req.body;
-        const response = await SharingService.UpdateShare(share as ISharing);
+    try {
+      const share = req.body;
+      const response = await SharingService.UpdateShare(share as ISharing);
 
-        if (response.succeeded) res.status(204).send();
-        else res.status(422).send(response.message);
-      } catch (err: any) {
-        console.log(err);
-      }
-    } else res.status(500).send();
+      if (response.succeeded) res.status(204).send();
+      else res.status(422).send(response.message);
+    } catch (err: any) {
+      console.log(err);
+      res.status(500).send();
+    }
   }
 
   public static async DeleteShare(req: Request, res: Response): Promise<void> {

@@ -220,7 +220,8 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        sharingId={selectedItem?.sharingId}
+        data={dialogData}
+        setData={setDialogData}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

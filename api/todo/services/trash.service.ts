@@ -3,14 +3,16 @@ import { IList } from "../types/list.types";
 import { IServiceResponse } from "../types/service.types";
 
 export default class TrashService {
-  public static async GetTrash(email: string): Promise<Array<IList> | undefined> {
+  public static async GetTrash(email: string): Promise<Array<IList> | null> {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
         return user.lists.filter((list) => list.deleted);
       }
+      return null;
     } catch (err: any) {
       console.log(err);
+      return null;
     }
   }
 
@@ -40,10 +42,14 @@ export default class TrashService {
     try {
       const user = await User.findOne({ email: email });
       if (user) {
-        user.lists.pull(listId);
-        await user.save();
+        const list = user.lists.id(listId);
+        if (list) {
+          user.lists.pull(listId);
+          await user.save();
 
-        return { succeeded: true, message: "" };
+          return { succeeded: true, message: "" };
+        }
+        return { succeeded: false, message: "List does not exist" };
       }
       return { succeeded: false, message: "User does not exist" };
     } catch (err: any) {

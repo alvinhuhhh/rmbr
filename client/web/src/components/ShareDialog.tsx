@@ -16,9 +16,10 @@ import {
 } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
 import { ISharing } from "../types/sharing.types";
+import { IList } from "../types/lists.types";
 import SharingService from "../services/Sharing/sharing.service";
 
-export default function ShareDialog({ title, open, setOpen, sharingId, ...props }: IShareDialogProps): JSX.Element {
+export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
   const email: string = localStorage.getItem("email") as string;
 
   const [share, setShare] = useState<ISharing | undefined>(undefined);
@@ -38,13 +39,14 @@ export default function ShareDialog({ title, open, setOpen, sharingId, ...props 
 
   const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, targetUserEmail: string) => {
     try {
-      let data: ISharing = { ...(share as ISharing) };
-      data.updatedDate = new Date(dayjs().format());
-      data.users.filter((user) => user.email !== userEmail);
+      let updated: ISharing = { ...(share as ISharing) };
+      updated.updatedDate = new Date(dayjs().format());
+      updated.users.filter((user) => user.email !== userEmail);
 
-      let response = await SharingService.UpdateShare(sharingId as number, data);
+      let response = await SharingService.UpdateShare(data?.sharingId as number, updated);
       if (response?.status === 204) {
-        typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
+        typeof data?.sharingId === "number" &&
+          SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
       }
     } catch (err: any) {
       console.log(err);
@@ -53,13 +55,26 @@ export default function ShareDialog({ title, open, setOpen, sharingId, ...props 
 
   const handleShareClick = async () => {
     try {
-      let data: ISharing = { ...(share as ISharing) };
-      data.updatedDate = new Date(dayjs().format());
-      data.users.push({ email: userEmail });
+      let response;
 
-      let response = await SharingService.UpdateShare(sharingId as number, data);
+      if (share) {
+        let updated: ISharing = { ...share };
+        updated.updatedDate = new Date(dayjs().format());
+        updated.users.push({ email: userEmail });
+        response = await SharingService.UpdateShare(data?.sharingId as number, updated);
+      } else {
+        let created: ISharing = {
+          createdDate: new Date(dayjs().format()),
+          owner: data?.createdBy as string,
+          users: [{ email: userEmail }],
+          listId: data?._id as number,
+        };
+        response = await SharingService.CreateShare(created);
+      }
+
       if (response?.status === 201) {
-        typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
+        typeof data?.sharingId === "number" &&
+          SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
         setUserEmail("");
         setServerValidation("");
       } else {
@@ -71,8 +86,8 @@ export default function ShareDialog({ title, open, setOpen, sharingId, ...props 
   };
 
   useEffect(() => {
-    typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
-  }, [sharingId]);
+    typeof data?.sharingId === "number" && SharingService.GetShareById(data?.sharingId).then((data) => setShare(data));
+  }, [open]);
 
   return (
     <Dialog open={open}>
@@ -98,7 +113,7 @@ export default function ShareDialog({ title, open, setOpen, sharingId, ...props 
             </Typography>
             <List disablePadding>
               <ListItem disablePadding>
-                <ListItemText primary={share?.owner} />
+                <ListItemText primary={share?.owner || data?.createdBy} />
               </ListItem>
             </List>
           </Grid>
@@ -158,5 +173,6 @@ interface IShareDialogProps {
   title: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  sharingId: number | undefined;
+  data: IList | undefined;
+  setData: React.Dispatch<React.SetStateAction<IList | undefined>>;
 }

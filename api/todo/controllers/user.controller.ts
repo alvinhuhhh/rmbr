@@ -18,8 +18,8 @@ export default class UserController {
 
   public static async CreateUser(req: Request, res: Response): Promise<void> {
     try {
-      const user = req.body;
-      const response = await UserService.CreateUser(user as IUser);
+      const user: IUser = req.body;
+      const response = await UserService.CreateUser(user);
 
       if (response.succeeded) res.status(201).send();
       else res.status(422).send(response.message);
@@ -31,8 +31,8 @@ export default class UserController {
 
   public static async UpdateUser(req: Request, res: Response): Promise<void> {
     try {
-      const user = req.body;
-      const response = await UserService.UpdateUser(user as IUser);
+      const user: IUser = req.body;
+      const response = await UserService.UpdateUser(user);
 
       if (response.succeeded) res.status(204).send();
       else res.status(422).send(response.message);
