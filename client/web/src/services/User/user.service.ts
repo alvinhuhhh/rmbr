@@ -24,7 +24,6 @@ export default class UserService {
       email: jwt.email as string,
       createdDate: new Date(dayjs().format()),
       lists: [],
-      sharedLists: [],
     };
     try {
       let response = await axios.post(`${appConfig.api.url}/user`, user);

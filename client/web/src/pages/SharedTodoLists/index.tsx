@@ -21,7 +21,7 @@ import {
 } from "@mui/icons-material";
 import { IList } from "../../types/lists.types";
 import TodoListsService from "../../services/TodoLists/todolists.service";
-import SharedService from "../../services/Shared/shared.service";
+import SharingService from "../../services/Sharing/sharing.service";
 import ListDialog from "../../components/TodoListDialog";
 import ShareDialog from "../../components/ShareDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
@@ -80,7 +80,15 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
     try {
       let response;
       if (selectedItem?.createdBy === email) response = await TodoListsService.DeleteList(email, id);
-      else response = await SharedService.RemoveShare(email, email, selectedItem as IList);
+      else {
+        const existingShare = await SharingService.GetShareById(selectedItem?.sharingId as number);
+        if (existingShare) {
+          existingShare.updatedDate = new Date();
+          existingShare.users.filter((user) => user.email !== email);
+
+          SharingService.UpdateShare(existingShare._id as number, existingShare);
+        }
+      }
 
       if (response?.status === 204) {
         setDeleteDialogOpen(false);
@@ -102,11 +110,11 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
   };
 
   useEffect(() => {
-    SharedService.GetSharedLists(email).then((data) => setLists(data));
+    SharingService.GetSharedLists(email).then((data) => setLists(data));
   }, []);
 
   useEffect(() => {
-    SharedService.GetSharedLists(email).then((data) => setLists(data));
+    SharingService.GetSharedLists(email).then((data) => setLists(data));
   }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (
@@ -188,8 +196,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
         title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        data={dialogData}
-        setData={setDialogData}
+        sharingId={selectedItem?.sharingId}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}

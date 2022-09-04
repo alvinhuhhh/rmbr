@@ -156,7 +156,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
               >
                 <ListItemButton onClick={(event) => handleListClick(event, list)}>
                   <ListItemText primary={list.title} />
-                  {list.sharedUsers.length ? <SharedIcon fontSize="small" /> : null}
+                  {list.sharingId ? <SharedIcon fontSize="small" /> : null}
                 </ListItemButton>
               </ListItem>
             ))}
@@ -220,16 +220,15 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
         title="Sharing"
         open={shareDialogOpen}
         setOpen={setShareDialogOpen}
-        data={dialogData}
-        setData={setDialogData}
+        sharingId={selectedItem?.sharingId}
       />
       <ConfirmationDialog
         open={deleteDialogOpen}
         onClose={handleCancelDelete}
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
-        dialogTitle={selectedItem?.sharedUsers.length ? "Delete shared list?" : "Delete list?"}
+        dialogTitle={selectedItem?.sharingId ? "Delete shared list?" : "Delete list?"}
         dialogContent={
-          selectedItem?.sharedUsers.length ? (
+          selectedItem?.sharingId ? (
             <Typography>
               Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list? Shared users will lose
               access to this list.

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dayjs from "dayjs";
 import {
   Dialog,
   DialogActions,
@@ -11,17 +12,16 @@ import {
   List,
   ListItem,
   ListItemText,
-  Divider,
   Typography,
 } from "@mui/material";
-import { Close as CloseIcon, Remove as RemoveIcon } from "@mui/icons-material";
-import { IList } from "../types/lists.types";
-import TodoListsService from "../services/TodoLists/todolists.service";
-import SharedService from "../services/Shared/shared.service";
+import { Close as CloseIcon } from "@mui/icons-material";
+import { ISharing } from "../types/sharing.types";
+import SharingService from "../services/Sharing/sharing.service";
 
-export default function ShareDialog({ title, open, setOpen, data, setData, ...props }: IShareDialogProps): JSX.Element {
+export default function ShareDialog({ title, open, setOpen, sharingId, ...props }: IShareDialogProps): JSX.Element {
   const email: string = localStorage.getItem("email") as string;
 
+  const [share, setShare] = useState<ISharing | undefined>(undefined);
   const [userEmail, setUserEmail] = useState<string>("");
   const [serverValidation, setServerValidation] = useState<string>("");
 
@@ -38,9 +38,13 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
 
   const handleRemoveClick = async (event: React.MouseEvent<HTMLButtonElement>, targetUserEmail: string) => {
     try {
-      let response = await SharedService.RemoveShare(email, targetUserEmail, data as IList);
+      let data: ISharing = { ...(share as ISharing) };
+      data.updatedDate = new Date(dayjs().format());
+      data.users.filter((user) => user.email !== userEmail);
+
+      let response = await SharingService.UpdateShare(sharingId as number, data);
       if (response?.status === 204) {
-        TodoListsService.GetListById(email, data?._id?.toString() as string).then((data) => setData(data));
+        typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
       }
     } catch (err: any) {
       console.log(err);
@@ -49,9 +53,13 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
 
   const handleShareClick = async () => {
     try {
-      let response = await SharedService.CreateShare(email, userEmail, data as IList);
+      let data: ISharing = { ...(share as ISharing) };
+      data.updatedDate = new Date(dayjs().format());
+      data.users.push({ email: userEmail });
+
+      let response = await SharingService.UpdateShare(sharingId as number, data);
       if (response?.status === 201) {
-        TodoListsService.GetListById(email, data?._id?.toString() as string).then((data) => setData(data));
+        typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
         setUserEmail("");
         setServerValidation("");
       } else {
@@ -61,6 +69,10 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    typeof sharingId === "number" && SharingService.GetShareById(sharingId).then((data) => setShare(data));
+  }, [sharingId]);
 
   return (
     <Dialog open={open}>
@@ -86,7 +98,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
             </Typography>
             <List disablePadding>
               <ListItem disablePadding>
-                <ListItemText primary={data?.createdBy} />
+                <ListItemText primary={share?.owner} />
               </ListItem>
             </List>
           </Grid>
@@ -95,8 +107,8 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
               Shared with
             </Typography>
             <List disablePadding>
-              {data?.sharedUsers && data.sharedUsers.length > 0 ? (
-                data.sharedUsers.map((u) => (
+              {share?.users && share.users.length > 0 ? (
+                share.users.map((u) => (
                   <ListItem key={u.email} disablePadding>
                     <ListItemText primary={u.email}></ListItemText>
                     <Button size="small" onClick={(event) => handleRemoveClick(event, u.email)}>
@@ -146,6 +158,5 @@ interface IShareDialogProps {
   title: string;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  data: IList | undefined;
-  setData: React.Dispatch<React.SetStateAction<IList | undefined>>;
+  sharingId: number | undefined;
 }
