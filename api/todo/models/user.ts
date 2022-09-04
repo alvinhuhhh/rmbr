@@ -3,6 +3,13 @@ import { IUser } from "../types/user.types";
 import listSchema from "./list";
 
 const userSchema = new Schema<IUser>({
+  createdDate: {
+    type: Date,
+    required: true,
+  },
+  updatedDate: {
+    type: Date,
+  },
   fullName: {
     type: String,
     required: true,
@@ -26,20 +33,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  createdDate: {
-    type: Date,
-    required: true,
-  },
-  updatedDate: {
-    type: Date,
-  },
   lists: [listSchema],
-  sharedLists: [
-    {
-      email: String,
-      listId: Schema.Types.ObjectId,
-    },
-  ],
 });
 
 const User = model<IUser>("User", userSchema);

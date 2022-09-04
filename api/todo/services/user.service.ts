@@ -62,6 +62,7 @@ export default class UserService {
         // Delete shares to others
         // Delete shares from others
         // Delete entire User document
+        await User.deleteOne({ email: email });
       }
     } catch (err: any) {
       console.log(err);

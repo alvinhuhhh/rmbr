@@ -53,6 +53,7 @@ export default function ShareDialog({ title, open, setOpen, data, setData, ...pr
       if (response?.status === 201) {
         TodoListsService.GetListById(email, data?._id?.toString() as string).then((data) => setData(data));
         setUserEmail("");
+        setServerValidation("");
       } else {
         setServerValidation(response.data);
       }

@@ -1,15 +1,39 @@
 import { Request, Response } from "express";
-import { IList } from "../types/list.types";
+import { ISharing } from "../types/sharing.types";
 import SharingService from "../services/sharing.service";
 
 export default class SharingController {
-  public static async CreateShare(req: Request, res: Response): Promise<void> {
+  public static async GetSharedLists(req: Request, res: Response): Promise<void> {
     const email = req.params.email;
     if (email) {
       try {
-        const list = req.body;
-        const targetUserEmail = req.params.targetUserEmail;
-        const response = await SharingService.CreateShare(email, targetUserEmail, list as IList);
+        const sharedLists = [];
+      } catch (err: any) {
+        console.log(err);
+      }
+    } else res.status(500).send();
+  }
+
+  public static async GetShareById(req: Request, res: Response): Promise<void> {
+    const sharingId = req.params.sharingId;
+    if (sharingId) {
+      try {
+        const sharing = await SharingService.GetShareById(sharingId);
+
+        if (sharing) res.status(200).send(sharing);
+        else res.status(404).send();
+      } catch (err: any) {
+        console.log(err);
+      }
+    } else res.status(500).send();
+  }
+
+  public static async CreateShare(req: Request, res: Response): Promise<void> {
+    const sharingId = req.params.sharingId;
+    if (sharingId) {
+      try {
+        const share = req.body;
+        const response = await SharingService.CreateShare(share as ISharing);
 
         if (response.succeeded) res.status(201).send();
         else res.status(422).send(response.message);
@@ -19,13 +43,12 @@ export default class SharingController {
     } else res.status(500).send();
   }
 
-  public static async RemoveShare(req: Request, res: Response): Promise<void> {
-    const email = req.params.email;
-    if (email) {
+  public static async UpdateShare(req: Request, res: Response): Promise<void> {
+    const sharingId = req.params.sharingId;
+    if (sharingId) {
       try {
-        const list = req.body;
-        const targetUserEmail = req.params.targetUserEmail;
-        const response = await SharingService.RemoveShare(email, targetUserEmail, list as IList);
+        const share = req.body;
+        const response = await SharingService.UpdateShare(share as ISharing);
 
         if (response.succeeded) res.status(204).send();
         else res.status(422).send(response.message);
@@ -35,14 +58,14 @@ export default class SharingController {
     } else res.status(500).send();
   }
 
-  public static async GetSharedLists(req: Request, res: Response): Promise<void> {
-    const email = req.params.email;
-    if (email) {
+  public static async DeleteShare(req: Request, res: Response): Promise<void> {
+    const sharingId = req.params.sharingId;
+    if (sharingId) {
       try {
-        const lists = await SharingService.GetSharedLists(email);
+        const response = await SharingService.DeleteShare(sharingId);
 
-        if (lists) res.status(200).send(lists);
-        else res.status(404).send();
+        if (response.succeeded) res.status(204).send();
+        else res.status(422).send(response.message);
       } catch (err: any) {
         console.log(err);
       }
