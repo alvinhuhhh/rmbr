@@ -8,8 +8,7 @@ export interface IUser {
   fullName: string;
   givenName: string;
   familyName: string;
-  profilePicUrl: string;
+  profilePicUrl?: string;
   email: string;
   lists: Types.DocumentArray<IList>;
-  sharedLists: Types.DocumentArray<{ email: string; listId: Types.ObjectId }>;
 }

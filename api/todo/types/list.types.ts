@@ -10,5 +10,5 @@ export interface IList {
   deleted: boolean;
   title: string;
   todos: Types.DocumentArray<ITodo>;
-  sharingId: Types.ObjectId;
+  sharingId?: Types.ObjectId;
 }

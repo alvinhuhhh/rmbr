@@ -2,13 +2,12 @@ import { IList } from "./lists.types";
 
 export interface IUser {
   _id?: number;
+  createdDate: Date;
+  updatedDate?: Date;
   fullName: string;
   givenName: string;
   familyName: string;
-  profilePicUrl: string;
+  profilePicUrl?: string;
   email: string;
-  createdDate: Date;
-  updatedDate?: Date;
   lists: Array<IList>;
-  sharedLists: Array<{ email: string; listId: number }>;
 }

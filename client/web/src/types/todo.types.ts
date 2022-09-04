@@ -4,6 +4,7 @@ export interface ITodo {
   createdDate: Date;
   updatedBy?: string;
   updatedDate?: Date;
+  deleted: boolean;
   title: string;
   notes?: string;
   done: boolean;
