@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import { useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import {
   Grid,
   Box,
@@ -12,6 +12,7 @@ import {
   IconButton,
   Popover,
   Typography,
+  Link,
 } from "@mui/material";
 import {
   MoreVert as OptionsIcon,
@@ -131,7 +132,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
           </Typography>
         </Box>
         <List sx={{ maxHeight: "calc(100vh - 132px)", overflow: "auto" }}>
-          {lists.length > 0 &&
+          {lists.length > 0 ? (
             lists.map((list) => (
               <ListItem
                 key={list._id}
@@ -147,7 +148,18 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
                   <ListItemText primary={list.title} secondary={`${list.createdBy}`} />
                 </ListItemButton>
               </ListItem>
-            ))}
+            ))
+          ) : (
+            <ListItem>
+              <ListItemText>
+                Lists shared with you will appear here, or{" "}
+                <Link component={RouterLink} to="/app/lists">
+                  share a list
+                </Link>
+                .
+              </ListItemText>
+            </ListItem>
+          )}
         </List>
         <Popover
           id="optionsPopover"
