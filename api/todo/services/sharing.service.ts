@@ -1,4 +1,6 @@
+import User from "../models/user";
 import Sharing from "../models/sharing";
+import { IList } from "../types/list.types";
 import { ISharing } from "../types/sharing.types";
 import { IServiceResponse } from "../types/service.types";
 
@@ -57,6 +59,35 @@ export default class SharingService {
     } catch (err: any) {
       console.log(err);
       return { succeeded: false, message: err.toString() };
+    }
+  }
+
+  public static async GetSharedLists(email: string): Promise<Array<IList> | null> {
+    try {
+      let lists: Array<IList> = [];
+
+      // Get sharings with owner === email
+      const own = await Sharing.find({ owner: email }, "owner listId");
+
+      // Get sharings with email in Sharing.users
+      const others = await Sharing.find({ "users.email": email }, "owner listId");
+
+      // Combine own and others into shared
+      const shared = own.concat(others);
+
+      // Get shared lists from User
+      for (let i = 0; i < shared.length; i++) {
+        const user = await User.findOne({ email: shared[i].owner });
+        if (user) {
+          const list = user.lists.id(shared[i].listId);
+          if (list && !list.deleted) lists.push(list);
+        }
+      }
+
+      return lists;
+    } catch (err: any) {
+      console.log(err);
+      return null;
     }
   }
 }

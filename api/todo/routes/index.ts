@@ -35,4 +35,6 @@ router.post("/sharing", SharingController.CreateShare);
 router.put("/sharing", SharingController.UpdateShare);
 router.delete("/sharing/:sharingId", SharingController.DeleteShare);
 
+router.get("/shared/:email", SharingController.GetSharedLists);
+
 export default router;
