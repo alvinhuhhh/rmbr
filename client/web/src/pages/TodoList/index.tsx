@@ -31,7 +31,7 @@ import ConfirmationDialog from "../../components/ConfirmationDialog";
 import PriorityColorMap from "../../components/PriorityColorMap";
 
 export default function TodoList({ ...props }: TodoListProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
   const { listId } = useParams();
 
   const [list, setList] = useState<IList>();
@@ -83,18 +83,18 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     event.stopPropagation();
 
     let data: ITodo = { ...todo };
-    data.updatedBy = email;
+    data.updatedBy = loggedInUser;
     data.updatedDate = new Date(dayjs().format());
     data.done = !data.done;
 
-    let response = await TodoService.UpdateTodo(email, listId as string, data);
+    let response = await TodoService.UpdateTodo(loggedInUser, listId as string, data);
     if (response.status === 204) {
-      TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+      TodoService.GetTodos(loggedInUser, listId as string).then((data) => setTodos(data));
     }
   };
 
   const handleConfirmDelete = async (id: number) => {
-    let response = await TodoService.DeleteTodo(email, listId as string, id);
+    let response = await TodoService.DeleteTodo(loggedInUser, listId as string, id);
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
@@ -106,21 +106,21 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
     let response;
     switch (dialogType) {
       case "create":
-        data.createdBy = email;
+        data.createdBy = loggedInUser;
         data.createdDate = new Date(dayjs().format());
         data.done = false;
         data.priority = data.priority || -1;
 
-        response = await TodoService.CreateTodo(email, listId as string, data);
+        response = await TodoService.CreateTodo(loggedInUser, listId as string, data);
         if (response.status === 201) {
           setDialogOpen(false);
         }
         break;
       case "edit":
-        data.updatedBy = email;
+        data.updatedBy = loggedInUser;
         data.updatedDate = new Date(dayjs().format());
 
-        response = await TodoService.UpdateTodo(email, listId as string, data);
+        response = await TodoService.UpdateTodo(loggedInUser, listId as string, data);
         if (response.status === 204) {
           setDialogOpen(false);
         }
@@ -131,13 +131,13 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   };
 
   useEffect(() => {
-    TodoListsService.GetListById(email, listId as string).then((data) => setList(data));
-    TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+    TodoListsService.GetListById(loggedInUser, listId as string).then((data) => setList(data));
+    TodoService.GetTodos(loggedInUser, listId as string).then((data) => setTodos(data));
   }, []);
 
   useEffect(() => {
-    TodoListsService.GetListById(email, listId as string).then((data) => setList(data));
-    TodoService.GetTodos(email, listId as string).then((data) => setTodos(data));
+    TodoListsService.GetListById(loggedInUser, listId as string).then((data) => setList(data));
+    TodoService.GetTodos(loggedInUser, listId as string).then((data) => setTodos(data));
   }, [dialogOpen, deleteDialogOpen]);
 
   return (

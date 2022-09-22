@@ -30,7 +30,7 @@ import ShareDialog from "../../components/ShareDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
   const navigate = useNavigate();
 
   const [lists, setLists] = useState<IList[]>([]);
@@ -93,7 +93,7 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   };
 
   const handleConfirmDelete = async (id: number) => {
-    let response = await TodoListsService.DeleteList(email, id);
+    let response = await TodoListsService.DeleteList(loggedInUser, id);
     if (response.status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
@@ -105,19 +105,19 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
     let response;
     switch (dialogType) {
       case "create":
-        data.createdBy = email;
+        data.createdBy = loggedInUser;
         data.createdDate = new Date(dayjs().format());
 
-        response = await TodoListsService.CreateList(email, data);
+        response = await TodoListsService.CreateList(loggedInUser, data);
         if (response.status === 201) {
           setDialogOpen(false);
         }
         break;
       case "edit":
-        data.updatedBy = email;
+        data.updatedBy = loggedInUser;
         data.updatedDate = new Date(dayjs().format());
 
-        response = await TodoListsService.UpdateList(email, data);
+        response = await TodoListsService.UpdateList(loggedInUser, data);
         if (response.status === 204) {
           setDialogOpen(false);
         }
@@ -128,11 +128,11 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
   };
 
   useEffect(() => {
-    TodoListsService.GetLists(email).then((data) => setLists(data));
+    TodoListsService.GetLists(loggedInUser).then((data) => setLists(data));
   }, []);
 
   useEffect(() => {
-    TodoListsService.GetLists(email).then((data) => setLists(data));
+    TodoListsService.GetLists(loggedInUser).then((data) => setLists(data));
   }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (

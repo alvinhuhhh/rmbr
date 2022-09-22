@@ -28,7 +28,7 @@ import ShareDialog from "../../components/ShareDialog";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
   const navigate = useNavigate();
 
   const [lists, setLists] = useState<IList[]>([]);
@@ -84,12 +84,12 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
   const handleConfirmDelete = async (id: number) => {
     try {
       let response;
-      if (selectedItem?.createdBy === email) response = await TodoListsService.DeleteList(email, id);
+      if (selectedItem?.createdBy === loggedInUser) response = await TodoListsService.DeleteList(loggedInUser, id);
       else {
         const existingShare = await SharingService.GetShareById(selectedItem?.sharingId as number);
         if (existingShare) {
           existingShare.updatedDate = new Date();
-          existingShare.users.filter((user) => user.email !== email);
+          existingShare.users.filter((user) => user.email !== loggedInUser);
 
           // SharingService.UpdateShare(existingShare._id as number, existingShare);
         }
@@ -105,7 +105,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
 
   const handleSave = async () => {
     let data: IList = { ...(dialogData as IList) };
-    data.updatedBy = email;
+    data.updatedBy = loggedInUser;
     data.updatedDate = new Date(dayjs().format());
 
     let response = await TodoListsService.UpdateList(data.createdBy, data);
@@ -115,11 +115,11 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
   };
 
   useEffect(() => {
-    SharingService.GetSharedLists(email).then((data) => setLists(data));
+    SharingService.GetSharedLists(loggedInUser).then((data) => setLists(data));
   }, []);
 
   useEffect(() => {
-    SharingService.GetSharedLists(email).then((data) => setLists(data));
+    SharingService.GetSharedLists(loggedInUser).then((data) => setLists(data));
   }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (
@@ -168,7 +168,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
                 Edit
               </ListItemButton>
             </ListItem>
-            {selectedItem?.createdBy === email && (
+            {selectedItem?.createdBy === loggedInUser && (
               <ListItem disablePadding>
                 <ListItemButton id="editItem" onClick={handleShareClick}>
                   <ListItemIcon>
@@ -210,7 +210,7 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
         onConfirm={() => handleConfirmDelete(selectedItem?._id || -1)}
         dialogTitle="Delete shared list?"
         dialogContent={
-          selectedItem?.createdBy === email ? (
+          selectedItem?.createdBy === loggedInUser ? (
             <Typography>
               Are you sure you want to delete the shared <b>{selectedItem?.title}</b> list? Shared users will lose
               access to this list.

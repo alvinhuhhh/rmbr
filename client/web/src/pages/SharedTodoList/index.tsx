@@ -31,7 +31,7 @@ import ConfirmationDialog from "../../components/ConfirmationDialog";
 import PriorityColorMap from "../../components/PriorityColorMap";
 
 export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.Element {
-  const user: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
   const { email, listId } = useParams();
 
   const [list, setList] = useState<IList>();
@@ -83,7 +83,7 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
     event.stopPropagation();
 
     let data: ITodo = { ...todo };
-    data.updatedBy = user;
+    data.updatedBy = loggedInUser;
     data.updatedDate = new Date(dayjs().format());
     data.done = !data.done;
 
@@ -106,7 +106,7 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
     let response;
     switch (dialogType) {
       case "create":
-        data.createdBy = user;
+        data.createdBy = loggedInUser;
         data.createdDate = new Date(dayjs().format());
         data.done = false;
         data.priority = data.priority || -1;
@@ -117,7 +117,7 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
         }
         break;
       case "edit":
-        data.updatedBy = user;
+        data.updatedBy = loggedInUser;
         data.updatedDate = new Date(dayjs().format());
 
         response = await TodoService.UpdateTodo(email as string, listId as string, data);

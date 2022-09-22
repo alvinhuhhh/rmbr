@@ -5,7 +5,7 @@ import SettingsService from "../../services/Settings/settings.service";
 import AccountDeleteConfirmationDialog from "./dialog";
 
 export default function Settings({ ...props }: ISettingsProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
   const navigate = useNavigate();
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -15,10 +15,10 @@ export default function Settings({ ...props }: ISettingsProps): JSX.Element {
   };
 
   const handleConfirmDelete = async () => {
-    let response = await SettingsService.DeleteUser(email);
+    let response = await SettingsService.DeleteUser(loggedInUser);
     if (response.status === 204) {
       // Revoke Google OAuth grant
-      globalThis.google.accounts.id.revoke(email, (response) => {
+      globalThis.google.accounts.id.revoke(loggedInUser, (response) => {
         if (response.successful) {
           // Log out
           sessionStorage.clear();

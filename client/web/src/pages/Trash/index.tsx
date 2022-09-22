@@ -20,7 +20,7 @@ import TrashService from "../../services/Trash/trash.service";
 import ConfirmationDialog from "../../components/ConfirmationDialog";
 
 export default function Trash({ ...props }: ITrashProps): JSX.Element {
-  const email: string = localStorage.getItem("email") as string;
+  const loggedInUser: string = localStorage.getItem("email") as string;
 
   const [trashed, setTrashed] = useState<Array<IList | ITodo>>([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -39,11 +39,11 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
   };
 
   const handleRestoreClick = async (id: number) => {
-    let status = await TrashService.RestoreItem(email, id);
+    let status = await TrashService.RestoreItem(loggedInUser, id);
     if (status === 204) {
       setOptionsAnchor(null);
       setSelectedItem(undefined);
-      TrashService.GetTrash(email).then((data) => setTrashed(data));
+      TrashService.GetTrash(loggedInUser).then((data) => setTrashed(data));
     } else {
       throw new Error(status?.toString());
     }
@@ -60,11 +60,11 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
   };
 
   const handleConfirmDelete = async (id: number) => {
-    let status = await TrashService.DeleteItem(email, id);
+    let status = await TrashService.DeleteItem(loggedInUser, id);
     if (status === 204) {
       setDeleteDialogOpen(false);
       setSelectedItem(undefined);
-      TrashService.GetTrash(email).then((data) => setTrashed(data));
+      TrashService.GetTrash(loggedInUser).then((data) => setTrashed(data));
     } else {
       throw new Error(status?.toString());
     }
@@ -79,17 +79,17 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
   };
 
   const handleConfirmEmpty = async () => {
-    let status = await TrashService.DeleteAll(email);
+    let status = await TrashService.DeleteAll(loggedInUser);
     if (status === 204) {
       setEmptyDialogOpen(false);
-      TrashService.GetTrash(email).then((data) => setTrashed(data));
+      TrashService.GetTrash(loggedInUser).then((data) => setTrashed(data));
     } else {
       throw new Error(status?.toString());
     }
   };
 
   useEffect(() => {
-    TrashService.GetTrash(email).then((data) =>
+    TrashService.GetTrash(loggedInUser).then((data) =>
       setTrashed(data.sort((a, b) => (dayjs(a.updatedDate).isBefore(b.updatedDate) ? 1 : -1)))
     );
   }, []);
