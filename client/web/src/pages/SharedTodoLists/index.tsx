@@ -89,9 +89,9 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
         const existingShare = await SharingService.GetShareById(selectedItem?.sharingId as number);
         if (existingShare) {
           existingShare.updatedDate = new Date();
-          existingShare.users.filter((user) => user.email !== loggedInUser);
+          existingShare.users = existingShare.users.filter((user) => user.email !== loggedInUser);
 
-          // SharingService.UpdateShare(existingShare._id as number, existingShare);
+          response = await SharingService.UpdateShare(existingShare);
         }
       }
 
