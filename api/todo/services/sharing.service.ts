@@ -66,8 +66,8 @@ export default class SharingService {
     try {
       let lists: Array<IList> = [];
 
-      // Get sharings with owner === email
-      const own = await Sharing.find({ owner: email }, "owner listId");
+      // Get sharings with owner === email and users array not empty
+      const own = await Sharing.find({ owner: email, users: { $not: { $size: 0 } } }, "owner listId");
 
       // Get sharings with email in Sharing.users
       const others = await Sharing.find({ "users.email": email }, "owner listId");
