@@ -47,7 +47,7 @@ module "iam" {
 module "api" {
   source = "./modules/api"
 
-  ec2_ami           = "ami-08222ba0572c64812"
+  ec2_ami           = "ami-08d3dadd770d42821"
   ec2_instance_type = "t4g.nano"
   ec2_private_ip    = "10.0.0.24"
 
@@ -61,7 +61,7 @@ module "api" {
 module "web" {
   source = "./modules/web"
 
-  ec2_ami           = "ami-08222ba0572c64812"
+  ec2_ami           = "ami-08d3dadd770d42821"
   ec2_instance_type = "t4g.nano"
   ec2_private_ip    = "10.0.0.25"
 
