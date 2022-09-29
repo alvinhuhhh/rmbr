@@ -8,5 +8,4 @@ jobs:
       - uses: actions/setup-node@v3.5.0
         with: 
           node-version: 16
-      - run: cd client/web
-      - run: npm ci
+      - run: ls
