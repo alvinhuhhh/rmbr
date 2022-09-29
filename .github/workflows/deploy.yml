@@ -13,5 +13,4 @@ jobs:
       - run: (cd api/todo; npm ci)
       - run: (cd api/todo; npm run build)
       - run: (cd api/todo; docker build -t public.ecr.aws/f4k7k9n9/rmbr-api .)
-      - run: aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws
       - run: (cd api/todo; docker push public.ecr.aws/f4k7k9n9/rmbr-api)
