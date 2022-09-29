@@ -5,8 +5,5 @@ COPY /build ./
 COPY package.json ./
 RUN npm install --omit=dev
 
-COPY ssl/private.key ssl/
-COPY ssl/certificate.crt ssl/
-
 CMD [ "node", "app.js" ]
-EXPOSE 443
+EXPOSE 80
