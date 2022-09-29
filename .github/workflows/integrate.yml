@@ -3,6 +3,6 @@ on: [push]
 jobs:
   On-Push:
   runs-on: ubuntu-latest
-    steps:
-      - run: echo "hello world"
-      - run: echo "goodbye world"
+  steps:
+    - run: echo "hello world"
+    - run: echo "goodbye world"
