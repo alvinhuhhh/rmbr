@@ -1,8 +1,10 @@
 name: Continuous Integration
 on: [push]
 jobs:
-  On-Push:
+  Test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello world"
-      - run: echo "goodbye world"
+      - uses: actions/setup-node@v3.5.0
+        with: 
+          node-version: 16
+      - run: npm ci
