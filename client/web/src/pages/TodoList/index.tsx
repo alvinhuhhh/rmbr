@@ -133,11 +133,13 @@ export default function TodoList({ ...props }: TodoListProps): JSX.Element {
   useEffect(() => {
     TodoListsService.GetListById(loggedInUser, listId as string).then((data) => setList(data));
     TodoService.GetTodos(loggedInUser, listId as string).then((data) => setTodos(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     TodoListsService.GetListById(loggedInUser, listId as string).then((data) => setList(data));
     TodoService.GetTodos(loggedInUser, listId as string).then((data) => setTodos(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogOpen, deleteDialogOpen]);
 
   return (

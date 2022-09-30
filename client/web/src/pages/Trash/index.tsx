@@ -92,6 +92,7 @@ export default function Trash({ ...props }: ITrashProps): JSX.Element {
     TrashService.GetTrash(loggedInUser).then((data) =>
       setTrashed(data.sort((a, b) => (dayjs(a.updatedDate).isBefore(b.updatedDate) ? 1 : -1)))
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

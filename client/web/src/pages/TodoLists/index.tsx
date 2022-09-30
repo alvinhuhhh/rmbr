@@ -129,10 +129,12 @@ export default function TodoLists({ ...props }: ITodoListsProps): JSX.Element {
 
   useEffect(() => {
     TodoListsService.GetLists(loggedInUser).then((data) => setLists(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     TodoListsService.GetLists(loggedInUser).then((data) => setLists(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (

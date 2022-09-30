@@ -26,31 +26,31 @@ export default function Public({ ...props }: LoginProps) {
     localStorage.clear();
   };
 
-  const handleCallback = (response: { credential: any }) => {
-    const jwt = decodeJwt(response.credential);
-
-    if (jwt.nonce === sessionStorage.getItem("nonce")) {
-      localStorage.setItem("jwt", response.credential);
-      // Check if user exists
-      UserService.CheckIfUserExists(jwt)
-        .then((loginResponse) => {
-          if (loginResponse?.status === 200) loginSuccess(jwt);
-          else if (loginResponse?.status === 404)
-            UserService.CreateUser(jwt).then((response) => response.status === 201 && loginSuccess(jwt));
-          else loginFailure(loginResponse?.status, loginResponse?.statusText);
-        })
-        .catch((err: any) => {
-          console.log(err);
-        });
-    } else {
-      console.log("Nonce error when logging in");
-    }
-  };
-
   useEffect(() => {
     // Generate nonce to prevent CSRF attacks
     const nonce = Math.random().toString();
     sessionStorage.setItem("nonce", nonce);
+
+    const handleCallback = (response: { credential: any }) => {
+      const jwt = decodeJwt(response.credential);
+
+      if (jwt.nonce === sessionStorage.getItem("nonce")) {
+        localStorage.setItem("jwt", response.credential);
+        // Check if user exists
+        UserService.CheckIfUserExists(jwt)
+          .then((loginResponse) => {
+            if (loginResponse?.status === 200) loginSuccess(jwt);
+            else if (loginResponse?.status === 404)
+              UserService.CreateUser(jwt).then((response) => response.status === 201 && loginSuccess(jwt));
+            else loginFailure(loginResponse?.status, loginResponse?.statusText);
+          })
+          .catch((err: any) => {
+            console.log(err);
+          });
+      } else {
+        console.log("Nonce error when logging in");
+      }
+    };
 
     globalThis.google.accounts.id.initialize({
       client_id: process.env.REACT_APP_CLIENT_ID as string,

@@ -133,11 +133,13 @@ export default function SharedTodoList({ ...props }: ISharedTodoListProps): JSX.
   useEffect(() => {
     TodoListsService.GetListById(email as string, listId as string).then((data) => setList(data));
     TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     TodoListsService.GetListById(email as string, listId as string).then((data) => setList(data));
     TodoService.GetTodos(email as string, listId as string).then((data) => setTodos(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogOpen, deleteDialogOpen]);
 
   return (

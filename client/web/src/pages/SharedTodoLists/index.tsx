@@ -117,10 +117,12 @@ export default function SharedTodoLists({ ...props }: ISharedProps): JSX.Element
 
   useEffect(() => {
     SharingService.GetSharedLists(loggedInUser).then((data) => setLists(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
     SharingService.GetSharedLists(loggedInUser).then((data) => setLists(data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dialogOpen, shareDialogOpen, deleteDialogOpen]);
 
   return (
