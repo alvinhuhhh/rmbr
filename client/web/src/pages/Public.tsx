@@ -62,6 +62,7 @@ export default function Public({ ...props }: LoginProps) {
       theme: "filled_blue",
       size: "large",
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
