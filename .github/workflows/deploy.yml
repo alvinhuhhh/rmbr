@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: 16
       - uses: docker/setup-buildx-action@v2.0.0
+      - run: (cd client/web; printf "REACT_APP_API_URL=${{ secrets.API_URL }}\nREACT_APP_CLIENT_ID=${{ secrets.CLIENT_ID }}" >> .env)
       - run: (cd client/web; npm ci)
       - run: (cd client/web; npm run build)
       - run: (cd client/web; docker build -t public.ecr.aws/f4k7k9n9/rmbr-web .)
