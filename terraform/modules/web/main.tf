@@ -22,6 +22,11 @@ resource "aws_instance" "rmbr_web" {
   }
 }
 
+resource "aws_eip" "rmbr_web" {
+  instance = aws_instance.rmbr_web.id
+  vpc = true
+}
+
 # Create ECS cluster
 resource "aws_ecs_cluster" "rmbr_web" {
   name = "rmbr-web"
