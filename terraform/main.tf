@@ -47,8 +47,8 @@ module "iam" {
 module "api" {
   source = "./modules/api"
 
-  ec2_ami           = "ami-08d3dadd770d42821"
-  ec2_instance_type = "t4g.nano"
+  ec2_ami           = "ami-0855712a34b3f2bf5"
+  ec2_instance_type = "t3.nano"
   ec2_private_ip    = "10.0.0.24"
 
   public_subnet_id                = module.vpc.public_subnet_id
@@ -61,8 +61,8 @@ module "api" {
 module "web" {
   source = "./modules/web"
 
-  ec2_ami           = "ami-08d3dadd770d42821"
-  ec2_instance_type = "t4g.nano"
+  ec2_ami           = "ami-0855712a34b3f2bf5"
+  ec2_instance_type = "t3.nano"
   ec2_private_ip    = "10.0.0.25"
 
   public_subnet_id                = module.vpc.public_subnet_id
