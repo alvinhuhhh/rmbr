@@ -6,5 +6,8 @@ COPY package.json ./
 
 RUN npm install --omit=dev
 
+COPY domain.crt ./
+COPY private.key ./
+
 CMD [ "node", "app.js" ]
 EXPOSE 443
