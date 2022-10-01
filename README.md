@@ -1,6 +1,6 @@
 # Rmbr
 
-Rmbr is a fullstack todo app, because every developer needs to make a todo app.
+Rmbr is a fullstack todo app based on the MERN stack.
 
 ## Key features
 
@@ -17,6 +17,10 @@ Rmbr is a fullstack todo app, because every developer needs to make a todo app.
 - [NGINX](https://nginx.org/)
 - [Terraform](https://www.terraform.io/)
 
+## CI/CD
+
+- [GitHub Actions](https://github.com/features/actions)
+
 ## Others
 
 - [MUI](https://mui.com/)
@@ -32,8 +36,8 @@ Rmbr is a fullstack todo app, because every developer needs to make a todo app.
 - :white_check_mark: Trash
 - :white_check_mark: Sharing
 - :white_check_mark: Terraform IaC
-- Domain name
-- SSL/TLS encryption
+- :white_check_mark: Domain name
+- :white_check_mark: SSL/TLS encryption
 
 ## Contributing
 
