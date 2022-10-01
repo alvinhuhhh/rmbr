@@ -3,7 +3,8 @@ ENV NODE_ENV=production
 WORKDIR /root/
 COPY /build ./
 COPY package.json ./
+
 RUN npm install --omit=dev
 
 CMD [ "node", "app.js" ]
-EXPOSE 80
+EXPOSE 443

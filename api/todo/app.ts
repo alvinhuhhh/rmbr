@@ -1,5 +1,7 @@
 import "dotenv/config";
+import fs from "fs";
 import http from "http";
+import https from "https";
 
 import express from "express";
 import mongoose from "mongoose";
@@ -11,6 +13,10 @@ import verify from "./middleware/verify";
 import routes from "./routes/index";
 
 const app = express();
+const options = {
+  cert: fs.readFileSync("domain.crt", "utf-8"),
+  key: fs.readFileSync("private.key", "utf-8"),
+};
 
 // Middleware
 app.use(express.json());
@@ -38,8 +44,8 @@ try {
       console.log("Database connected");
 
       if (process.env.NODE_ENV === "production") {
-        http.createServer(app).listen(80, () => {
-          console.log(`API server started and listening on PORT: 80`);
+        https.createServer(options, app).listen(443, () => {
+          console.log(`API server started and listening on PORT: 443`);
         });
       } else {
         http.createServer(app).listen(3000, () => {
